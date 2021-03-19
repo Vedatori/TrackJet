@@ -1,0 +1,165 @@
+
+(rules PCB Sergej_H00
+  (snap_angle 
+    fortyfive_degree
+  )
+  (autoroute_settings
+    (fanout off)
+    (eu.mihosoft.freerouting.autoroute on)
+    (postroute on)
+    (vias on)
+    (via_costs 10)
+    (plane_via_costs 1)
+    (start_ripup_costs 20)
+    (start_pass_no 177)
+    (layer_rule F.Cu
+      (active on)
+      (preferred_direction vertical)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 1.0)
+    )
+    (layer_rule B.Cu
+      (active on)
+      (preferred_direction horizontal)
+      (preferred_direction_trace_costs 14.0)
+      (against_preferred_direction_trace_costs 14.0)
+    )
+  )
+  (rule
+    (width 254.0)
+    (clear 127.2)
+    (clear 127.0 (type smd_to_turn_gap))
+    (clear 31.8 (type smd_smd))
+  )
+  (padstack "Via[0-1]_600:300_um"
+    (shape
+      (circle F.Cu 600.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 600.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (padstack "Via[0-1]_800:400_um"
+    (shape
+      (circle F.Cu 800.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 800.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (padstack "Via[0-1]_1000:500_um"
+    (shape
+      (circle F.Cu 1000.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 1000.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (padstack "Via[0-1]_1400:700_um"
+    (shape
+      (circle F.Cu 1400.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 1400.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (via 
+    "Via[0-1]_600:300_um" "Via[0-1]_600:300_um" default
+  )
+  (via 
+    "Via[0-1]_800:400_um" "Via[0-1]_800:400_um" default
+  )
+  (via 
+    "Via[0-1]_1000:500_um" "Via[0-1]_1000:500_um" default
+  )
+  (via 
+    "Via[0-1]_1400:700_um" "Via[0-1]_1400:700_um" default
+  )
+  (via 
+    "Via[0-1]_600:300_um-kicad_default" "Via[0-1]_600:300_um" "kicad_default"
+  )
+  (via 
+    "Via[0-1]_800:400_um-kicad_default" "Via[0-1]_800:400_um" "kicad_default"
+  )
+  (via 
+    "Via[0-1]_1000:500_um-kicad_default" "Via[0-1]_1000:500_um" "kicad_default"
+  )
+  (via 
+    "Via[0-1]_1400:700_um-kicad_default" "Via[0-1]_1400:700_um" "kicad_default"
+  )
+  (via 
+    "Via[0-1]_600:300_um-Power" "Via[0-1]_600:300_um" Power
+  )
+  (via 
+    "Via[0-1]_800:400_um-Power" "Via[0-1]_800:400_um" Power
+  )
+  (via 
+    "Via[0-1]_1000:500_um-Power" "Via[0-1]_1000:500_um" Power
+  )
+  (via 
+    "Via[0-1]_1400:700_um-Power" "Via[0-1]_1400:700_um" Power
+  )
+  (via_rule
+    default "Via[0-1]_600:300_um"
+  )
+  (via_rule
+    "kicad_default" "Via[0-1]_600:300_um-kicad_default"
+  )
+  (via_rule
+    Power "Via[0-1]_600:300_um-Power"
+  )
+  (class default
+    (clearance_class default)
+    (via_rule default)
+    (rule
+      (width 254.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class "kicad_default"
+    "Net-(C50-Pad2)" "Net-(BT1-Pad1)" "Net-(BZ1-Pad2)" BUTTON "/Motors/SERVO1_CURRENT" "/Motors/SERVO2_CURRENT" "/Motors/SERVO3_CURRENT" "/Power/5V_ENABLE"
+    "ENC_B" "ENC_SW" "ENC_A" "Net-(D2-Pad2)" "Net-(F1-Pad1)" "Net-(IC1-Pad2)" "Net-(J1-Pad6)" SDA
+    SCL "/Motors/SERVO1_CTRL" "/Motors/SERVO2_CTRL" "/Motors/SERVO3_CTRL" "/USB/D-" /USB/D+ BUZZER "/USB/ESP_RST"
+    "Net-(Q2-Pad2)" "Net-(Q2-Pad1)" "/USB/ESP_GPIO0" "Net-(Q5-Pad3)" "/Motors/DC_MOT1_12V" "/Motors/DC_MOT2_5V" "/Motors/DC_MOT3_12V" "/Motors/DC_MOT4_5V"
+    "Net-(R15-Pad2)" "/USB/ESP_RX" "/USB/ESP_TX" "Net-(R37-Pad2)" "Net-(R54-Pad2)" POT "/Gyro/MPU-6050_INT" "/Motors/MOTA_IN1"
+    "/Motors/MOTA_IN2" "/Motors/MOTB_IN1" "/Motors/MOTB_IN2" "/Power/12V_ENABLE" "/Power/12V_MODE" "Net-(C8-Pad1)" "Net-(C9-Pad1)" "Net-(C12-Pad1)"
+    "Net-(C13-Pad1)" "Net-(C39-Pad2)" "Net-(C41-Pad2)" "Net-(C47-Pad1)" "Net-(C50-Pad1)" "Net-(C64-Pad2)" "Net-(C65-Pad2)" "Net-(C69-Pad2)"
+    "Net-(C70-Pad2)" "Net-(C72-Pad2)" "Net-(C73-Pad2)" "Net-(J5-PadB8)" "Net-(J5-PadA5)" "Net-(J5-PadA8)" "Net-(J5-PadB5)" "Net-(J7-Pad2)"
+    "Net-(J7-Pad1)" "Net-(J8-Pad1)" "Net-(J9-Pad2)" "Net-(J9-Pad1)" "Net-(J12-Pad1)" "Net-(J15-Pad1)" "Net-(R7-Pad2)" "Net-(R8-Pad2)"
+    "Net-(R9-Pad2)" "Net-(R10-Pad2)" "Net-(R16-Pad2)" "Net-(R17-Pad1)" "Net-(R18-Pad1)" "Net-(R27-Pad1)" "Net-(R29-Pad2)" "Net-(R31-Pad2)"
+    "Net-(R33-Pad2)" "Net-(R35-Pad2)" "Net-(R39-Pad2)" "Net-(R42-Pad2)" "Net-(R43-Pad2)" "Net-(R44-Pad1)" "Net-(R48-Pad2)" "Net-(R50-Pad1)"
+    "Net-(R63-Pad2)" "Net-(U13-Pad9)" "Net-(U14-Pad7)" "Net-(U14-Pad6)" "Net-(U14-Pad5)" "/Mux Demux Matrix/Analog_IN_7" "/Mux Demux Matrix/REG_OUT_11" "/Mux Demux Matrix/REG_OE"
+    "Net-(R13-Pad1)" "Net-(R14-Pad1)" "/Mux Demux Matrix/Analog_IN_1" "/Mux Demux Matrix/Analog_IN_3" "/Mux Demux Matrix/Analog_IN_5" "/Mux Demux Matrix/Analog_IN_2" "/Mux Demux Matrix/Analog_IN_4" "/Mux Demux Matrix/Analog_IN_6"
+    "Net-(R41-Pad1)" "Net-(R65-Pad1)" "Net-(R66-Pad1)" "Net-(R67-Pad1)" "Net-(R68-Pad1)" "Net-(R69-Pad1)" "/Mux Demux Matrix/REG_DAT" "/Mux Demux Matrix/REG_LAT"
+    "/Mux Demux Matrix/REG_CLK" "/Mux Demux Matrix/Analog_MUX" "Net-(U14-Pad9)" "Net-(U20-Pad9)" "Net-(D1-Pad2)" "Net-(D3-Pad2)" "Net-(D3-Pad1)" "Net-(D4-Pad2)"
+    "Net-(D4-Pad1)" "Net-(D5-Pad15)" "Net-(D5-Pad16)" "Net-(D5-Pad13)" "Net-(D5-Pad12)" "Net-(D5-Pad10)" "Net-(D5-Pad9)" "Net-(D5-Pad14)"
+    "Net-(D5-Pad11)" "Net-(D5-Pad8)" "Net-(D5-Pad7)" "Net-(D5-Pad6)" "Net-(D5-Pad5)" "Net-(D5-Pad4)" "Net-(D5-Pad3)" "Net-(D5-Pad2)"
+    "Net-(D5-Pad1)" "Net-(D8-Pad2)" "Net-(D9-Pad2)" "Net-(D10-Pad2)" "Net-(D11-Pad2)" "Net-(D12-Pad2)" "Net-(J6-Pad1)" "Net-(R30-Pad2)"
+    "Net-(R32-Pad2)" "Net-(R34-Pad2)" "Net-(R36-Pad2)" "Net-(R38-Pad2)" "Net-(R40-Pad2)"
+    (clearance_class "kicad_default")
+    (via_rule kicad_default)
+    (rule
+      (width 254.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class Power
+    GND +12V +3V3 +5V +BATT +5VP
+    (clearance_class Power)
+    (via_rule Power)
+    (rule
+      (width 508.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+)
