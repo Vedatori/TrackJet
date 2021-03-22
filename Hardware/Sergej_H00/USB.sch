@@ -207,19 +207,6 @@ F 3 "" H 3600 4350 50  0001 C CNN
 	1    3600 4350
 	1    0    0    -1  
 $EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 601A619F
-P 3300 4350
-AR Path="/60171EF5/601A619F" Ref="#PWR?"  Part="1" 
-AR Path="/6018ABDD/601A619F" Ref="#PWR050"  Part="1" 
-F 0 "#PWR050" H 3300 4100 50  0001 C CNN
-F 1 "GND" H 3305 4177 50  0000 C CNN
-F 2 "" H 3300 4350 50  0001 C CNN
-F 3 "" H 3300 4350 50  0001 C CNN
-	1    3300 4350
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	4200 3550 4200 3650
 Connection ~ 4200 3550
@@ -473,4 +460,5 @@ Wire Wire Line
 	4400 3100 4200 3100
 Wire Wire Line
 	4200 3100 4200 3050
+NoConn ~ 3300 4350
 $EndSCHEMATC

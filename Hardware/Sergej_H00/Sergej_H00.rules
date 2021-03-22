@@ -5,13 +5,13 @@
   )
   (autoroute_settings
     (fanout off)
-    (eu.mihosoft.freerouting.autoroute on)
+    (eu.mihosoft.freerouting.autoroute off)
     (postroute on)
     (vias on)
-    (via_costs 10)
-    (plane_via_costs 1)
-    (start_ripup_costs 20)
-    (start_pass_no 177)
+    (via_costs 50)
+    (plane_via_costs 5)
+    (start_ripup_costs 100)
+    (start_pass_no 5564)
     (layer_rule F.Cu
       (active on)
       (preferred_direction vertical)
@@ -21,8 +21,8 @@
     (layer_rule B.Cu
       (active on)
       (preferred_direction horizontal)
-      (preferred_direction_trace_costs 14.0)
-      (against_preferred_direction_trace_costs 14.0)
+      (preferred_direction_trace_costs 40.0)
+      (against_preferred_direction_trace_costs 40.0)
     )
   )
   (rule
