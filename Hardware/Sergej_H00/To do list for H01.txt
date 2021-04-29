@@ -6,3 +6,6 @@ Revork auto shut down circuit.
 Fix auto USB reset ciruit.
 Change track encoders resistor values.
 Resolve overheating of TP4056 when connected to PSU.
+390R to IR TRACK LED 1K to collector.
+znaèky + a - zaspoda desky
+R17 na 200K pro 9V
