@@ -15,10 +15,9 @@ public:
     typedef int value_type;
 
     SerialPWM(const int channels,
-        const std::initializer_list<int> data_pins,
+        const int data_pin,
         const int latch_pin,
         const int clock_pin,
-        const int test_pin = -1,
         const int frequency = 20000,
         const int i2s = 1);
 

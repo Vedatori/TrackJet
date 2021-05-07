@@ -20,19 +20,18 @@ volatile void* SerialPWM::i2snum2struct(const int num) {
 }
 
 SerialPWM::SerialPWM(const int channels,
-    const std::initializer_list<int> data_pins,
+    const int data_pin,
     const int latch_pin,
     const int clock_pin,
-    const int test_pin,
     const int frequency,
     const int i2s)
     : c_channels(channels)
-    , c_bytes(((data_pins.size() + (test_pin == -1 ? 0 : 1)) >> 3) + 1)
+    , c_bytes(1)
     , m_i2s(i2snum2struct(i2s))
     , m_buffer_descriptors { nullptr }
     , m_buffer { nullptr }
     , m_active_buffer(0)
-    , m_pwm(channels * data_pins.size(), 0) {
+    , m_pwm(channels, 0) {
     const int buffer_size = c_channels * c_bytes;
     for (int buffer = 0; buffer != sc_buffers; ++buffer) {
         m_buffer_descriptors[buffer] = static_cast<i2s_parallel_buffer_desc_t*>(heap_caps_malloc((sc_resolution + 1) * sizeof(i2s_parallel_buffer_desc_t), MALLOC_CAP_32BIT)); // +1 for end mark
@@ -41,35 +40,18 @@ SerialPWM::SerialPWM(const int channels,
             m_buffer_descriptors[buffer][i].memory = p_buffer;
             m_buffer_descriptors[buffer][i].size = buffer_size;
             memset(p_buffer, 0, buffer_size);
-            p_buffer[c_bytes - 1] = (1 << (data_pins.size() & 7)); // latch pin
+            p_buffer[c_bytes - 1] = (1 << (1 & 7)); // latch pin
             m_buffer[buffer][i] = p_buffer;
         }
         m_buffer_descriptors[buffer][sc_resolution].memory = nullptr;
-        if (test_pin != -1)
-            for (int i = 0; i != buffer_size; ++i)
-                m_buffer[buffer][0][i] |= 1 << (data_pins.size() + 1);
     }
 
     i2s_parallel_config_t cfg;
-    switch (c_bytes) {
-    default:
-    case 1:
-        cfg.bits = I2S_PARALLEL_BITS_8;
-        break;
-    case 2:
-        cfg.bits = I2S_PARALLEL_BITS_16;
-        break;
-    case 3:
-        cfg.bits = I2S_PARALLEL_BITS_32;
-        break;
-    }
+    cfg.bits = I2S_PARALLEL_BITS_8; // if c_bytes == 1
 
     int i = 0;
-    for (int pin : data_pins)
-        cfg.gpio_bus[i++] = pin;
+    cfg.gpio_bus[i++] = data_pin;
     cfg.gpio_bus[i++] = latch_pin;
-    if (test_pin != -1)
-        cfg.gpio_bus[i++] = test_pin;
     for (; i != 24; ++i)
         cfg.gpio_bus[i] = -1;
     cfg.gpio_wclk = -1;
