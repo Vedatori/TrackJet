@@ -15,7 +15,7 @@ const uint8_t REG_OE = 25;
 
 const uint8_t ENC_SW = 23;
 
-rb::SerialPWM serialPWM(PWM_CHANNELS, { REG_DAT }, REG_LATCH, REG_CLK, PWM_FREQUENCY);
+rb::SerialPWM serialPWM(PWM_CHANNELS, REG_DAT, REG_LATCH, REG_CLK, PWM_FREQUENCY);
 int8_t pwm_index[] = {0, 3, 2, 29, 28, 31, 30, 25, 24, 27, 26, 21, 20, 23, 22, 17, 16, 19, 18, 13, 12, 15, 14, 9, 8, 11, 10, 5, 4, 7, 6, 1, 0};
 
 void setPWM(rb::SerialPWM::value_type& channel, int8_t power) {
@@ -29,8 +29,8 @@ void setPWM(rb::SerialPWM::value_type& channel, int8_t power) {
 
 void taskOne( void * parameter ) {
     for(;;) {
-        
-        delay(2);
+        serialPWM.update();
+        delay(20);
     }
 }
 
@@ -47,9 +47,8 @@ void setup() {
         1,                /* Priority of the task. */
         NULL);            /* Task handle. */
     
-    setPWM(serialPWM[pwm_index[12]], 10);
-    setPWM(serialPWM[pwm_index[13]], 50);
-    serialPWM.update();
+    serialPWM.setPWM(pwm_index[12], 10);
+    serialPWM.setPWM(pwm_index[13], 50);
 }
 
 void loop() {
