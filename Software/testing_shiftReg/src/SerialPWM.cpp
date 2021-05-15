@@ -4,9 +4,9 @@
 #include <cstdint>
 #include <cstring>
 
-#include "RBControl_serialPWM.hpp"
+#include "SerialPWM.h"
 
-namespace rb {
+int8_t SerialPWM::pwm_index[] = {0, 3, 2, 29, 28, 31, 30, 25, 24, 27, 26, 21, 20, 23, 22, 17, 16, 19, 18, 13, 12, 15, 14, 9, 8, 11, 10, 5, 4, 7, 6, 1, 0};
 
 volatile void* SerialPWM::i2snum2struct(const int num) {
     assert(num >= 0 && num < 2);
@@ -23,9 +23,11 @@ SerialPWM::SerialPWM(const int channels,
     const int data_pin,
     const int latch_pin,
     const int clock_pin,
+    const int a_output_enable_pin,
     const int frequency,
     const int i2s)
     : c_channels(channels)
+    , output_enable_pin(a_output_enable_pin)
     , m_i2s(i2snum2struct(i2s))
     , m_buffer_descriptors { nullptr }
     , m_buffer { nullptr }
@@ -60,6 +62,9 @@ SerialPWM::SerialPWM(const int channels,
     cfg.clkspeed = frequency * sc_resolution * c_channels;
     cfg.bufa = m_buffer_descriptors[0];
     cfg.bufb = m_buffer_descriptors[1];
+    
+    gpio_set_direction((gpio_num_t)output_enable_pin, GPIO_MODE_OUTPUT);
+    set_output(false);
 
     i2s_parallel_setup(static_cast<i2s_dev_t*>(m_i2s), &cfg);
     update();
@@ -78,7 +83,7 @@ SerialPWM::~SerialPWM() {
 }
 
 void SerialPWM::setPWM(uint8_t index, uint8_t width) {
-    m_pwm[index] = width;
+    m_pwm[pwm_index[index]] = width;
 }
 
 void SerialPWM::update() {
@@ -95,6 +100,8 @@ void SerialPWM::update() {
     i2s_parallel_flip_to_buffer(static_cast<i2s_dev_t*>(m_i2s), m_active_buffer);
 }
 
-int SerialPWM::resolution() { return sc_resolution; }
+void SerialPWM::set_output(bool state) {
+    gpio_set_level((gpio_num_t)output_enable_pin, !state);
+}
 
-} // namespace rb
+int SerialPWM::resolution() { return sc_resolution; }
