@@ -6,10 +6,11 @@
 
 #include "SerialPWM.h"
 
-int8_t SerialPWM::pwm_index[] = {3, 2, 29, 28, 31, 30, 25, 24, 27, 26, 21, 20, 23, 22, 17, 16, 19, 18, 13, 12, 15, 14, 9, 8, 11, 10, 5, 4, 7, 6, 1, 0};
-uint8_t SerialPWM::disp_pin_index[] = {18, 21, 25, 17, 22, 19, 29, 23, 20, 28, 31, 26, 16, 30, 27, 24};     // 8 rows, 8 columns 
-uint8_t SerialPWM::m_pwm[32] = {0, };
-uint8_t SerialPWM::m_disp[8][8] = {0, };
+int8_t SerialPWM::pwm_index[PWM_CHANNELS] = {3, 2, 29, 28, 31, 30, 25, 24, 27, 26, 21, 20, 23, 22, 17, 16, 19, 18, 13, 12, 15, 14, 9, 8, 11, 10, 5, 4, 7, 6, 1, 0};
+uint8_t SerialPWM::row_pin_index[DISP_ROWS] = {16, 17, 18, 19, 20, 21, 22, 23};
+uint8_t SerialPWM::col_pin_index[DISP_COLS] = {24, 25, 26, 27, 28, 29, 30, 31};
+uint8_t SerialPWM::m_pwm[PWM_CHANNELS] = {0, };
+uint8_t SerialPWM::m_disp[DISP_ROWS][DISP_COLS] = {0, };
 
 volatile void* SerialPWM::i2snum2struct(const int num) {
     assert(num >= 0 && num < 2);
@@ -60,8 +61,8 @@ SerialPWM::SerialPWM(
     cfg.bufa = m_buffer_descriptors[0];
     cfg.bufb = m_buffer_descriptors[1];
     
-    gpio_set_direction((gpio_num_t)m_output_enable_pin, GPIO_MODE_OUTPUT);
     set_output(false);
+    gpio_set_direction((gpio_num_t)m_output_enable_pin, GPIO_MODE_OUTPUT);
 
     i2s_parallel_setup(static_cast<i2s_dev_t*>(m_i2s), &cfg);
     update();
@@ -82,11 +83,17 @@ SerialPWM::~SerialPWM() {
 void SerialPWM::setPWM(uint8_t index, uint8_t width) {
     m_pwm[index] = width;
 }
+void SerialPWM::setDisp(uint8_t state[][8]) {
+    memcpy(m_disp, state, 64*sizeof(uint8_t));
+}
+void SerialPWM::setDispSingle(uint8_t row, uint8_t col, uint8_t brightness) {
+    m_disp[row][col] = brightness;
+}
 
 void SerialPWM::update() {
     m_active_buffer ^= 1;
     for (int sample = 0; sample != sc_resolution; ++sample) {
-        for (int channel = 0; channel != 32; ++channel) {
+        for (int channel = 0; channel != PWM_CHANNELS; ++channel) {
             uint8_t& value = m_buffer[m_active_buffer][sample][pwm_index[channel]];
             if (sample < m_pwm[channel])
                 value |= 1;
@@ -95,17 +102,15 @@ void SerialPWM::update() {
         }
         
         // Turn all off
-        for (int channel = 0; channel != 8; ++channel) {
-            m_buffer[m_active_buffer][sample][pwm_index[disp_pin_index[channel]]] |= 1;
-        }
-        for (int channel = 8; channel != 16; ++channel) {
-            m_buffer[m_active_buffer][sample][pwm_index[disp_pin_index[channel]]] &= ~1;
+        for (int channel = 0; channel != DISP_ROWS; ++channel) {
+            m_buffer[m_active_buffer][sample][pwm_index[row_pin_index[channel]]] |= 1;  // Turn off rows
+            m_buffer[m_active_buffer][sample][pwm_index[col_pin_index[channel]]] &= ~1; // Turn off cols
         }
         
-        m_buffer[m_active_buffer][sample][pwm_index[disp_pin_index[sample/12]]] &= ~1;
-        for (int col = 0; col != 8; ++col) {
-            uint8_t& value = m_buffer[m_active_buffer][sample][pwm_index[disp_pin_index[col + 8]]];
-            if ((sample % 12) < m_disp[sample/12][col])
+        m_buffer[m_active_buffer][sample][pwm_index[row_pin_index[sample/12]]] &= ~1;   // Turn on 1 row
+        for (int col = 0; col != DISP_COLS; ++col) {
+            uint8_t& value = m_buffer[m_active_buffer][sample][pwm_index[col_pin_index[col]]];
+            if ((sample % DISP_PWM_RESOLUTION) < m_disp[sample/DISP_PWM_RESOLUTION][col])
                 value |= 1;
             else
                 value &= ~1;

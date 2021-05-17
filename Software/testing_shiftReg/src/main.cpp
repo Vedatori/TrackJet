@@ -26,6 +26,22 @@ void setup() {
     Serial.begin(115200);
     pinMode(ENC_SW, INPUT_PULLDOWN);
 
+
+    serialPWM.set_output(true);
+    serialPWM.setPWM(11, 10);
+    serialPWM.setPWM(12, 50);
+
+    uint8_t dispSetting[8][8] = {{0, 0, 0, 0, 0, 0, 0, 0}, 
+                                {0, 0, 0, 0, 5, 5, 5, 5}, 
+                                {5, 5, 5, 5, 0, 0, 0, 0}, 
+                                {0, 0, 0, 0, 5, 5, 5, 5}, 
+                                {5, 5, 5, 5, 0, 0, 0, 0}, 
+                                {0, 0, 0, 0, 5, 5, 5, 5}, 
+                                {5, 5, 5, 5, 0, 0, 0, 0}, 
+                                {0, 0, 0, 0, 5, 5, 5, 5}};
+    serialPWM.setDisp(dispSetting);
+    serialPWM.setDispSingle(1, 2, 12);
+
     xTaskCreate(
         taskOne,          /* Task function. */
         "TaskOne",        /* String with name of task. */
@@ -33,15 +49,10 @@ void setup() {
         NULL,             /* Parameter passed as input of the task */
         1,                /* Priority of the task. */
         NULL);            /* Task handle. */
-    
-    serialPWM.setPWM(11, 10);
-    serialPWM.setPWM(12, 50);
-    uint8_t dispSetting[8][8] = {{5, 5, 5, 5, 0, 0, 0, 0},{0, 0, 0, 0, 5, 5, 5, 5, }, {5, 5, 5, 5, 0, 0, 0, 0},{0, 0, 0, 0, 5, 5, 5, 5, }, {5, 5, 5, 5, 0, 0, 0, 0},{0, 0, 0, 0, 5, 5, 5, 5, }, {5, 5, 5, 5, 0, 0, 0, 0},{0, 0, 0, 0, 5, 5, 5, 5, }};
-    memcpy(serialPWM.m_disp, dispSetting, 64*sizeof(uint8_t));
+    delay(1000);
 }
 
 void loop() {
-    serialPWM.set_output(digitalRead(ENC_SW));
     Serial.printf("ENC_SW %d\n", digitalRead(ENC_SW));
     delay(loopDelay);
 }
