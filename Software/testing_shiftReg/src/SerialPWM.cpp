@@ -81,12 +81,14 @@ SerialPWM::~SerialPWM() {
 }
 
 void SerialPWM::setPWM(uint8_t index, uint8_t width) {
-    m_pwm[index] = width;
+    if(index < PWM_CHANNELS)
+        m_pwm[index] = width;
 }
-void SerialPWM::setDisp(uint8_t state[][8]) {
-    memcpy(m_disp, state, 64*sizeof(uint8_t));
+void SerialPWM::setDisp(uint8_t state[][DISP_COLS]) {
+    memcpy(m_disp, state, DISP_ROWS*DISP_COLS*sizeof(uint8_t));
 }
 void SerialPWM::setDispSingle(uint8_t row, uint8_t col, uint8_t brightness) {
+    if(row < DISP_ROWS && col < DISP_COLS)
     m_disp[row][col] = brightness;
 }
 

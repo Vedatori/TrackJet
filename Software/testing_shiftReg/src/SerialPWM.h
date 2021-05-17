@@ -25,7 +25,7 @@ public:
     ~SerialPWM();
 
     void setPWM(uint8_t index, uint8_t width);
-    void setDisp(uint8_t state[][8]);
+    void setDisp(uint8_t state[][DISP_COLS]);
     void setDispSingle(uint8_t row, uint8_t col, uint8_t brightness);
 
     void update();
