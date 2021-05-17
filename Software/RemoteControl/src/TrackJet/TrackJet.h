@@ -1,14 +1,13 @@
 #pragma once
 
-#include "RBControl_serialPWM.hpp"
+#include "SerialPWM.h"
 #include <Arduino.h>
 #include "Preferences.h"
 
 #include "WiFiCaptain.h"
 
-namespace TR {
+namespace TJ {
 
-const uint8_t PWM_CHANNELS = 32;
 const uint16_t PWM_FREQUENCY = 1000;  //330
 extern const uint8_t PWM_MAX;
 
@@ -18,6 +17,7 @@ const uint8_t REG_LATCH = 12;
 const uint8_t REG_OE = 25;
 const uint8_t I2C_SDA = 21;
 const uint8_t I2C_SCL = 22;
+const uint8_t ENC_SW = 23;
 
 const float MOTOR_SPEED_FILTER_UPDATE_COEF = 0.15;
 const uint8_t FREQ_PWM_THRESHOLD = 40;
@@ -27,10 +27,7 @@ const uint16_t lettersSwapTimeout = 500;
 const uint16_t lettersBlankTimeout = 50;
 const uint16_t lettersSweepTimeout =  150;
 
-extern rb::SerialPWM serialPWM;
-extern int8_t pwm_index[33];
-
-void setPWM(rb::SerialPWM::value_type& channel, int8_t power);
+extern SerialPWM serialPWM;
 void updatePWM(void * param);
 }
 

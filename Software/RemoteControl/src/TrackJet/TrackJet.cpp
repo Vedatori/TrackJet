@@ -5,22 +5,11 @@
 #include "DisplayCharactersSet.h"
 #include "WiFiCaptain.h"
 
-const uint8_t TR::PWM_MAX = rb::SerialPWM::resolution();
-rb::SerialPWM TR::serialPWM(TR::PWM_CHANNELS, { TR::REG_DAT }, TR::REG_LATCH, TR::REG_CLK, -1, TR::PWM_FREQUENCY);
-int8_t TR::pwm_index[] = {0, 3, 2, 29, 28, 31, 30, 25, 24, 27, 26, 21, 20, 23, 22, 17, 16, 19, 18, 13, 12, 15, 14, 9, 8, 11, 10, 5, 4, 7, 6, 1, 0};
+SerialPWM TJ::serialPWM(TJ::REG_DAT, TJ::REG_LATCH, TJ::REG_CLK, TJ::REG_OE, TJ::PWM_FREQUENCY);
 
-void TR::setPWM(rb::SerialPWM::value_type& channel, int8_t power) {
-    if(power > TR::PWM_MAX)
-        power = TR::PWM_MAX;
-    else if(power < 0)
-        power = 0;
-
-    channel = power;
-}
-
-void TR::updatePWM(void * param) {
+void TJ::updatePWM(void * param) {
     for(;;) {
-        TR::serialPWM.update();
+        serialPWM.update();
 
         TrackJet.checkConnection();
         TrackJet.updateMotorsSpeed();
@@ -75,41 +64,42 @@ void TrackJetClass::updateMotorsSpeed() {
         shootingEnd = 0;
     }
     if(beepingEnd != 0 && millis() > beepingEnd) {
-        TR::setPWM(TR::serialPWM[TR::pwm_index[TR_OUT27]], 0);
+        //TJ::setPWM(TJ::serialPWM[TJ::pwm_index[TJ_OUT27]], 0);
         beepingEnd = 0;
     }
 
     // Switch PFM/PWM step up converter mode
     if(motorsSpeed[0] != 0 || motorsSpeed[1] != 0 || motorsSpeed[2]) {
-        TR::setPWM(TR::serialPWM[TR::pwm_index[6]], 0);     // PWM mode - High power
+        TJ::serialPWM.setPWM(5, 0);     // PWM mode - High power
+        
     }
     else {
-        TR::setPWM(TR::serialPWM[TR::pwm_index[6]], 100);   // PFM mode - Low power, high efficiency
+        TJ::serialPWM.setPWM(5, 100);   // PFM mode - Low power, high efficiency
     }
 
     // Filter motor speeds and turn off when connection not active
     for(uint8_t i = 0; i < 3; ++i) {
-        motorsSpeedFiltered[i] = motorsSpeed[i] * TR::MOTOR_SPEED_FILTER_UPDATE_COEF + motorsSpeedFiltered[i] * (1 - TR::MOTOR_SPEED_FILTER_UPDATE_COEF);
+        motorsSpeedFiltered[i] = motorsSpeed[i] * TJ::MOTOR_SPEED_FILTER_UPDATE_COEF + motorsSpeedFiltered[i] * (1 - TJ::MOTOR_SPEED_FILTER_UPDATE_COEF);
     }
     
     // Left motor
-    if(motorsSpeed[0] > 0) {
-        TR::setPWM(TR::serialPWM[TR::pwm_index[3]], (int)motorsSpeedFiltered[0]);
-        TR::setPWM(TR::serialPWM[TR::pwm_index[4]], 0);
+    if(motorsSpeedFiltered[0] > 0) {
+        TJ::serialPWM.setPWM(2, (int)motorsSpeedFiltered[0]);
+        TJ::serialPWM.setPWM(3, 0);
     }
     else {
-        TR::setPWM(TR::serialPWM[TR::pwm_index[3]], 0);
-        TR::setPWM(TR::serialPWM[TR::pwm_index[4]], -(int)motorsSpeedFiltered[0]);
+        TJ::serialPWM.setPWM(2, 0);
+        TJ::serialPWM.setPWM(3, -(int)motorsSpeedFiltered[0]);
     }
 
     // Right motor
-    if(motorsSpeed[1] > 0) {
-        TR::setPWM(TR::serialPWM[TR::pwm_index[1]], 0);
-        TR::setPWM(TR::serialPWM[TR::pwm_index[2]], (int)motorsSpeedFiltered[1]);
+    if(motorsSpeedFiltered[1] > 0) {
+        TJ::serialPWM.setPWM(0, 0);
+        TJ::serialPWM.setPWM(1, (int)motorsSpeedFiltered[1]);
     }
     else {
-        TR::setPWM(TR::serialPWM[TR::pwm_index[1]], -(int)motorsSpeedFiltered[1]);
-        TR::setPWM(TR::serialPWM[TR::pwm_index[2]], 0);
+        TJ::serialPWM.setPWM(0, -(int)motorsSpeedFiltered[1]);
+        TJ::serialPWM.setPWM(1, 0);
     }
 }
 
@@ -134,7 +124,7 @@ void TrackJetClass::canonShoot(const uint16_t length) {
 }
 
 void TrackJetClass::buzzerBeep(const uint16_t length) {
-    TR::setPWM(TR::serialPWM[TR::pwm_index[TR_OUT27]], 100);
+    //TJ::setPWM(TJ::serialPWM[TJ::pwm_index[TJ_OUT27]], 100);
     beepingEnd = millis() + length;
 }
 
@@ -149,12 +139,21 @@ void TrackJetClass::begin() {
     bool prefsPresent = preferences.getBool("prefsPresent", false);
     preferences.end();
 
-    //Wire.begin(TR::I2C_SDA, TR::I2C_SCL);
+    //Wire.begin(TJ::I2C_SDA, TJ::I2C_SCL);
+
+    TJ::serialPWM.setPWM(4, 100);   // Turn on motor step up
+    xTaskCreate(TJ::updatePWM, "updatePWM", 10000 , (void*) 0, 1, NULL);
+    TJ::serialPWM.set_output(true);
     
-    TR::setPWM(TR::serialPWM[TR::pwm_index[5]], 100);   // Turn on motor step up
-    xTaskCreate(TR::updatePWM, "updatePWM", 10000 , (void*) 0, 1, NULL);
-    pinMode(TR::REG_OE, OUTPUT);
-    digitalWrite(TR::REG_OE, 0);    // Enable shift registers output
+    uint8_t dispSetting[8][8] ={{1, 1, 1, 1, 1, 0, 0, 0}, 
+                                {0, 0, 1, 0, 0, 0, 0, 0}, 
+                                {0, 0, 1, 0, 1, 1, 1, 1}, 
+                                {0, 0, 1, 0, 0, 0, 0, 1}, 
+                                {0, 0, 1, 0, 0, 0, 0, 1},
+                                {0, 0, 1, 0, 0, 0, 0, 1},
+                                {0, 0, 0, 0, 1, 0, 0, 1},
+                                {0, 0, 0, 0, 0, 1, 1, 0}};
+    TJ::serialPWM.setDisp(dispSetting);
 }
 
 bool TrackJetClass::gyroGetEnabled() {
@@ -228,7 +227,7 @@ void TrackJetClass::displayText(String text, bool sweep) {
     }
 
     if(sweeping) {
-        if((millis() > prevMoveTime + TR::lettersSweepTimeout) && letterIndex <= (displayTextBuffer.length()*5)) {
+        if((millis() > prevMoveTime + TJ::lettersSweepTimeout) && letterIndex <= (displayTextBuffer.length()*5)) {
             prevMoveTime = millis();
 
             uint8_t letterID1 = displayTextBuffer[letterIndex / 5];
@@ -246,10 +245,10 @@ void TrackJetClass::displayText(String text, bool sweep) {
         }
     }
     else {
-        if(millis() > prevMoveTime + TR::lettersSwapTimeout - TR::lettersBlankTimeout) {
+        if(millis() > prevMoveTime + TJ::lettersSwapTimeout - TJ::lettersBlankTimeout) {
             trrSetLedAllDigital(0);
         }
-        if((millis() > prevMoveTime + TR::lettersSwapTimeout) && letterIndex <= displayTextBuffer.length()) {
+        if((millis() > prevMoveTime + TJ::lettersSwapTimeout) && letterIndex <= displayTextBuffer.length()) {
             prevMoveTime = millis();
 
             trrSetLedAllDigital(0);
@@ -283,7 +282,7 @@ void TrackJetClass::checkConnection() {
     if(!connectionEnabled) {
         return;
     }
-    if(millis() > prevCommunicationTime + TR::communicationTimeout) {
+    if(millis() > prevCommunicationTime + TJ::communicationTimeout) {
         connectionActive = false;
     }
     else {
