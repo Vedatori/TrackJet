@@ -36,6 +36,8 @@ void setup() {
     
     serialPWM.setPWM(11, 10);
     serialPWM.setPWM(12, 50);
+    uint8_t dispSetting[8][8] = {{5, 5, 5, 5, 0, 0, 0, 0},{0, 0, 0, 0, 5, 5, 5, 5, }, {5, 5, 5, 5, 0, 0, 0, 0},{0, 0, 0, 0, 5, 5, 5, 5, }, {5, 5, 5, 5, 0, 0, 0, 0},{0, 0, 0, 0, 5, 5, 5, 5, }, {5, 5, 5, 5, 0, 0, 0, 0},{0, 0, 0, 0, 5, 5, 5, 5, }};
+    memcpy(serialPWM.m_disp, dispSetting, 64*sizeof(uint8_t));
 }
 
 void loop() {

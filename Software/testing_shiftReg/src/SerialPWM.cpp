@@ -7,7 +7,9 @@
 #include "SerialPWM.h"
 
 int8_t SerialPWM::pwm_index[] = {3, 2, 29, 28, 31, 30, 25, 24, 27, 26, 21, 20, 23, 22, 17, 16, 19, 18, 13, 12, 15, 14, 9, 8, 11, 10, 5, 4, 7, 6, 1, 0};
+uint8_t SerialPWM::disp_pin_index[] = {18, 21, 25, 17, 22, 19, 29, 23, 20, 28, 31, 26, 16, 30, 27, 24};     // 8 rows, 8 columns 
 uint8_t SerialPWM::m_pwm[32] = {0, };
+uint8_t SerialPWM::m_disp[8][8] = {0, };
 
 volatile void* SerialPWM::i2snum2struct(const int num) {
     assert(num >= 0 && num < 2);
@@ -84,9 +86,26 @@ void SerialPWM::setPWM(uint8_t index, uint8_t width) {
 void SerialPWM::update() {
     m_active_buffer ^= 1;
     for (int sample = 0; sample != sc_resolution; ++sample) {
-        for (int channel = 1; channel != 32; ++channel) {
+        for (int channel = 0; channel != 32; ++channel) {
             uint8_t& value = m_buffer[m_active_buffer][sample][pwm_index[channel]];
             if (sample < m_pwm[channel])
+                value |= 1;
+            else
+                value &= ~1;
+        }
+        
+        // Turn all off
+        for (int channel = 0; channel != 8; ++channel) {
+            m_buffer[m_active_buffer][sample][pwm_index[disp_pin_index[channel]]] |= 1;
+        }
+        for (int channel = 8; channel != 16; ++channel) {
+            m_buffer[m_active_buffer][sample][pwm_index[disp_pin_index[channel]]] &= ~1;
+        }
+        
+        m_buffer[m_active_buffer][sample][pwm_index[disp_pin_index[sample/12]]] &= ~1;
+        for (int col = 0; col != 8; ++col) {
+            uint8_t& value = m_buffer[m_active_buffer][sample][pwm_index[disp_pin_index[col + 8]]];
+            if ((sample % 12) < m_disp[sample/12][col])
                 value |= 1;
             else
                 value &= ~1;

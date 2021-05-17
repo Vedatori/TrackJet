@@ -26,6 +26,7 @@ public:
     void set_output(bool state);    // 0-disabled, 1-enabled
 
     static int resolution();
+    static uint8_t m_disp[8][8];
 
 private:
     SerialPWM(const SerialPWM&) = delete;
@@ -33,8 +34,9 @@ private:
     static volatile void* i2snum2struct(const int num);
 
     static constexpr int sc_buffers = 2;
-    static constexpr int sc_resolution = 100;
+    static constexpr int sc_resolution = 96;
     static int8_t pwm_index[];
+    static uint8_t disp_pin_index[];
     const int c_channels = 32;
     int m_output_enable_pin;
     volatile void* m_i2s; // m_i2s is actually i2s_dev_t*, but this is an anonymous struct in the Espressif header i2s_struct.h and that causes a compilation error
