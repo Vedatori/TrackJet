@@ -5,7 +5,6 @@
 #include "Preferences.h"
 
 #include "WiFiCaptain.h"
-#include "cam.h"
 
 namespace TR {
 
@@ -22,7 +21,7 @@ const uint8_t I2C_SCL = 22;
 
 const float MOTOR_SPEED_FILTER_UPDATE_COEF = 0.15;
 const uint8_t FREQ_PWM_THRESHOLD = 40;
-const char STORAGE_NAMESPACE[] = "trackray";
+const char STORAGE_NAMESPACE[] = "TrackJet";
 const uint16_t communicationTimeout = 1000;
 const uint16_t lettersSwapTimeout = 500;
 const uint16_t lettersBlankTimeout = 50;
@@ -41,7 +40,7 @@ enum shiftRegPins {
     TR_OUT26, TR_OUT27, TR_OUT28, TR_OUT29, TR_OUT30, TR_OUT31, TR_OUT32,
 };
 
-class TrackRayClass {
+class TrackJetClass {
     bool beginCalled = false;
     bool buttonPressed = false;
     int8_t motorsSpeed[3];
@@ -58,7 +57,7 @@ class TrackRayClass {
     String displayTextBuffer;
 
 public:
-    TrackRayClass();
+    TrackJetClass();
     bool getButton();
     void setButton(bool pressed);
     void setFlashLight(int16_t brightness);
@@ -90,4 +89,4 @@ public:
     void commandSend(String command);
 };
 
-extern TrackRayClass TrackRay;
+extern TrackJetClass TrackJet;

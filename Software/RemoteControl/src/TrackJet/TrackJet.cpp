@@ -1,12 +1,9 @@
-#include "TrackRay.h"
+#include "TrackJet.h"
 #include "Wire.h"
-#include "Gyroscope.h"
-#include "GyroCalibration.h"
 #include "Preferences.h"
 
 #include "DisplayCharactersSet.h"
 #include "WiFiCaptain.h"
-#include "cam.h"
 
 const uint8_t TR::PWM_MAX = rb::SerialPWM::resolution();
 rb::SerialPWM TR::serialPWM(TR::PWM_CHANNELS, { TR::REG_DAT }, TR::REG_LATCH, TR::REG_CLK, -1, TR::PWM_FREQUENCY);
@@ -25,15 +22,15 @@ void TR::updatePWM(void * param) {
     for(;;) {
         TR::serialPWM.update();
 
-        TrackRay.checkConnection();
-        TrackRay.updateMotorsSpeed();
-        TrackRay.displayText();
+        TrackJet.checkConnection();
+        TrackJet.updateMotorsSpeed();
+        TrackJet.displayText();
 
         vTaskDelay(5);
     }
 }
 
-TrackRayClass::TrackRayClass(void) {
+TrackJetClass::TrackJetClass(void) {
     for(uint8_t i = 0; i < 3; ++i) {
         motorsSpeed[i] = 0;
         motorsSpeedFiltered[i] = 0;
@@ -42,13 +39,13 @@ TrackRayClass::TrackRayClass(void) {
     }
 }
 
-bool TrackRayClass::getButton() {
+bool TrackJetClass::getButton() {
     return buttonPressed;
 }
-void TrackRayClass::setButton(bool pressed) {
-    TrackRay.buttonPressed = pressed;
+void TrackJetClass::setButton(bool pressed) {
+    TrackJet.buttonPressed = pressed;
 }
-void TrackRayClass::setMotorsSpeed(const int8_t speed, const int8_t index) {
+void TrackJetClass::setMotorsSpeed(const int8_t speed, const int8_t index) {
     if(index == 0 || index == 1) {
         if(speed < -100)
             motorsSpeed[index] = -100;
@@ -67,7 +64,7 @@ void TrackRayClass::setMotorsSpeed(const int8_t speed, const int8_t index) {
     }
     
 }
-void TrackRayClass::updateMotorsSpeed() {
+void TrackJetClass::updateMotorsSpeed() {
     if(connectionEnabled == true && connectionActive == false) {
         for(uint8_t i = 0; i < 3; ++i) {
             motorsSpeed[i] = 0;
@@ -116,7 +113,7 @@ void TrackRayClass::updateMotorsSpeed() {
     }
 }
 
-void TrackRayClass::controlMovement(const int8_t joystickX, const int8_t joystickY) {
+void TrackJetClass::controlMovement(const int8_t joystickX, const int8_t joystickY) {
     prevCommunicationTime = millis();
     int16_t engineLeftSpeed = 0;
     int16_t engineRightSpeed = 0;
@@ -131,48 +128,39 @@ void TrackRayClass::controlMovement(const int8_t joystickX, const int8_t joystic
     setMotorsSpeed(engineRightSpeed, 1);
 }
 
-void TrackRayClass::canonShoot(const uint16_t length) {
+void TrackJetClass::canonShoot(const uint16_t length) {
     setMotorsSpeed(100, 2);
     shootingEnd = millis() + length;
 }
 
-void TrackRayClass::buzzerBeep(const uint16_t length) {
+void TrackJetClass::buzzerBeep(const uint16_t length) {
     TR::setPWM(TR::serialPWM[TR::pwm_index[TR_OUT27]], 100);
     beepingEnd = millis() + length;
 }
 
-void TrackRayClass::begin() {
+void TrackJetClass::begin() {
     beginCalled = true;
     Serial.begin(115200);
     
-    preferences.begin("trackray", false);
+    preferences.begin("TrackJet", false);
     gyroOffsets[0] = preferences.getInt("counter", 0);
     gyroOffsets[1] = preferences.getInt("gyroOffPitch", 0);
     gyroOffsets[2] = preferences.getInt("gyroOffRoll", 0);
     bool prefsPresent = preferences.getBool("prefsPresent", false);
     preferences.end();
 
-    /*Wire.begin(TR::I2C_SDA, TR::I2C_SCL);
-    if(initiateGyroscope(gyroOffsets)) {
-        gyroEnabled = true;
-        
-        // Calibrate gyroscope if no offset data present
-        if(prefsPresent == false) {
-            printf("Calibrating gyroscope: Place TrackRay electronics board horizontally and wait.\n");
-            trrGyroCalibrate();
-        }
-    }
-    camInit();*/
+    //Wire.begin(TR::I2C_SDA, TR::I2C_SCL);
+    
     TR::setPWM(TR::serialPWM[TR::pwm_index[5]], 100);   // Turn on motor step up
     xTaskCreate(TR::updatePWM, "updatePWM", 10000 , (void*) 0, 1, NULL);
     pinMode(TR::REG_OE, OUTPUT);
     digitalWrite(TR::REG_OE, 0);    // Enable shift registers output
 }
 
-bool TrackRayClass::gyroGetEnabled() {
+bool TrackJetClass::gyroGetEnabled() {
     return gyroEnabled;
 }
-float TrackRayClass::gyroData(uint8_t index) {
+float TrackJetClass::gyroData(uint8_t index) {
     float output = gyroYPR[index];
     if(index == 1) {
         output -= 20;
@@ -183,28 +171,28 @@ float TrackRayClass::gyroData(uint8_t index) {
     }
     return output;
 }
-void TrackRayClass::gyroCalibrate() {
-    gyroCalibration(gyroOffsets);
+void TrackJetClass::gyroCalibrate() {
+    //gyroCalibration(gyroOffsets);
 
-    preferences.begin("trackray", false);
+    preferences.begin("TrackJet", false);
     preferences.putInt("counter", gyroOffsets[0]);
     preferences.putInt("gyroOffPitch", gyroOffsets[1]);
     preferences.putInt("gyroOffRoll", gyroOffsets[2]);
     preferences.putBool("prefsPresent", true);
     preferences.end();
 }
-void TrackRayClass::gyroUpdate() {
-    updateGyroData(gyroYPR);
+void TrackJetClass::gyroUpdate() {
+    //updateGyroData(gyroYPR);
 }
 
-void TrackRayClass::displayDigit(const uint8_t digit) {
+void TrackJetClass::displayDigit(const uint8_t digit) {
     if(digit > 9) {
         return;
     }
     displayChar(digit + 48);
 }
 
-void TrackRayClass::displayChar(const char letter, int8_t sweepRight, int8_t sweepDown) {
+void TrackJetClass::displayChar(const char letter, int8_t sweepRight, int8_t sweepDown) {
     /*
     uint8_t letterID = letter;
     if(letterID >= 97 && letterID <= 122) {
@@ -225,7 +213,7 @@ void TrackRayClass::displayChar(const char letter, int8_t sweepRight, int8_t swe
     ;
 }
 
-void TrackRayClass::displayText(String text, bool sweep) {
+void TrackJetClass::displayText(String text, bool sweep) {
     /*static uint8_t letterIndex;
     static uint32_t prevMoveTime = 0;
     static bool sweeping;
@@ -278,21 +266,20 @@ void TrackRayClass::displayText(String text, bool sweep) {
    ;
 }
 
-bool TrackRayClass::isDisplayingText() {
+bool TrackJetClass::isDisplayingText() {
     return !displayTextBuffer.isEmpty();
 }
 
-void TrackRayClass::startWiFiCaptain(String ssid, String password) {
+void TrackJetClass::startWiFiCaptain(String ssid, String password) {
     if(!beginCalled) {
         begin();
     }
     setApCredentials(ssid, password);
     wifiCaptInit();
     connectionEnabled = true;
-    camWebSocketStart();
 }
 
-void TrackRayClass::checkConnection() {
+void TrackJetClass::checkConnection() {
     if(!connectionEnabled) {
         return;
     }
@@ -304,13 +291,13 @@ void TrackRayClass::checkConnection() {
     }
 }
 
-String TrackRayClass::commandGet() {
+String TrackJetClass::commandGet() {
     String command = String(commandGetCaptain());
     command.toLowerCase();
     return command;
 }
 
-String TrackRayClass::commandGetIndexed(uint8_t index) {
+String TrackJetClass::commandGetIndexed(uint8_t index) {
     char commandBuffer[64];
     sprintf(commandBuffer, commandGetCaptain());
     const char delimiter[2] = " ";
@@ -324,12 +311,12 @@ String TrackRayClass::commandGetIndexed(uint8_t index) {
     return command;
 }
 
-void TrackRayClass::commandClear() {
+void TrackJetClass::commandClear() {
     commandClearCaptain();
 }
 
-void TrackRayClass::commandSend(String command) {
+void TrackJetClass::commandSend(String command) {
     commandSendCaptain(command);
 }
 
-TrackRayClass TrackRay;
+TrackJetClass TrackJet;

@@ -8,7 +8,7 @@
 #include "Preferences.h"
 #include "WebSocketsServer.h"   //https://github.com/Links2004/arduinoWebSockets
 
-#include "TrackRay.h"
+#include "TrackJet.h"
 
 WebSocketsServer webSocket = WebSocketsServer(1337);
 
@@ -70,7 +70,7 @@ void handleWifi() {
         "<!DOCTYPE html><html lang='en'><head>"
         "<meta name='theme-color' content='#404040' />"
         "<meta name='viewport' content='width=device-width'>"
-        "<title>TrackRay</title>"
+        "<title>TrackJet</title>"
         "<link rel='stylesheet' type='text/css' href='style.css'>"
         "<style>.textDiv {margin : 3vw;}</style>"
         "</head><body><div class='textDiv'>"
@@ -218,7 +218,7 @@ void handleClients(void * param) {
 
 void wifiCaptInit() {
     if(strlen(apCredentials.ssid) == 0 || strlen(apCredentials.password) < 8) {
-        sprintf(apCredentials.ssid, "TrackRay");
+        sprintf(apCredentials.ssid, "TrackJet");
         sprintf(apCredentials.password, "12345678");
     }
     softApEnable();
@@ -281,7 +281,7 @@ void onWebSocketEvent(uint8_t client_num, WStype_t type, uint8_t * payload, size
         // Client has disconnected
         case WStype_DISCONNECTED:
             Serial.printf("[%u] Disconnected!\n", client_num);
-            TrackRay.controlMovement(0, 0);
+            TrackJet.controlMovement(0, 0);
             if(client_num < 3) {
                 clientConnectedCaptain[client_num] = false;
             }
@@ -316,7 +316,7 @@ void onWebSocketEvent(uint8_t client_num, WStype_t type, uint8_t * payload, size
                 joystickX = atoi(token);
                 token = strtok(NULL, delimiter);
                 joystickY = atoi(token);
-                TrackRay.controlMovement(joystickX, joystickY);
+                TrackJet.controlMovement(joystickX, joystickY);
             }
             else if(strcmp(token, commandMsg) == 0) {
                 token = strtok(NULL, delimiter);
