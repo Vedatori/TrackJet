@@ -55,6 +55,7 @@ class TrackJetClass {
 
 public:
     TrackJetClass();
+    void begin();
     bool getButton();
     void setButton(bool pressed);
     void setFlashLight(int16_t brightness);
@@ -63,7 +64,6 @@ public:
     void controlMovement(const int8_t joystickX, const int8_t joystickY);
     void canonShoot(const uint16_t length);
     void buzzerBeep(const uint16_t length);
-    void begin();
     
     bool gyroGetEnabled();
     float gyroData(uint8_t index) ;
@@ -73,6 +73,9 @@ public:
         printf("offsets: %d %d %d\n", gyroOffsets[0], gyroOffsets[1], gyroOffsets[2]);
     }
 
+    void displaySetSingle(uint8_t row, uint8_t col, int8_t value);
+    void displaySetAll(int8_t value);
+    void displaySet(uint8_t state[][DISP_COLS]);
     void displayDigit(const uint8_t digit);
     void displayChar(const char letter, int8_t sweepRight = 0, int8_t sweepDown = 0);
     void displayText(String text = "", bool sweep = true);

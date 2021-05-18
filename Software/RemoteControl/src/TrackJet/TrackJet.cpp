@@ -28,6 +28,25 @@ TrackJetClass::TrackJetClass(void) {
     }
 }
 
+void TrackJetClass::begin() {
+    beginCalled = true;
+    Serial.begin(115200);
+    
+    preferences.begin("TrackJet", false);
+    gyroOffsets[0] = preferences.getInt("counter", 0);
+    gyroOffsets[1] = preferences.getInt("gyroOffPitch", 0);
+    gyroOffsets[2] = preferences.getInt("gyroOffRoll", 0);
+    bool prefsPresent = preferences.getBool("prefsPresent", false);
+    preferences.end();
+
+    //Wire.begin(TJ::I2C_SDA, TJ::I2C_SCL);
+
+    TJ::serialPWM.setPWM(4, 100);   // Turn on motor step up
+    displaySet(dispWelcome);
+    xTaskCreate(TJ::updatePWM, "updatePWM", 10000 , (void*) 0, 1, NULL);
+    TJ::serialPWM.set_output(true);
+}
+
 bool TrackJetClass::getButton() {
     return buttonPressed;
 }
@@ -128,34 +147,6 @@ void TrackJetClass::buzzerBeep(const uint16_t length) {
     beepingEnd = millis() + length;
 }
 
-void TrackJetClass::begin() {
-    beginCalled = true;
-    Serial.begin(115200);
-    
-    preferences.begin("TrackJet", false);
-    gyroOffsets[0] = preferences.getInt("counter", 0);
-    gyroOffsets[1] = preferences.getInt("gyroOffPitch", 0);
-    gyroOffsets[2] = preferences.getInt("gyroOffRoll", 0);
-    bool prefsPresent = preferences.getBool("prefsPresent", false);
-    preferences.end();
-
-    //Wire.begin(TJ::I2C_SDA, TJ::I2C_SCL);
-
-    TJ::serialPWM.setPWM(4, 100);   // Turn on motor step up
-    xTaskCreate(TJ::updatePWM, "updatePWM", 10000 , (void*) 0, 1, NULL);
-    TJ::serialPWM.set_output(true);
-    
-    uint8_t dispSetting[8][8] ={{1, 1, 1, 1, 1, 0, 0, 0}, 
-                                {0, 0, 1, 0, 0, 0, 0, 0}, 
-                                {0, 0, 1, 0, 1, 1, 1, 1}, 
-                                {0, 0, 1, 0, 0, 0, 0, 1}, 
-                                {0, 0, 1, 0, 0, 0, 0, 1},
-                                {0, 0, 1, 0, 0, 0, 0, 1},
-                                {0, 0, 0, 0, 1, 0, 0, 1},
-                                {0, 0, 0, 0, 0, 1, 1, 0}};
-    TJ::serialPWM.setDisp(dispSetting);
-}
-
 bool TrackJetClass::gyroGetEnabled() {
     return gyroEnabled;
 }
@@ -184,6 +175,15 @@ void TrackJetClass::gyroUpdate() {
     //updateGyroData(gyroYPR);
 }
 
+void TrackJetClass::displaySetSingle(uint8_t row, uint8_t col, int8_t value) {
+    TJ::serialPWM.setDispSingle(row, col, value);
+}
+void TrackJetClass::displaySetAll(int8_t value) {
+    TJ::serialPWM.setDispAll(value);
+}
+void TrackJetClass::displaySet(uint8_t state[][DISP_COLS]) {
+    TJ::serialPWM.setDisp(state);
+}
 void TrackJetClass::displayDigit(const uint8_t digit) {
     if(digit > 9) {
         return;
@@ -192,7 +192,7 @@ void TrackJetClass::displayDigit(const uint8_t digit) {
 }
 
 void TrackJetClass::displayChar(const char letter, int8_t sweepRight, int8_t sweepDown) {
-    /*
+    
     uint8_t letterID = letter;
     if(letterID >= 97 && letterID <= 122) {
         letterID = letterID - 32;   // change to upper case letters
@@ -201,19 +201,17 @@ void TrackJetClass::displayChar(const char letter, int8_t sweepRight, int8_t swe
         return;     // out of defined letters
     }
     letterID = letterID - 40;   // move to beginning of character set array
-    for(uint8_t i = 0; i < 5; ++i) {
-        for(uint8_t j = 0; j < 5; ++j) {
-            int16_t ledIndex = (i + sweepDown)*5 + j + sweepRight + 1;
-            if((i + sweepDown) >= 0 && (i + sweepDown) < 5 && (j + sweepRight) >= 0 && (j + sweepRight) < 5) {
-                trrSetLedDigital(ledIndex, characterSet[letterID][i][j]);
+    for(uint8_t row = 0; row < 5; ++row) {
+        for(uint8_t col = 0; col < 5; ++col) {
+            if((row + sweepDown) >= 0 && (row + sweepDown) < DISP_ROWS && (col + sweepRight) >= 0 && (col + sweepRight) < DISP_COLS) {
+                TJ::serialPWM.setDispSingle(row + sweepDown, col + sweepRight, DISP_PWM_RESOLUTION*characterSet[letterID][row][col]);
             }
         }
-    }*/
-    ;
+    }
 }
 
 void TrackJetClass::displayText(String text, bool sweep) {
-    /*static uint8_t letterIndex;
+    static uint8_t letterIndex;
     static uint32_t prevMoveTime = 0;
     static bool sweeping;
     if(text.length() > 0) {
@@ -233,7 +231,7 @@ void TrackJetClass::displayText(String text, bool sweep) {
             uint8_t letterID1 = displayTextBuffer[letterIndex / 5];
             uint8_t letterID2 = displayTextBuffer[letterIndex / 5 + 1];
 
-            trrSetLedAllDigital(0);
+            displaySetAll(0);
             displayChar(letterID1, -(letterIndex % 5));
             displayChar(letterID2, (5 - (letterIndex % 5)));
 
@@ -246,12 +244,12 @@ void TrackJetClass::displayText(String text, bool sweep) {
     }
     else {
         if(millis() > prevMoveTime + TJ::lettersSwapTimeout - TJ::lettersBlankTimeout) {
-            trrSetLedAllDigital(0);
+            displaySetAll(0);
         }
         if((millis() > prevMoveTime + TJ::lettersSwapTimeout) && letterIndex <= displayTextBuffer.length()) {
             prevMoveTime = millis();
 
-            trrSetLedAllDigital(0);
+            displaySetAll(0);
             displayChar(displayTextBuffer[letterIndex]);
 
             if(letterIndex >= displayTextBuffer.length()) {
@@ -261,8 +259,6 @@ void TrackJetClass::displayText(String text, bool sweep) {
             ++letterIndex;
         }
     }
-    */
-   ;
 }
 
 bool TrackJetClass::isDisplayingText() {

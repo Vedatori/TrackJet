@@ -7,8 +7,8 @@
 #include "SerialPWM.h"
 
 int8_t SerialPWM::pwm_index[PWM_CHANNELS] = {3, 2, 29, 28, 31, 30, 25, 24, 27, 26, 21, 20, 23, 22, 17, 16, 19, 18, 13, 12, 15, 14, 9, 8, 11, 10, 5, 4, 7, 6, 1, 0};
-uint8_t SerialPWM::row_pin_index[DISP_ROWS] = {16, 17, 18, 19, 20, 21, 22, 23};
-uint8_t SerialPWM::col_pin_index[DISP_COLS] = {24, 25, 26, 27, 28, 29, 30, 31};
+uint8_t SerialPWM::row_pin_index[DISP_ROWS] = {23, 22, 21, 20, 19, 18, 17, 16};
+uint8_t SerialPWM::col_pin_index[DISP_COLS] = {31, 30, 29, 28, 27, 26, 25, 24};
 uint8_t SerialPWM::m_pwm[PWM_CHANNELS] = {0, };
 uint8_t SerialPWM::m_disp[DISP_ROWS][DISP_COLS] = {0, };
 
@@ -86,6 +86,13 @@ void SerialPWM::setPWM(uint8_t index, uint8_t width) {
 }
 void SerialPWM::setDisp(uint8_t state[][DISP_COLS]) {
     memcpy(m_disp, state, DISP_ROWS*DISP_COLS*sizeof(uint8_t));
+}
+void SerialPWM::setDispAll(uint8_t brightness) {
+    for(uint8_t row = 0; row < DISP_ROWS; ++row) {
+        for(uint8_t col = 0; col < DISP_COLS; ++col) {
+            m_disp[row][col] = brightness;
+        }
+    }
 }
 void SerialPWM::setDispSingle(uint8_t row, uint8_t col, uint8_t brightness) {
     if(row < DISP_ROWS && col < DISP_COLS)
