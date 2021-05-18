@@ -5,6 +5,7 @@
 #include "Preferences.h"
 
 #include "WiFiCaptain.h"
+#include "QuadEncoder.h"
 
 namespace TJ {
 
@@ -17,7 +18,11 @@ const uint8_t REG_LATCH = 12;
 const uint8_t REG_OE = 25;
 const uint8_t I2C_SDA = 21;
 const uint8_t I2C_SCL = 22;
+
+const uint8_t ENC_A = 15;
+const uint8_t ENC_B = 5;
 const uint8_t ENC_SW = 23;
+const uint8_t BUTTON = 18;
 
 const float MOTOR_SPEED_FILTER_UPDATE_COEF = 0.15;
 const uint8_t FREQ_PWM_THRESHOLD = 40;
@@ -28,7 +33,10 @@ const uint16_t lettersBlankTimeout = 50;
 const uint16_t lettersSweepTimeout =  150;
 
 extern SerialPWM serialPWM;
+extern QuadEncoder quadEnc;
 void updatePWM(void * param);
+void handleRot();
+void handleSW();
 }
 
 enum shiftRegPins {
@@ -39,7 +47,6 @@ enum shiftRegPins {
 
 class TrackJetClass {
     bool beginCalled = false;
-    bool buttonPressed = false;
     int8_t motorsSpeed[3];
     float motorsSpeedFiltered[3];
     bool gyroEnabled = false;
@@ -57,8 +64,11 @@ public:
     TrackJetClass();
     void begin();
     bool getButton();
-    void setButton(bool pressed);
-    void setFlashLight(int16_t brightness);
+    uint16_t getPotentiometer();
+    bool getEncoderSW();
+    bool getEncoderSWPulse();
+    int16_t getEncoder();
+    void resetEnc();
     void setMotorsSpeed(const int8_t speed, const int8_t index);
     void updateMotorsSpeed();
     void controlMovement(const int8_t joystickX, const int8_t joystickY);

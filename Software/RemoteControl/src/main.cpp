@@ -1,6 +1,6 @@
 #include "TrackJet/TrackJet.h"
 
-const uint8_t CONTROL_PERIOD = 50;
+const uint8_t CONTROL_PERIOD = 200;
 uint32_t prevControlTime = 0;
 
 void setup() {
@@ -12,5 +12,7 @@ void setup() {
 void loop() {
     if(millis() > prevControlTime + CONTROL_PERIOD) {
         prevControlTime = millis();
+        //TrackJet.displayDigit(TrackJet.getEncoder()%10);
+        Serial.printf("Button %d, Enc %d, %d, %d\n", TrackJet.getButton(), TrackJet.getEncoder(), TrackJet.getEncoderSW(), TrackJet.getEncoderSWPulse());
     }
 }

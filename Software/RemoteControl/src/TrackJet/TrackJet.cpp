@@ -6,6 +6,7 @@
 #include "WiFiCaptain.h"
 
 SerialPWM TJ::serialPWM(TJ::REG_DAT, TJ::REG_LATCH, TJ::REG_CLK, TJ::REG_OE, TJ::PWM_FREQUENCY);
+QuadEncoder TJ::quadEnc(TJ::ENC_A, TJ::ENC_B, TJ::ENC_SW);
 
 void TJ::updatePWM(void * param) {
     for(;;) {
@@ -17,6 +18,12 @@ void TJ::updatePWM(void * param) {
 
         vTaskDelay(5);
     }
+}
+void TJ::handleRot(){
+    quadEnc.updatePosition();
+}
+void TJ::handleSW(){
+    quadEnc.lastPressed = millis();
 }
 
 TrackJetClass::TrackJetClass(void) {
@@ -45,13 +52,31 @@ void TrackJetClass::begin() {
     displaySet(dispWelcome);
     xTaskCreate(TJ::updatePWM, "updatePWM", 10000 , (void*) 0, 1, NULL);
     TJ::serialPWM.set_output(true);
+
+    pinMode(TJ::BUTTON, INPUT_PULLUP);
+    attachInterrupt(TJ::ENC_A, TJ::handleRot, CHANGE);
+    attachInterrupt(TJ::ENC_B, TJ::handleRot, CHANGE);
+    attachInterrupt(TJ::ENC_SW, TJ::handleSW, RISING);
 }
 
 bool TrackJetClass::getButton() {
-    return buttonPressed;
+    // 0-not pressed, 1-pressed
+    return !digitalRead(TJ::BUTTON);
 }
-void TrackJetClass::setButton(bool pressed) {
-    TrackJet.buttonPressed = pressed;
+uint16_t TrackJetClass::getPotentiometer() {
+    return 0;
+}
+bool TrackJetClass::getEncoderSW() {
+    return TJ::quadEnc.getSWPressed();
+}
+bool TrackJetClass::getEncoderSWPulse() {
+    return TJ::quadEnc.getSW();
+}
+int16_t TrackJetClass::getEncoder() {
+    return TJ::quadEnc.getPosition();
+}
+void TrackJetClass::resetEnc() {
+    TJ::quadEnc.clear();
 }
 void TrackJetClass::setMotorsSpeed(const int8_t speed, const int8_t index) {
     if(index == 0 || index == 1) {
