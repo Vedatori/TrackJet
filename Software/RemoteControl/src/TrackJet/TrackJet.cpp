@@ -13,7 +13,7 @@ void TJ::updatePWM(void * param) {
         serialPWM.update();
 
         TrackJet.checkConnection();
-        TrackJet.updateMotorsSpeed();
+        TrackJet.motorsUpdateSpeed();
         TrackJet.displayText();
 
         vTaskDelay(5);
@@ -48,8 +48,8 @@ void TrackJetClass::begin() {
 
     //Wire.begin(TJ::I2C_SDA, TJ::I2C_SCL);
 
-    TJ::serialPWM.setPWM(4, 100);   // Turn on motor step up
-    displaySet(dispWelcome);
+    TJ::serialPWM.setPWM(STEP_EN, 100);   // Turn on motor step up
+    display(dispWelcome);
     xTaskCreate(TJ::updatePWM, "updatePWM", 10000 , (void*) 0, 1, NULL);
     TJ::serialPWM.set_output(true);
 
@@ -59,26 +59,26 @@ void TrackJetClass::begin() {
     attachInterrupt(TJ::ENC_SW, TJ::handleSW, RISING);
 }
 
-bool TrackJetClass::getButton() {
+bool TrackJetClass::buttonRead() {
     // 0-not pressed, 1-pressed
     return !digitalRead(TJ::BUTTON);
 }
-uint16_t TrackJetClass::getPotentiometer() {
+uint16_t TrackJetClass::potentiometerRead() {
     return 0;
 }
-bool TrackJetClass::getEncoderSW() {
+bool TrackJetClass::encoderReadButton() {
     return TJ::quadEnc.getSWPressed();
 }
-bool TrackJetClass::getEncoderSWPulse() {
+bool TrackJetClass::encoderReadButtonPulse() {
     return TJ::quadEnc.getSW();
 }
-int16_t TrackJetClass::getEncoder() {
+int16_t TrackJetClass::encoderRead() {
     return TJ::quadEnc.getPosition();
 }
-void TrackJetClass::resetEnc() {
+void TrackJetClass::encoderReset() {
     TJ::quadEnc.clear();
 }
-void TrackJetClass::setMotorsSpeed(const int8_t speed, const int8_t index) {
+void TrackJetClass::motorsSetSpeed(const int8_t speed, const int8_t index) {
     if(index == 0 || index == 1) {
         if(speed < -100)
             motorsSpeed[index] = -100;
@@ -97,15 +97,11 @@ void TrackJetClass::setMotorsSpeed(const int8_t speed, const int8_t index) {
     }
     
 }
-void TrackJetClass::updateMotorsSpeed() {
+void TrackJetClass::motorsUpdateSpeed() {
     if(connectionEnabled == true && connectionActive == false) {
         for(uint8_t i = 0; i < 3; ++i) {
             motorsSpeed[i] = 0;
         }
-    }
-    if(shootingEnd != 0 && millis() > shootingEnd) {
-        motorsSpeed[2] = 0;
-        shootingEnd = 0;
     }
     if(beepingEnd != 0 && millis() > beepingEnd) {
         //TJ::setPWM(TJ::serialPWM[TJ::pwm_index[TJ_OUT27]], 0);
@@ -114,11 +110,11 @@ void TrackJetClass::updateMotorsSpeed() {
 
     // Switch PFM/PWM step up converter mode
     if(motorsSpeed[0] != 0 || motorsSpeed[1] != 0 || motorsSpeed[2]) {
-        TJ::serialPWM.setPWM(5, 0);     // PWM mode - High power
+        TJ::serialPWM.setPWM(STEP_MODE, 0);     // PWM mode - High power
         
     }
     else {
-        TJ::serialPWM.setPWM(5, 100);   // PFM mode - Low power, high efficiency
+        TJ::serialPWM.setPWM(STEP_MODE, 100);   // PFM mode - Low power, high efficiency
     }
 
     // Filter motor speeds and turn off when connection not active
@@ -128,22 +124,22 @@ void TrackJetClass::updateMotorsSpeed() {
     
     // Left motor
     if(motorsSpeedFiltered[0] > 0) {
-        TJ::serialPWM.setPWM(2, (int)motorsSpeedFiltered[0]);
-        TJ::serialPWM.setPWM(3, 0);
+        TJ::serialPWM.setPWM(MOTB1, (int)motorsSpeedFiltered[0]);
+        TJ::serialPWM.setPWM(MOTB2, 0);
     }
     else {
-        TJ::serialPWM.setPWM(2, 0);
-        TJ::serialPWM.setPWM(3, -(int)motorsSpeedFiltered[0]);
+        TJ::serialPWM.setPWM(MOTB1, 0);
+        TJ::serialPWM.setPWM(MOTB2, -(int)motorsSpeedFiltered[0]);
     }
 
     // Right motor
     if(motorsSpeedFiltered[1] > 0) {
-        TJ::serialPWM.setPWM(0, 0);
-        TJ::serialPWM.setPWM(1, (int)motorsSpeedFiltered[1]);
+        TJ::serialPWM.setPWM(MOTA1, 0);
+        TJ::serialPWM.setPWM(MOTA2, (int)motorsSpeedFiltered[1]);
     }
     else {
-        TJ::serialPWM.setPWM(0, -(int)motorsSpeedFiltered[1]);
-        TJ::serialPWM.setPWM(1, 0);
+        TJ::serialPWM.setPWM(MOTA1, -(int)motorsSpeedFiltered[1]);
+        TJ::serialPWM.setPWM(MOTA2, 0);
     }
 }
 
@@ -158,13 +154,8 @@ void TrackJetClass::controlMovement(const int8_t joystickX, const int8_t joystic
     engineLeftSpeed = constrain(engineLeftSpeed, -100, 100);
     engineRightSpeed = constrain(engineRightSpeed, -100, 100);
 
-    setMotorsSpeed(engineLeftSpeed, 0);
-    setMotorsSpeed(engineRightSpeed, 1);
-}
-
-void TrackJetClass::canonShoot(const uint16_t length) {
-    setMotorsSpeed(100, 2);
-    shootingEnd = millis() + length;
+    motorsSetSpeed(engineLeftSpeed, 0);
+    motorsSetSpeed(engineRightSpeed, 1);
 }
 
 void TrackJetClass::buzzerBeep(const uint16_t length) {
@@ -200,13 +191,13 @@ void TrackJetClass::gyroUpdate() {
     //updateGyroData(gyroYPR);
 }
 
-void TrackJetClass::displaySetSingle(uint8_t row, uint8_t col, int8_t value) {
+void TrackJetClass::displaySingle(uint8_t row, uint8_t col, int8_t value) {
     TJ::serialPWM.setDispSingle(row, col, value);
 }
-void TrackJetClass::displaySetAll(int8_t value) {
+void TrackJetClass::displayAll(int8_t value) {
     TJ::serialPWM.setDispAll(value);
 }
-void TrackJetClass::displaySet(uint8_t state[][DISP_COLS]) {
+void TrackJetClass::display(uint8_t state[][DISP_COLS]) {
     TJ::serialPWM.setDisp(state);
 }
 void TrackJetClass::displayDigit(const uint8_t digit) {
@@ -256,7 +247,7 @@ void TrackJetClass::displayText(String text, bool sweep) {
             uint8_t letterID1 = displayTextBuffer[letterIndex / 5];
             uint8_t letterID2 = displayTextBuffer[letterIndex / 5 + 1];
 
-            displaySetAll(0);
+            displayAll(0);
             displayChar(letterID1, -(letterIndex % 5));
             displayChar(letterID2, (5 - (letterIndex % 5)));
 
@@ -269,12 +260,12 @@ void TrackJetClass::displayText(String text, bool sweep) {
     }
     else {
         if(millis() > prevMoveTime + TJ::lettersSwapTimeout - TJ::lettersBlankTimeout) {
-            displaySetAll(0);
+            displayAll(0);
         }
         if((millis() > prevMoveTime + TJ::lettersSwapTimeout) && letterIndex <= displayTextBuffer.length()) {
             prevMoveTime = millis();
 
-            displaySetAll(0);
+            displayAll(0);
             displayChar(displayTextBuffer[letterIndex]);
 
             if(letterIndex >= displayTextBuffer.length()) {
@@ -286,7 +277,7 @@ void TrackJetClass::displayText(String text, bool sweep) {
     }
 }
 
-bool TrackJetClass::isDisplayingText() {
+bool TrackJetClass::displayIsBusy() {
     return !displayTextBuffer.isEmpty();
 }
 

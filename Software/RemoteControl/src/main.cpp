@@ -12,7 +12,7 @@ void setup() {
 void loop() {
     if(millis() > prevControlTime + CONTROL_PERIOD) {
         prevControlTime = millis();
-        //TrackJet.displayDigit(TrackJet.getEncoder()%10);
-        Serial.printf("Button %d, Enc %d, %d, %d\n", TrackJet.getButton(), TrackJet.getEncoder(), TrackJet.getEncoderSW(), TrackJet.getEncoderSWPulse());
+        //TrackJet.displayDigit(TrackJet.encoderRead()%10);
+        Serial.printf("Button %d, Enc %d, %d, %d\n", TrackJet.buttonRead(), TrackJet.encoderRead(), TrackJet.encoderReadButton(), TrackJet.encoderReadButtonPulse());
     }
 }

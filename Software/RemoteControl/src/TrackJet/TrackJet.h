@@ -9,8 +9,7 @@
 
 namespace TJ {
 
-const uint16_t PWM_FREQUENCY = 1000;  //330
-extern const uint8_t PWM_MAX;
+const uint16_t PWM_FREQUENCY = 1000;
 
 const uint8_t REG_DAT = 13;
 const uint8_t REG_CLK = 14;
@@ -40,9 +39,8 @@ void handleSW();
 }
 
 enum shiftRegPins {
-    D0, D1, D2, D3, D4, D5, D6, D7, D8, D9, D10, D11, D12, D13, D14, D15, D16, 
-    D17, D18, D19, D20, D21, D22, D23, D24, D25, 
-    TR_OUT26, TR_OUT27, TR_OUT28, TR_OUT29, TR_OUT30, TR_OUT31, TR_OUT32,
+    MOTA1, MOTA2, MOTB1, MOTB2, STEP_EN, STEP_MODE, MOT1, MOT2, MOT3, MOT4, 
+    XSHUT, LED2, LED1, MUXA, MUXB, MUXC
 };
 
 class TrackJetClass {
@@ -56,23 +54,23 @@ class TrackJetClass {
     uint32_t prevCommunicationTime = 0;
     bool connectionEnabled = false;
     bool connectionActive = false;
-    uint32_t shootingEnd = 0;
     uint32_t beepingEnd = 0;
     String displayTextBuffer;
 
 public:
     TrackJetClass();
     void begin();
-    bool getButton();
-    uint16_t getPotentiometer();
-    bool getEncoderSW();
-    bool getEncoderSWPulse();
-    int16_t getEncoder();
-    void resetEnc();
-    void setMotorsSpeed(const int8_t speed, const int8_t index);
-    void updateMotorsSpeed();
+
+    bool buttonRead();
+    uint16_t potentiometerRead();
+    bool encoderReadButton();
+    bool encoderReadButtonPulse();
+    int16_t encoderRead();
+    void encoderReset();
+
+    void motorsSetSpeed(const int8_t speed, const int8_t index);
+    void motorsUpdateSpeed();
     void controlMovement(const int8_t joystickX, const int8_t joystickY);
-    void canonShoot(const uint16_t length);
     void buzzerBeep(const uint16_t length);
     
     bool gyroGetEnabled();
@@ -83,13 +81,13 @@ public:
         printf("offsets: %d %d %d\n", gyroOffsets[0], gyroOffsets[1], gyroOffsets[2]);
     }
 
-    void displaySetSingle(uint8_t row, uint8_t col, int8_t value);
-    void displaySetAll(int8_t value);
-    void displaySet(uint8_t state[][DISP_COLS]);
+    void displaySingle(uint8_t row, uint8_t col, int8_t value);
+    void displayAll(int8_t value);
+    void display(uint8_t state[][DISP_COLS]);
     void displayDigit(const uint8_t digit);
     void displayChar(const char letter, int8_t sweepRight = 0, int8_t sweepDown = 0);
     void displayText(String text = "", bool sweep = true);
-    bool isDisplayingText();
+    bool displayIsBusy();
 
     void startWiFiCaptain(String ssid, String password);
     void checkConnection();

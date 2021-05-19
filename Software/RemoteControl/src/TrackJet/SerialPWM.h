@@ -9,6 +9,7 @@
 #define DISP_ROWS 8
 #define DISP_COLS 8
 #define DISP_PWM_RESOLUTION 12
+#define PWM_MAX DISP_ROWS*DISP_PWM_RESOLUTION
 
 class SerialPWM {
 public:
