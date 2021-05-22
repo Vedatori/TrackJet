@@ -12,7 +12,6 @@ SemiIntelligentServo TJ::servo[] = {SemiIntelligentServo(TJ::SERVO[0], 0),
                                     SemiIntelligentServo(TJ::SERVO[1], 1), 
                                     SemiIntelligentServo(TJ::SERVO[2], 2)};
 
-
 void TJ::updatePWM(void * param) {
     for(;;) {
         serialPWM.update();
@@ -21,7 +20,11 @@ void TJ::updatePWM(void * param) {
         TrackJet.motorsUpdateSpeed();
         TrackJet.displayText();
 
-        vTaskDelay(5);
+        for(uint8_t servoID = 0; servoID < SERVO_COUNT; ++servoID) {
+            TJ::servo[servoID].updatePWM();
+        }
+
+        vTaskDelay(10);
     }
 }
 void TJ::handleRot(){
@@ -164,10 +167,10 @@ void TrackJetClass::controlMovement(const int8_t joystickX, const int8_t joystic
 }
 
 void TrackJetClass::servoSetPosition(uint8_t servoID, float position) {
-    TJ::servo[0].setPosition(position);
+    TJ::servo[servoID].setPosition(position);
 }
-void TrackJetClass::servoDriveToPosition(uint8_t servoID, float position, float speed) {
-    ;
+void TrackJetClass::servoSetSpeed(uint8_t servoID, float speed) {
+    TJ::servo[servoID].setSpeed(speed);
 }
 
 void TrackJetClass::buzzerBeep(const uint16_t length) {

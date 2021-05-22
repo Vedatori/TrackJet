@@ -79,7 +79,7 @@ public:
     void controlMovement(const int8_t joystickX, const int8_t joystickY);
 
     void servoSetPosition(uint8_t servoID, float position);     // servoID 0, 1, 2; position 0-180 [°]
-    void servoDriveToPosition(uint8_t servoID, float position, float speed);    // speed 0-600 [°/s]
+    void servoSetSpeed(uint8_t servoID, float speed);    // speed 0-600 [°/s]
 
     void buzzerBeep(const uint16_t length);
     

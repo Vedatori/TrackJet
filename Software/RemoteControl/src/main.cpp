@@ -7,13 +7,15 @@ void setup() {
     TrackJet.begin();
     TrackJet.startWiFiCaptain("TrackJet", "12345678");    // password length minimally 8 characters
     TrackJet.displayText(ipToDisp());
+    TrackJet.servoSetSpeed(0, 10);
 }
 
 void loop() {
     if(millis() > prevControlTime + CONTROL_PERIOD) {
         prevControlTime = millis();
-        //TrackJet.displayDigit(TrackJet.encoderRead()%10);
-        Serial.printf("Button %d, Enc %d, %d, %d\n", TrackJet.buttonRead(), TrackJet.encoderRead(), TrackJet.encoderReadButton(), TrackJet.encoderReadButtonPulse());
+        if(TrackJet.displayIsBusy() == false)
+            TrackJet.displayDigit(TrackJet.encoderRead()%10);
+        //Serial.printf("Button %d, Enc %d, %d, %d\n", TrackJet.buttonRead(), TrackJet.encoderRead(), TrackJet.encoderReadButton(), TrackJet.encoderReadButtonPulse());
 
         if(TrackJet.commandGetIndexed(0) == "servo") {
             TrackJet.servoSetPosition(0, TrackJet.commandGetIndexed(1).toInt());
