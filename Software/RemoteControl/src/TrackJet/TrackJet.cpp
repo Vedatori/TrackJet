@@ -4,9 +4,14 @@
 
 #include "DisplayCharactersSet.h"
 #include "WiFiCaptain.h"
+#include "SemiIntelligentServo.h"
 
 SerialPWM TJ::serialPWM(TJ::REG_DAT, TJ::REG_LATCH, TJ::REG_CLK, TJ::REG_OE, TJ::PWM_FREQUENCY);
 QuadEncoder TJ::quadEnc(TJ::ENC_A, TJ::ENC_B, TJ::ENC_SW);
+SemiIntelligentServo TJ::servo[] = {SemiIntelligentServo(TJ::SERVO[0], 0),
+                                    SemiIntelligentServo(TJ::SERVO[1], 1), 
+                                    SemiIntelligentServo(TJ::SERVO[2], 2)};
+
 
 void TJ::updatePWM(void * param) {
     for(;;) {
@@ -57,11 +62,6 @@ void TrackJetClass::begin() {
     attachInterrupt(TJ::ENC_A, TJ::handleRot, CHANGE);
     attachInterrupt(TJ::ENC_B, TJ::handleRot, CHANGE);
     attachInterrupt(TJ::ENC_SW, TJ::handleSW, RISING);
-
-    for(uint8_t servoID = 0; servoID < 3; ++servoID) {
-        ledcSetup(TJ::servoChannelPWM[servoID], TJ::servoFreqPWM, TJ::servoResolPWM);
-        ledcAttachPin(TJ::SERVO[servoID], TJ::servoChannelPWM[servoID]);
-    }
 }
 
 bool TrackJetClass::buttonRead() {
@@ -164,17 +164,10 @@ void TrackJetClass::controlMovement(const int8_t joystickX, const int8_t joystic
 }
 
 void TrackJetClass::servoSetPosition(uint8_t servoID, float position) {
-    if(servoID >= SERVO_COUNT)
-        return;
-    if(position < 0)
-        position = 0;
-    else if(position > 180)
-        position = 180;
-    uint16_t dutyCycleServo = position/180*(TJ::servoCountHigh - TJ::servoCountLow) + TJ::servoCountLow;
-    ledcWrite(TJ::servoChannelPWM[servoID], dutyCycleServo);
+    TJ::servo[0].setPosition(position);
 }
 void TrackJetClass::servoDriveToPosition(uint8_t servoID, float position, float speed) {
-    
+    ;
 }
 
 void TrackJetClass::buzzerBeep(const uint16_t length) {

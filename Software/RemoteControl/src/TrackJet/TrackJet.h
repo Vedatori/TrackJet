@@ -6,6 +6,7 @@
 
 #include "WiFiCaptain.h"
 #include "QuadEncoder.h"
+#include "SemiIntelligentServo.h"
 
 namespace TJ {
 
@@ -27,11 +28,6 @@ const uint8_t BUTTON = 18;
 const uint8_t SERVO[SERVO_COUNT] = {27, 32, 33};
 
 const float MOTOR_SPEED_FILTER_UPDATE_COEF = 0.15;
-const uint8_t servoChannelPWM[] = {0, 1, 2};
-const uint8_t servoFreqPWM = 50;
-const uint8_t servoResolPWM = 16;
-const uint16_t servoCountLow = 1707;
-const uint16_t servoCountHigh = 8187;
 
 const uint8_t FREQ_PWM_THRESHOLD = 40;
 const char STORAGE_NAMESPACE[] = "TrackJet";
@@ -42,6 +38,7 @@ const uint16_t lettersSweepTimeout =  150;
 
 extern SerialPWM serialPWM;
 extern QuadEncoder quadEnc;
+extern SemiIntelligentServo servo[SERVO_COUNT];
 void updatePWM(void * param);
 void handleRot();
 void handleSW();
