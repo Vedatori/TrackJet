@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name Sergej_Library)(type Legacy)(uri ${KIPRJMOD}/Sergej_Libraries/Sergej_Library.lib)(options "")(descr ""))
+  (lib (name Sergej_H00-rescue)(type Legacy)(uri ${KIPRJMOD}/Sergej_H00-rescue.lib)(options "")(descr ""))
+)

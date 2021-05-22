@@ -12,3 +12,4 @@ R17 na 200K pro 9V
 tlaèítka špatnì zapojený
 flyback diode pro buzzer
 TP4056 C382139 a flyback dioda
+zmìnit pinout na rychlejší analogové ètení enkodérù.
