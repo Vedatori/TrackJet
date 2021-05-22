@@ -23,7 +23,16 @@ const uint8_t ENC_B = 5;
 const uint8_t ENC_SW = 23;
 const uint8_t BUTTON = 18;
 
+#define SERVO_COUNT 3
+const uint8_t SERVO[SERVO_COUNT] = {27, 32, 33};
+
 const float MOTOR_SPEED_FILTER_UPDATE_COEF = 0.15;
+const uint8_t servoChannelPWM[] = {0, 1, 2};
+const uint8_t servoFreqPWM = 50;
+const uint8_t servoResolPWM = 16;
+const uint16_t servoCountLow = 1707;
+const uint16_t servoCountHigh = 8187;
+
 const uint8_t FREQ_PWM_THRESHOLD = 40;
 const char STORAGE_NAMESPACE[] = "TrackJet";
 const uint16_t communicationTimeout = 1000;
@@ -71,6 +80,10 @@ public:
     void motorsSetSpeed(const int8_t speed, const int8_t index);
     void motorsUpdateSpeed();
     void controlMovement(const int8_t joystickX, const int8_t joystickY);
+
+    void servoSetPosition(uint8_t servoID, float position);     // servoID 0, 1, 2; position 0-180 [°]
+    void servoDriveToPosition(uint8_t servoID, float position, float speed);    // speed 0-600 [°/s]
+
     void buzzerBeep(const uint16_t length);
     
     bool gyroGetEnabled();
