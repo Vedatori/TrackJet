@@ -59,6 +59,7 @@ class TrackJetClass {
     uint8_t gyroStatus = 0; // 0-disabled, 1-running, 2-calibrating
     float gyroYPR[3];
     float gyroOffsets[3];
+    float accelOffsets[3];
     Preferences preferences;
     uint32_t prevCommunicationTime = 0;
     bool connectionEnabled = false;
@@ -91,7 +92,7 @@ public:
     void gyroCalibrate();
     void gyroUpdate();
     void printOffsets() {
-        printf("offsets: %f %f %f\n", gyroOffsets[0], gyroOffsets[1], gyroOffsets[2]);
+        printf("offsets: %f %f %f %f %f %f\n", gyroOffsets[0], gyroOffsets[1], gyroOffsets[2], accelOffsets[0], accelOffsets[1], accelOffsets[2]);
     }
 
     void displaySingle(uint8_t row, uint8_t col, int8_t value);

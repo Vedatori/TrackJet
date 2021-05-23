@@ -46,6 +46,7 @@ TrackJetClass::TrackJetClass(void) {
         motorsSpeedFiltered[i] = 0;
         gyroYPR[i] = 0;
         gyroOffsets[i] = 0;
+        accelOffsets[i] = 0;
     }
 }
 
@@ -57,6 +58,10 @@ void TrackJetClass::begin() {
     gyroOffsets[0] = preferences.getFloat("gyroOffYaw", 0);
     gyroOffsets[1] = preferences.getFloat("gyroOffPitch", 0);
     gyroOffsets[2] = preferences.getFloat("gyroOffRoll", 0);
+    
+    accelOffsets[0] = preferences.getFloat("accOffX", 0);
+    accelOffsets[1] = preferences.getFloat("accOffY", 0);
+    accelOffsets[2] = preferences.getFloat("accOffZ", 0);
     bool prefsPresent = preferences.getBool("prefsPresent", false);
     preferences.end();
 
@@ -65,6 +70,7 @@ void TrackJetClass::begin() {
     if(TJ::mpu.begin() == 0)
         gyroStatus = 1;
     TJ::mpu.setGyroOffsets(gyroYPR[1], gyroYPR[2], gyroYPR[0]);
+    TJ::mpu.setAccOffsets(accelOffsets[0], accelOffsets[1], accelOffsets[2]);
     if(gyroStatus != 1) {
         Serial.printf("Error connecting to MPU6050.\n");
     }
@@ -208,11 +214,17 @@ void TrackJetClass::gyroCalibrate() {
     gyroOffsets[0] = TJ::mpu.getGyroZoffset();
     gyroOffsets[1] = TJ::mpu.getGyroXoffset();
     gyroOffsets[2] = TJ::mpu.getGyroYoffset();
+    accelOffsets[0] = TJ::mpu.getAccXoffset();
+    accelOffsets[1] = TJ::mpu.getAccYoffset();
+    accelOffsets[2] = TJ::mpu.getAccZoffset();
 
     preferences.begin("TrackJet", false);
     preferences.putFloat("gyroOffYaw", gyroOffsets[0]);
     preferences.putFloat("gyroOffPitch", gyroOffsets[1]);
     preferences.putFloat("gyroOffRoll", gyroOffsets[2]);
+    preferences.putFloat("accOffX", accelOffsets[0]);
+    preferences.putFloat("accOffY", accelOffsets[1]);
+    preferences.putFloat("accOffZ", accelOffsets[2]);
     preferences.putBool("prefsPresent", true);
     preferences.end();
 }
