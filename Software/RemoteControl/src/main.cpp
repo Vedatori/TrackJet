@@ -13,8 +13,17 @@ void setup() {
 void loop() {
     if(millis() > prevControlTime + CONTROL_PERIOD) {
         prevControlTime = millis();
-        if(TrackJet.displayIsBusy() == false)
+        if(TrackJet.displayIsBusy() == false) {
             TrackJet.displayDigit(TrackJet.encoderRead()%10);
+            for(uint8_t i = 0; i < 8; ++i) {
+                TrackJet.displaySingle(7, i, 0);
+                TrackJet.displaySingle(i, 7, 0);
+            }
+            TrackJet.displaySingle(7, 3 - ((int)TrackJet.gyroAngleYPR(2) - 10)/20, 12);
+            TrackJet.displaySingle(7, 4 - ((int)TrackJet.gyroAngleYPR(2) + 10)/20, 12);
+            TrackJet.displaySingle(3 + ((int)TrackJet.gyroAngleYPR(1) + 10)/20, 7, 12);
+            TrackJet.displaySingle(4 + ((int)TrackJet.gyroAngleYPR(1) - 10)/20, 7, 12);
+        }
         //Serial.printf("Button %d, Enc %d, %d, %d\n", TrackJet.buttonRead(), TrackJet.encoderRead(), TrackJet.encoderReadButton(), TrackJet.encoderReadButtonPulse());
         Serial.printf("%f %f %f\t", TrackJet.gyroAngleYPR(0), TrackJet.gyroAngleYPR(1), TrackJet.gyroAngleYPR(2));
         TrackJet.printOffsets();

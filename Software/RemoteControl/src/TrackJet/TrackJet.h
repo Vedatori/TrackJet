@@ -36,7 +36,7 @@ const char STORAGE_NAMESPACE[] = "TrackJet";
 const uint16_t communicationTimeout = 1000;
 const uint16_t lettersSwapTimeout = 500;
 const uint16_t lettersBlankTimeout = 50;
-const uint16_t lettersSweepTimeout =  150;
+const uint16_t lettersSweepTimeout =  100;
 
 extern SerialPWM serialPWM;
 extern QuadEncoder quadEnc;
