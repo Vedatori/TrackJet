@@ -1,12 +1,14 @@
 #pragma once
 
-#include "SerialPWM.h"
 #include <Arduino.h>
+#include <Wire.h>
 #include "Preferences.h"
 
+#include "SerialPWM.h"
 #include "WiFiCaptain.h"
 #include "QuadEncoder.h"
 #include "SemiIntelligentServo.h"
+#include "MPU6050_light.h"
 
 namespace TJ {
 
@@ -39,6 +41,7 @@ const uint16_t lettersSweepTimeout =  150;
 extern SerialPWM serialPWM;
 extern QuadEncoder quadEnc;
 extern SemiIntelligentServo servo[SERVO_COUNT];
+extern MPU6050 mpu;
 void updatePWM(void * param);
 void handleRot();
 void handleSW();
@@ -53,9 +56,9 @@ class TrackJetClass {
     bool beginCalled = false;
     int8_t motorsSpeed[3];
     float motorsSpeedFiltered[3];
-    bool gyroEnabled = false;
+    uint8_t gyroStatus = 0; // 0-disabled, 1-running, 2-calibrating
     float gyroYPR[3];
-    int16_t gyroOffsets[3];
+    float gyroOffsets[3];
     Preferences preferences;
     uint32_t prevCommunicationTime = 0;
     bool connectionEnabled = false;
@@ -83,12 +86,12 @@ public:
 
     void buzzerBeep(const uint16_t length);
     
-    bool gyroGetEnabled();
-    float gyroData(uint8_t index) ;
+    uint8_t gyroGetStatus();
+    float gyroAngleYPR(uint8_t index) ;
     void gyroCalibrate();
     void gyroUpdate();
     void printOffsets() {
-        printf("offsets: %d %d %d\n", gyroOffsets[0], gyroOffsets[1], gyroOffsets[2]);
+        printf("offsets: %f %f %f\n", gyroOffsets[0], gyroOffsets[1], gyroOffsets[2]);
     }
 
     void displaySingle(uint8_t row, uint8_t col, int8_t value);

@@ -5,12 +5,14 @@
 #include "DisplayCharactersSet.h"
 #include "WiFiCaptain.h"
 #include "SemiIntelligentServo.h"
+#include "MPU6050_light.h"
 
 SerialPWM TJ::serialPWM(TJ::REG_DAT, TJ::REG_LATCH, TJ::REG_CLK, TJ::REG_OE, TJ::PWM_FREQUENCY);
 QuadEncoder TJ::quadEnc(TJ::ENC_A, TJ::ENC_B, TJ::ENC_SW);
 SemiIntelligentServo TJ::servo[] = {SemiIntelligentServo(TJ::SERVO[0], 0),
                                     SemiIntelligentServo(TJ::SERVO[1], 1), 
                                     SemiIntelligentServo(TJ::SERVO[2], 2)};
+MPU6050 TJ::mpu(Wire);
 
 void TJ::updatePWM(void * param) {
     for(;;) {
@@ -23,6 +25,10 @@ void TJ::updatePWM(void * param) {
         for(uint8_t servoID = 0; servoID < SERVO_COUNT; ++servoID) {
             TJ::servo[servoID].updatePWM();
         }
+        
+        if(TrackJet.gyroGetStatus() == 1)
+            TJ::mpu.update();
+        TrackJet.gyroUpdate();
 
         vTaskDelay(10);
     }
@@ -48,13 +54,20 @@ void TrackJetClass::begin() {
     Serial.begin(115200);
     
     preferences.begin("TrackJet", false);
-    gyroOffsets[0] = preferences.getInt("counter", 0);
-    gyroOffsets[1] = preferences.getInt("gyroOffPitch", 0);
-    gyroOffsets[2] = preferences.getInt("gyroOffRoll", 0);
+    gyroOffsets[0] = preferences.getFloat("gyroOffYaw", 0);
+    gyroOffsets[1] = preferences.getFloat("gyroOffPitch", 0);
+    gyroOffsets[2] = preferences.getFloat("gyroOffRoll", 0);
     bool prefsPresent = preferences.getBool("prefsPresent", false);
     preferences.end();
 
-    //Wire.begin(TJ::I2C_SDA, TJ::I2C_SCL);
+    Wire.begin(TJ::I2C_SDA, TJ::I2C_SCL);
+
+    if(TJ::mpu.begin() == 0)
+        gyroStatus = 1;
+    TJ::mpu.setGyroOffsets(gyroYPR[1], gyroYPR[2], gyroYPR[0]);
+    if(gyroStatus != 1) {
+        Serial.printf("Error connecting to MPU6050.\n");
+    }
 
     TJ::serialPWM.setPWM(STEP_EN, 100);   // Turn on motor step up
     display(dispWelcome);
@@ -178,32 +191,35 @@ void TrackJetClass::buzzerBeep(const uint16_t length) {
     beepingEnd = millis() + length;
 }
 
-bool TrackJetClass::gyroGetEnabled() {
-    return gyroEnabled;
+uint8_t TrackJetClass::gyroGetStatus() {
+    return gyroStatus;
 }
-float TrackJetClass::gyroData(uint8_t index) {
+float TrackJetClass::gyroAngleYPR(uint8_t index) {
     float output = gyroYPR[index];
-    if(index == 1) {
-        output -= 20;
-        if(output < -180) {
-            output += 360;
-        }
-        output = -output;
-    }
     return output;
 }
 void TrackJetClass::gyroCalibrate() {
-    //gyroCalibration(gyroOffsets);
+    if(gyroStatus == 0)
+        return;
+    Serial.printf("Calibration started.\n");
+    gyroStatus = 2;
+    TJ::mpu.calcOffsets();
+    gyroStatus = 1;
+    gyroOffsets[0] = TJ::mpu.getGyroZoffset();
+    gyroOffsets[1] = TJ::mpu.getGyroXoffset();
+    gyroOffsets[2] = TJ::mpu.getGyroYoffset();
 
     preferences.begin("TrackJet", false);
-    preferences.putInt("counter", gyroOffsets[0]);
-    preferences.putInt("gyroOffPitch", gyroOffsets[1]);
-    preferences.putInt("gyroOffRoll", gyroOffsets[2]);
+    preferences.putFloat("gyroOffYaw", gyroOffsets[0]);
+    preferences.putFloat("gyroOffPitch", gyroOffsets[1]);
+    preferences.putFloat("gyroOffRoll", gyroOffsets[2]);
     preferences.putBool("prefsPresent", true);
     preferences.end();
 }
 void TrackJetClass::gyroUpdate() {
-    //updateGyroData(gyroYPR);
+    gyroYPR[0] = -TJ::mpu.getAngleZ();   // yaw
+    gyroYPR[1] = TJ::mpu.getAngleX();   // pitch
+    gyroYPR[2] = -TJ::mpu.getAngleY();   // roll
 }
 
 void TrackJetClass::displaySingle(uint8_t row, uint8_t col, int8_t value) {

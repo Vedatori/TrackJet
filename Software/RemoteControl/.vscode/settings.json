@@ -6,6 +6,7 @@
         "istream": "cpp",
         "ostream": "cpp",
         "unordered_map": "cpp",
-        "unordered_set": "cpp"
+        "unordered_set": "cpp",
+        "algorithm": "cpp"
     }
 }
