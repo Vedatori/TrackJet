@@ -4,11 +4,13 @@
 #include <Wire.h>
 #include "Preferences.h"
 
+#include "VL53L0X.h"
+#include "MPU6050_light.h"
+
 #include "SerialPWM.h"
 #include "WiFiCaptain.h"
 #include "QuadEncoder.h"
 #include "SemiIntelligentServo.h"
-#include "MPU6050_light.h"
 
 namespace TJ {
 
@@ -25,6 +27,7 @@ const uint8_t ENC_A = 15;
 const uint8_t ENC_B = 5;
 const uint8_t ENC_SW = 23;
 const uint8_t BUTTON = 18;
+const uint8_t LIDAR = 19;
 
 #define SERVO_COUNT 3
 const uint8_t SERVO[SERVO_COUNT] = {27, 32, 33};
@@ -42,6 +45,7 @@ extern SerialPWM serialPWM;
 extern QuadEncoder quadEnc;
 extern SemiIntelligentServo servo[SERVO_COUNT];
 extern MPU6050 mpu;
+extern VL53L0X lidar;
 void updatePWM(void * param);
 void handleRot();
 void handleSW();
@@ -60,6 +64,8 @@ class TrackJetClass {
     float gyroYPR[3];
     float gyroOffsets[3];
     float accelOffsets[3];
+    uint8_t lidarStatus = 0;    // 0-disabled, 1-running
+    uint16_t lidarDist = 0;
     Preferences preferences;
     uint32_t prevCommunicationTime = 0;
     bool connectionEnabled = false;
@@ -94,6 +100,9 @@ public:
     void printOffsets() {
         printf("offsets: %f %f %f %f %f %f\n", gyroOffsets[0], gyroOffsets[1], gyroOffsets[2], accelOffsets[0], accelOffsets[1], accelOffsets[2]);
     }
+
+    uint16_t lidarDistance();
+    void lidarUpdate();
 
     void displaySingle(uint8_t row, uint8_t col, int8_t value);
     void displayAll(int8_t value);

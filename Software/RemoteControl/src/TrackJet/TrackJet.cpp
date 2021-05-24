@@ -2,10 +2,12 @@
 #include "Wire.h"
 #include "Preferences.h"
 
+#include "VL53L0X.h"
+#include "MPU6050_light.h"
+
 #include "DisplayCharactersSet.h"
 #include "WiFiCaptain.h"
 #include "SemiIntelligentServo.h"
-#include "MPU6050_light.h"
 
 SerialPWM TJ::serialPWM(TJ::REG_DAT, TJ::REG_LATCH, TJ::REG_CLK, TJ::REG_OE, TJ::PWM_FREQUENCY);
 QuadEncoder TJ::quadEnc(TJ::ENC_A, TJ::ENC_B, TJ::ENC_SW);
@@ -13,6 +15,7 @@ SemiIntelligentServo TJ::servo[] = {SemiIntelligentServo(TJ::SERVO[0], 0),
                                     SemiIntelligentServo(TJ::SERVO[1], 1), 
                                     SemiIntelligentServo(TJ::SERVO[2], 2)};
 MPU6050 TJ::mpu(Wire);
+VL53L0X TJ::lidar;
 
 void TJ::updatePWM(void * param) {
     for(;;) {
@@ -25,10 +28,9 @@ void TJ::updatePWM(void * param) {
         for(uint8_t servoID = 0; servoID < SERVO_COUNT; ++servoID) {
             TJ::servo[servoID].updatePWM();
         }
-        
-        if(TrackJet.gyroGetStatus() == 1)
-            TJ::mpu.update();
+
         TrackJet.gyroUpdate();
+        TrackJet.lidarUpdate();
 
         vTaskDelay(10);
     }
@@ -67,13 +69,23 @@ void TrackJetClass::begin() {
 
     Wire.begin(TJ::I2C_SDA, TJ::I2C_SCL);
 
-    if(TJ::mpu.begin() == 0)
+    if(TJ::mpu.begin() == 0) {
         gyroStatus = 1;
-    TJ::mpu.setGyroOffsets(gyroYPR[1], gyroYPR[2], gyroYPR[0]);
-    TJ::mpu.setAccOffsets(accelOffsets[0], accelOffsets[1], accelOffsets[2]);
-    if(gyroStatus != 1) {
-        Serial.printf("Error connecting to MPU6050.\n");
+        TJ::mpu.setGyroOffsets(gyroYPR[1], gyroYPR[2], gyroYPR[0]);
+        TJ::mpu.setAccOffsets(accelOffsets[0], accelOffsets[1], accelOffsets[2]);
     }
+    else
+        Serial.printf("Error connecting to gyro MPU6050.\n");
+
+    pinMode(TJ::LIDAR, OUTPUT);
+    digitalWrite(TJ::LIDAR, 1);
+    TJ::lidar.setTimeout(500);
+    if (TJ::lidar.init()) {
+        lidarStatus = 1;
+        TJ::lidar.startContinuous();
+    }
+    else
+        Serial.printf("Error connecting to lidar VL53L0X.\n");
 
     TJ::serialPWM.setPWM(STEP_EN, 100);   // Turn on motor step up
     display(dispWelcome);
@@ -229,9 +241,21 @@ void TrackJetClass::gyroCalibrate() {
     preferences.end();
 }
 void TrackJetClass::gyroUpdate() {
+    if(gyroStatus != 1)
+        return;
+    TJ::mpu.update();
     gyroYPR[0] = -TJ::mpu.getAngleZ();   // yaw
     gyroYPR[1] = TJ::mpu.getAngleX();   // pitch
     gyroYPR[2] = -TJ::mpu.getAngleY();   // roll
+}
+
+uint16_t TrackJetClass::lidarDistance() {
+    return lidarDist;
+}
+void TrackJetClass::lidarUpdate() {
+    if(lidarStatus != 1)
+        return;
+    lidarDist = TJ::lidar.readRangeContinuousMillimeters();
 }
 
 void TrackJetClass::displaySingle(uint8_t row, uint8_t col, int8_t value) {

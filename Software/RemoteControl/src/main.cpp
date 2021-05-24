@@ -18,15 +18,16 @@ void loop() {
             for(uint8_t i = 0; i < 8; ++i) {
                 TrackJet.displaySingle(7, i, 0);
                 TrackJet.displaySingle(i, 7, 0);
+                TrackJet.displaySingle(i, 6, 0);
             }
             TrackJet.displaySingle(7, 3 - ((int)TrackJet.gyroAngleYPR(2) - 10)/20, 12);
             TrackJet.displaySingle(7, 4 - ((int)TrackJet.gyroAngleYPR(2) + 10)/20, 12);
             TrackJet.displaySingle(3 + ((int)TrackJet.gyroAngleYPR(1) + 10)/20, 7, 12);
             TrackJet.displaySingle(4 + ((int)TrackJet.gyroAngleYPR(1) - 10)/20, 7, 12);
+            TrackJet.displaySingle(TrackJet.lidarDistance()/100, 6, 12);
         }
         //Serial.printf("Button %d, Enc %d, %d, %d\n", TrackJet.buttonRead(), TrackJet.encoderRead(), TrackJet.encoderReadButton(), TrackJet.encoderReadButtonPulse());
-        Serial.printf("%f %f %f\t", TrackJet.gyroAngleYPR(0), TrackJet.gyroAngleYPR(1), TrackJet.gyroAngleYPR(2));
-        TrackJet.printOffsets();
+        Serial.printf("%f %f %f %d\n", TrackJet.gyroAngleYPR(0), TrackJet.gyroAngleYPR(1), TrackJet.gyroAngleYPR(2), TrackJet.lidarDistance());
 
         if(TrackJet.commandGetIndexed(0) == "servo") {
             TrackJet.servoSetPosition(0, TrackJet.commandGetIndexed(1).toInt());
