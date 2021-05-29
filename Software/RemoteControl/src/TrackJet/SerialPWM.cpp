@@ -96,7 +96,7 @@ void SerialPWM::setDispAll(uint8_t brightness) {
 }
 void SerialPWM::setDispSingle(uint8_t row, uint8_t col, uint8_t brightness) {
     if(row < DISP_ROWS && col < DISP_COLS)
-    m_disp[row][col] = brightness;
+        m_disp[row][col] = brightness;
 }
 
 void SerialPWM::update() {

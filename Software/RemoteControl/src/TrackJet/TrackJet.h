@@ -28,6 +28,8 @@ const uint8_t ENC_B = 5;
 const uint8_t ENC_SW = 23;
 const uint8_t BUTTON = 18;
 const uint8_t LIDAR = 19;
+const uint8_t ADC_MUX = 39;
+const adc1_channel_t ADC_CH = ADC1_CHANNEL_3;
 
 #define SERVO_COUNT 3
 const uint8_t SERVO[SERVO_COUNT] = {27, 32, 33};
@@ -100,6 +102,8 @@ public:
     void printOffsets() {
         printf("offsets: %f %f %f %f %f %f\n", gyroOffsets[0], gyroOffsets[1], gyroOffsets[2], accelOffsets[0], accelOffsets[1], accelOffsets[2]);
     }
+
+    uint16_t analogRead(uint8_t pin);
 
     uint16_t lidarDistance();
     void lidarUpdate();

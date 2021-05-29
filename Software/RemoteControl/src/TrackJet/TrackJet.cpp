@@ -96,6 +96,9 @@ void TrackJetClass::begin() {
     attachInterrupt(TJ::ENC_A, TJ::handleRot, CHANGE);
     attachInterrupt(TJ::ENC_B, TJ::handleRot, CHANGE);
     attachInterrupt(TJ::ENC_SW, TJ::handleSW, RISING);
+
+    adc1_config_width(ADC_WIDTH_BIT_12);
+    adc1_config_channel_atten(TJ::ADC_CH, ADC_ATTEN_DB_11);
 }
 
 bool TrackJetClass::buttonRead() {
@@ -247,6 +250,14 @@ void TrackJetClass::gyroUpdate() {
     gyroYPR[0] = -TJ::mpu.getAngleZ();   // yaw
     gyroYPR[1] = TJ::mpu.getAngleX();   // pitch
     gyroYPR[2] = -TJ::mpu.getAngleY();   // roll
+}
+
+uint16_t TrackJetClass::analogRead(uint8_t pin) {
+    TJ::serialPWM.setPWM(MUXA, uint8_t(((pin >> 0) & 0x01)*100));
+    TJ::serialPWM.setPWM(MUXB, uint8_t(((pin >> 1) & 0x01)*100));
+    TJ::serialPWM.setPWM(MUXC, uint8_t(((pin >> 2) & 0x01)*100));
+
+    return adc1_get_raw(TJ::ADC_CH);
 }
 
 uint16_t TrackJetClass::lidarDistance() {
