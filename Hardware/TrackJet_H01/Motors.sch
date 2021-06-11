@@ -261,7 +261,7 @@ $EndComp
 Wire Wire Line
 	5500 3300 5500 3150
 Text Notes 3500 3700 0    50   ~ 0
-Sallen Key\nButterworth response\nLow Pass\n-3dB @ 500 Hz\nG = 32,33
+Sallen Key\nButterworth response\nLow Pass\n-3dB @ 5 Hz\nG = 32,33
 Text HLabel 4350 4200 2    50   Input ~ 0
 SERVO2_CURRENT
 Wire Wire Line
@@ -328,10 +328,10 @@ L Device:C C70
 U 1 1 601E6157
 P 3000 4350
 F 0 "C70" H 2885 4304 50  0000 R CNN
-F 1 "2n2" H 2885 4395 50  0000 R CNN
+F 1 "220n" H 2885 4395 50  0000 R CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 3038 4200 50  0001 C CNN
 F 3 "~" H 3000 4350 50  0001 C CNN
-F 4 "C1604" H 3000 4350 50  0001 C CNN "LCSC"
+F 4 "C21120" H 3000 4350 50  0001 C CNN "LCSC"
 	1    3000 4350
 	-1   0    0    1   
 $EndComp
@@ -346,10 +346,10 @@ L Device:C C69
 U 1 1 601E4BA0
 P 3300 3750
 F 0 "C69" V 3048 3750 50  0000 C CNN
-F 1 "2n2" V 3139 3750 50  0000 C CNN
+F 1 "220n" V 3139 3750 50  0000 C CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 3338 3600 50  0001 C CNN
 F 3 "~" H 3300 3750 50  0001 C CNN
-F 4 "C1604" H 3300 3750 50  0001 C CNN "LCSC"
+F 4 "C21120" H 3300 3750 50  0001 C CNN "LCSC"
 	1    3300 3750
 	0    1    1    0   
 $EndComp
@@ -465,7 +465,7 @@ F 4 "C25334" H 2000 4350 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 Text Notes 3500 1400 0    50   ~ 0
-Sallen Key\nButterworth response\nLow Pass\n-3dB @ 500 Hz\nG = 32,33
+Sallen Key\nButterworth response\nLow Pass\n-3dB @ 5 Hz\nG = 32,33
 Text HLabel 4350 1900 2    50   Input ~ 0
 SERVO1_CURRENT
 Wire Wire Line
@@ -532,10 +532,10 @@ L Device:C C65
 U 1 1 602151D9
 P 3000 2050
 F 0 "C65" H 2885 2004 50  0000 R CNN
-F 1 "2n2" H 2885 2095 50  0000 R CNN
+F 1 "220n" H 2885 2095 50  0000 R CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 3038 1900 50  0001 C CNN
 F 3 "~" H 3000 2050 50  0001 C CNN
-F 4 "C1604" H 3000 2050 50  0001 C CNN "LCSC"
+F 4 "C21120" H 3000 2050 50  0001 C CNN "LCSC"
 	1    3000 2050
 	-1   0    0    1   
 $EndComp
@@ -550,10 +550,10 @@ L Device:C C64
 U 1 1 602151E2
 P 3300 1450
 F 0 "C64" V 3048 1450 50  0000 C CNN
-F 1 "2n2" V 3139 1450 50  0000 C CNN
+F 1 "220n" V 3139 1450 50  0000 C CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 3338 1300 50  0001 C CNN
 F 3 "~" H 3300 1450 50  0001 C CNN
-F 4 "C1604" H 3300 1450 50  0001 C CNN "LCSC"
+F 4 "C21120" H 3300 1450 50  0001 C CNN "LCSC"
 	1    3300 1450
 	0    1    1    0   
 $EndComp
@@ -729,7 +729,7 @@ $EndComp
 Wire Wire Line
 	5500 5900 5500 5750
 Text Notes 3500 5900 0    50   ~ 0
-Sallen Key\nButterworth response\nLow Pass\n-3dB @ 500 Hz\nG = 32,33
+Sallen Key\nButterworth response\nLow Pass\n-3dB @ 5 Hz\nG = 32,33
 Text HLabel 4350 6400 2    50   Input ~ 0
 SERVO3_CURRENT
 Wire Wire Line
@@ -796,10 +796,10 @@ L Device:C C73
 U 1 1 602496DD
 P 3000 6550
 F 0 "C73" H 2885 6504 50  0000 R CNN
-F 1 "2n2" H 2885 6595 50  0000 R CNN
+F 1 "220n" H 2885 6595 50  0000 R CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 3038 6400 50  0001 C CNN
 F 3 "~" H 3000 6550 50  0001 C CNN
-F 4 "C1604" H 3000 6550 50  0001 C CNN "LCSC"
+F 4 "C21120" H 3000 6550 50  0001 C CNN "LCSC"
 	1    3000 6550
 	-1   0    0    1   
 $EndComp
@@ -814,10 +814,10 @@ L Device:C C72
 U 1 1 602496E6
 P 3300 5950
 F 0 "C72" V 3048 5950 50  0000 C CNN
-F 1 "2n2" V 3139 5950 50  0000 C CNN
+F 1 "220n" V 3139 5950 50  0000 C CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 3338 5800 50  0001 C CNN
 F 3 "~" H 3300 5950 50  0001 C CNN
-F 4 "C1604" H 3300 5950 50  0001 C CNN "LCSC"
+F 4 "C21120" H 3300 5950 50  0001 C CNN "LCSC"
 	1    3300 5950
 	0    1    1    0   
 $EndComp

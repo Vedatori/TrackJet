@@ -158,7 +158,6 @@ U 600F65F0
 F0 "Power" 50
 F1 "Power.sch" 50
 F2 "12V_MODE" I L 9050 1950 50 
-F3 "5V_ENABLE" I L 9050 2250 50 
 F4 "12V_ENABLE" I L 9050 2050 50 
 F5 "BATT" I L 9050 2400 50 
 $EndSheet
@@ -258,23 +257,23 @@ Wire Wire Line
 $Comp
 L Device:Buzzer BZ1
 U 1 1 603F233C
-P 2450 6950
-F 0 "BZ1" H 2602 6979 50  0000 L CNN
-F 1 "Buzzer" H 2602 6888 50  0000 L CNN
-F 2 "Buzzer_Beeper:Buzzer_12x9.5RM7.6" V 2425 7050 50  0001 C CNN
-F 3 "~" V 2425 7050 50  0001 C CNN
-	1    2450 6950
+P 2500 6850
+F 0 "BZ1" H 2652 6879 50  0000 L CNN
+F 1 "Buzzer" H 2652 6788 50  0000 L CNN
+F 2 "Buzzer_Beeper:Buzzer_12x9.5RM7.6" V 2475 6950 50  0001 C CNN
+F 3 "~" V 2475 6950 50  0001 C CNN
+	1    2500 6850
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:+5V #PWR020
 U 1 1 603F2E5D
-P 2350 6850
-F 0 "#PWR020" H 2350 6700 50  0001 C CNN
-F 1 "+5V" H 2365 7023 50  0000 C CNN
-F 2 "" H 2350 6850 50  0001 C CNN
-F 3 "" H 2350 6850 50  0001 C CNN
-	1    2350 6850
+P 2350 6650
+F 0 "#PWR020" H 2350 6500 50  0001 C CNN
+F 1 "+5V" H 2365 6823 50  0000 C CNN
+F 2 "" H 2350 6650 50  0001 C CNN
+F 3 "" H 2350 6650 50  0001 C CNN
+	1    2350 6650
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -287,12 +286,12 @@ BUZZER
 $Comp
 L power:GND #PWR022
 U 1 1 603F4A7D
-P 650 7250
-F 0 "#PWR022" H 650 7000 50  0001 C CNN
-F 1 "GND" H 655 7077 50  0000 C CNN
-F 2 "" H 650 7250 50  0001 C CNN
-F 3 "" H 650 7250 50  0001 C CNN
-	1    650  7250
+P 650 7050
+F 0 "#PWR022" H 650 6800 50  0001 C CNN
+F 1 "GND" H 650 6900 50  0000 C CNN
+F 2 "" H 650 7050 50  0001 C CNN
+F 3 "" H 650 7050 50  0001 C CNN
+	1    650  7050
 	1    0    0    -1  
 $EndComp
 Text GLabel 1050 7250 2    50   Input ~ 0
@@ -488,7 +487,7 @@ Wire Wire Line
 Wire Wire Line
 	3300 1450 3050 1450
 Wire Wire Line
-	3050 1450 3050 900 
+	3050 1450 3050 1000
 Wire Wire Line
 	3050 900  9050 900 
 Wire Wire Line
@@ -546,15 +545,7 @@ $EndSheet
 Wire Wire Line
 	9050 3900 8150 3900
 Wire Wire Line
-	8150 4000 9050 4000
-Wire Wire Line
 	8150 4100 9050 4100
-Wire Wire Line
-	8150 4200 9050 4200
-Wire Wire Line
-	8150 4300 9050 4300
-Wire Wire Line
-	8150 4400 9050 4400
 Wire Wire Line
 	8600 4500 8600 2400
 Wire Wire Line
@@ -567,18 +558,6 @@ Wire Wire Line
 	3100 1750 3300 1750
 Wire Wire Line
 	3300 1650 3000 1650
-Wire Wire Line
-	3000 6400 8900 6400
-Wire Wire Line
-	4500 3750 4500 6450
-Wire Wire Line
-	4500 6450 8950 6450
-Wire Wire Line
-	4550 6500 4550 3650
-Wire Wire Line
-	4550 3650 4500 3650
-Wire Wire Line
-	4550 6500 9000 6500
 NoConn ~ 4500 1650
 Wire Wire Line
 	9050 2050 8550 2050
@@ -593,21 +572,9 @@ Wire Wire Line
 Wire Wire Line
 	8500 5350 8150 5350
 Wire Wire Line
-	8850 6350 4600 6350
+	4900 6250 4900 3350
 Wire Wire Line
-	4600 6350 4600 3550
-Wire Wire Line
-	4600 3550 4500 3550
-Wire Wire Line
-	4500 3450 4650 3450
-Wire Wire Line
-	4650 3450 4650 6300
-Wire Wire Line
-	4650 6300 8800 6300
-Wire Wire Line
-	4700 6250 4700 3350
-Wire Wire Line
-	4700 3350 4500 3350
+	4900 3350 4500 3350
 Wire Wire Line
 	7100 3250 7100 3100
 Wire Wire Line
@@ -667,7 +634,6 @@ BUTTON
 Text GLabel 4500 2550 2    50   Input ~ 0
 BUZZER
 NoConn ~ 1050 7050
-NoConn ~ 650  7050
 Text Notes 6100 3000 0    50   ~ 0
 • MTDI/GPIO12: internal pull-down\n• GPIO0: internal pull-up\n• GPIO2: internal pull-down\n• GPIO4: internal pull-down\n• MTDO/GPIO15: internal pull-up\n• GPIO5: internal pull-up
 $Comp
@@ -687,7 +653,7 @@ L power:+3V3 #PWR09
 U 1 1 602169CB
 P 6500 3900
 F 0 "#PWR09" H 6500 3750 50  0001 C CNN
-F 1 "+3V3" H 6515 4073 50  0000 C CNN
+F 1 "+3V3" H 6350 3950 50  0000 C CNN
 F 2 "" H 6500 3900 50  0001 C CNN
 F 3 "" H 6500 3900 50  0001 C CNN
 	1    6500 3900
@@ -719,29 +685,9 @@ F14 "DC_MOT3_12V" I L 9050 5500 50
 F15 "DC_MOT4_5V" I L 9050 5600 50 
 $EndSheet
 Wire Wire Line
-	9000 6500 9000 6350
+	8350 6250 8350 5800
 Wire Wire Line
-	9000 6350 9050 6350
-Wire Wire Line
-	8950 6450 8950 6250
-Wire Wire Line
-	8950 6250 9050 6250
-Wire Wire Line
-	9050 6150 8900 6150
-Wire Wire Line
-	8900 6150 8900 6400
-Wire Wire Line
-	8850 6350 8850 6000
-Wire Wire Line
-	8850 6000 9050 6000
-Wire Wire Line
-	9050 5900 8800 5900
-Wire Wire Line
-	8800 5900 8800 6300
-Wire Wire Line
-	8750 6250 8750 5800
-Wire Wire Line
-	8750 5800 9050 5800
+	8350 5800 9050 5800
 Wire Wire Line
 	8150 5450 8750 5450
 Wire Wire Line
@@ -850,12 +796,6 @@ F 4 "C14663" H 1550 750 50  0001 C CNN "LCSC"
 	1    1550 750 
 	0    1    1    0   
 $EndComp
-Wire Wire Line
-	6800 2250 6800 2450
-Wire Wire Line
-	6800 2450 4500 2450
-Wire Wire Line
-	6800 2250 9050 2250
 $Comp
 L power:+3V3 #PWR03
 U 1 1 602DD437
@@ -1078,28 +1018,6 @@ F 3 "~" H 2050 1900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Mechanical:MountingHole H2
-U 1 1 60396227
-P 2050 2100
-F 0 "H2" H 2150 2146 50  0000 L CNN
-F 1 "MountingHole" H 2150 2055 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3" H 2050 2100 50  0001 C CNN
-F 3 "~" H 2050 2100 50  0001 C CNN
-	1    2050 2100
-	1    0    0    -1  
-$EndComp
-$Comp
-L Mechanical:MountingHole H3
-U 1 1 60396483
-P 2050 2300
-F 0 "H3" H 2150 2346 50  0000 L CNN
-F 1 "MountingHole" H 2150 2255 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3" H 2050 2300 50  0001 C CNN
-F 3 "~" H 2050 2300 50  0001 C CNN
-	1    2050 2300
-	1    0    0    -1  
-$EndComp
-$Comp
 L Mechanical:MountingHole H4
 U 1 1 6039671C
 P 2050 2500
@@ -1123,7 +1041,7 @@ Wire Wire Line
 Wire Wire Line
 	8150 5850 8300 5850
 Wire Wire Line
-	4700 6250 8750 6250
+	4900 6250 8350 6250
 Wire Wire Line
 	8300 5850 8300 6200
 Wire Wire Line
@@ -1171,4 +1089,176 @@ F 3 "~" H 1850 2100 50  0001 C CNN
 	1    1850 2100
 	1    0    0    -1  
 $EndComp
+$Comp
+L Device:D_Schottky D?
+U 1 1 60BFA057
+P 2200 6850
+AR Path="/600F65F0/60BFA057" Ref="D?"  Part="1" 
+AR Path="/60BFA057" Ref="D13"  Part="1" 
+F 0 "D13" V 2154 6930 50  0000 L CNN
+F 1 "B5819W" V 2300 6500 50  0000 L CNN
+F 2 "Diode_SMD:D_SOD-123" H 2200 6850 50  0001 C CNN
+F 3 "~" H 2200 6850 50  0001 C CNN
+F 4 "C8598" V 2200 6850 50  0001 C CNN "LCSC"
+	1    2200 6850
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	2350 6650 2350 6700
+Wire Wire Line
+	2350 6750 2400 6750
+Wire Wire Line
+	2350 6700 2200 6700
+Connection ~ 2350 6700
+Wire Wire Line
+	2350 6700 2350 6750
+Wire Wire Line
+	2400 6950 2350 6950
+Wire Wire Line
+	2350 6950 2350 7000
+Wire Wire Line
+	2350 7000 2200 7000
+Connection ~ 2350 7000
+Wire Wire Line
+	2350 7000 2350 7050
+Text Notes 9050 3650 0    50   ~ 0
+ENCODER 1 & 3 - Line Follow\nENCODER 2, 4, 5  & 6 Track Encoders
+$Comp
+L Graphic:SYM_Flash_Small G2
+U 1 1 60C4F5F6
+P 6850 7600
+F 0 "G2" V 6760 7600 50  0001 C CNN
+F 1 "LOGO" V 6940 7600 50  0001 C CNN
+F 2 "Sergej_Library:Vedatori_15mm" H 6850 7575 50  0001 C CNN
+F 3 "~" H 7250 7500 50  0001 C CNN
+	1    6850 7600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Graphic:SYM_Flash_Small G1
+U 1 1 60C50E70
+P 6700 7600
+F 0 "G1" V 6610 7600 50  0001 C CNN
+F 1 "LOGO" V 6790 7600 50  0001 C CNN
+F 2 "0Logo:Coufal_elektronika_text_30x13mm" H 6700 7575 50  0001 C CNN
+F 3 "~" H 7100 7500 50  0001 C CNN
+	1    6700 7600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9050 6350 8650 6350
+Wire Wire Line
+	8650 6350 8650 4400
+Wire Wire Line
+	8650 4400 8150 4400
+Wire Wire Line
+	9050 6250 8700 6250
+Wire Wire Line
+	8700 6250 8700 4300
+Wire Wire Line
+	8700 4300 8150 4300
+Wire Wire Line
+	9050 5900 8450 5900
+Wire Wire Line
+	8450 5900 8450 2450
+Wire Wire Line
+	8450 2450 4500 2450
+Wire Wire Line
+	3000 6400 8450 6400
+Wire Wire Line
+	8450 6400 8450 6000
+Wire Wire Line
+	8450 6000 9050 6000
+NoConn ~ 650  7250
+Wire Wire Line
+	9050 4400 8750 4400
+Wire Wire Line
+	8750 4400 8750 3750
+Wire Wire Line
+	9050 4300 8800 4300
+Wire Wire Line
+	8800 4300 8800 3650
+Wire Wire Line
+	8950 6150 9050 6150
+Wire Wire Line
+	8150 4200 8950 4200
+Wire Wire Line
+	8950 4200 8950 6150
+Wire Wire Line
+	9050 4200 9000 4200
+Wire Wire Line
+	9000 4200 9000 3550
+Wire Wire Line
+	9050 4000 8950 4000
+Wire Wire Line
+	8950 4000 8950 3450
+Wire Wire Line
+	8750 3750 4500 3750
+Wire Wire Line
+	4500 3650 8800 3650
+Wire Wire Line
+	9000 3550 4500 3550
+Wire Wire Line
+	4500 3450 8950 3450
+NoConn ~ 8150 4000
+$Comp
+L Device:R R24
+U 1 1 60D1EFE4
+P 2650 800
+F 0 "R24" H 2720 846 50  0000 L CNN
+F 1 "10K" H 2720 755 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 2580 800 50  0001 C CNN
+F 3 "~" H 2650 800 50  0001 C CNN
+F 4 "C25804" H 2650 800 50  0001 C CNN "LCSC"
+	1    2650 800 
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR0119
+U 1 1 60D1EFEA
+P 2650 650
+F 0 "#PWR0119" H 2650 500 50  0001 C CNN
+F 1 "+3V3" H 2500 700 50  0000 C CNN
+F 2 "" H 2650 650 50  0001 C CNN
+F 3 "" H 2650 650 50  0001 C CNN
+	1    2650 650 
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 60D29FEE
+P 2650 1200
+AR Path="/600F65F0/60D29FEE" Ref="C?"  Part="1" 
+AR Path="/60D29FEE" Ref="C22"  Part="1" 
+F 0 "C22" V 2398 1200 50  0000 C CNN
+F 1 "1u" V 2489 1200 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 2688 1050 50  0001 C CNN
+F 3 "~" H 2650 1200 50  0001 C CNN
+F 4 "C15849" H 2650 1200 50  0001 C CNN "LCSC"
+	1    2650 1200
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 60D319A5
+P 2650 1350
+AR Path="/6018F5FA/60D319A5" Ref="#PWR?"  Part="1" 
+AR Path="/60D319A5" Ref="#PWR0120"  Part="1" 
+F 0 "#PWR0120" H 2650 1100 50  0001 C CNN
+F 1 "GND" H 2655 1177 50  0000 C CNN
+F 2 "" H 2650 1350 50  0001 C CNN
+F 3 "" H 2650 1350 50  0001 C CNN
+	1    2650 1350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2650 1050 2650 1000
+Wire Wire Line
+	2650 1000 3050 1000
+Connection ~ 2650 1000
+Wire Wire Line
+	2650 1000 2650 950 
+Connection ~ 3050 1000
+Wire Wire Line
+	3050 1000 3050 900 
 $EndSCHEMATC

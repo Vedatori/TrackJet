@@ -1,15 +1,10 @@
-change sallen keys to -3dB @ 5Hz (probably by changing both capacitors to 220nF).
-Better potentiometer footprint.
-Higher resistor values for LED matrix.
+
+
 Bigger edge to track clearance.
-Revork auto shut down circuit.
-Fix auto USB reset ciruit.
-Change track encoders resistor values.
-Resolve overheating of TP4056 when connected to PSU.
-390R to IR TRACK LED 1K to collector.
-znaèky + a - zaspoda desky
-R17 na 200K pro 9V
-tlaèítka špatnì zapojený
-flyback diode pro buzzer
-TP4056 C382139 a flyback dioda
-zmìnit pinout na rychlejší analogové ètení enkodérù.
+
+
+
+
+
+
+
