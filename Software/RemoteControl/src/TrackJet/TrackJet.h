@@ -37,6 +37,7 @@ const uint8_t SERVO[SERVO_COUNT] = {27, 32, 33};
 const float MOTOR_SPEED_FILTER_UPDATE_COEF = 0.15;
 
 const uint8_t FREQ_PWM_THRESHOLD = 40;
+const uint16_t controlPeriod = 10;  // [ms]
 const char STORAGE_NAMESPACE[] = "TrackJet";
 const uint16_t communicationTimeout = 1000;
 const uint16_t lettersSwapTimeout = 500;

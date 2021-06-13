@@ -32,7 +32,7 @@ void TJ::updatePWM(void * param) {
         TrackJet.gyroUpdate();
         TrackJet.lidarUpdate();
 
-        vTaskDelay(10);
+        vTaskDelay(TJ::controlPeriod);
     }
 }
 void TJ::handleRot(){
@@ -82,7 +82,7 @@ void TrackJetClass::begin() {
     TJ::lidar.setTimeout(500);
     if (TJ::lidar.init()) {
         lidarStatus = 1;
-        TJ::lidar.startContinuous();
+        TJ::lidar.startContinuous(TJ::controlPeriod);
     }
     else
         Serial.printf("Error connecting to lidar VL53L0X.\n");
