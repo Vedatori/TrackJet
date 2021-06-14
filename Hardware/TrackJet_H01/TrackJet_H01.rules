@@ -10,8 +10,8 @@
     (vias on)
     (via_costs 5)
     (plane_via_costs 1)
-    (start_ripup_costs 10)
-    (start_pass_no 116)
+    (start_ripup_costs 5)
+    (start_pass_no 6)
     (layer_rule F.Cu
       (active on)
       (preferred_direction vertical)
@@ -21,8 +21,8 @@
     (layer_rule B.Cu
       (active on)
       (preferred_direction horizontal)
-      (preferred_direction_trace_costs 13.0)
-      (against_preferred_direction_trace_costs 13.0)
+      (preferred_direction_trace_costs 10.0)
+      (against_preferred_direction_trace_costs 10.0)
     )
   )
   (rule
@@ -37,6 +37,15 @@
     )
     (shape
       (circle B.Cu 600.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (padstack "Via[0-1]_800:400_um"
+    (shape
+      (circle F.Cu 800.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 800.0 0.0 0.0)
     )
     (attach off)
   )
@@ -58,17 +67,11 @@
     )
     (attach off)
   )
-  (padstack "Via[0-1]_800:400_um"
-    (shape
-      (circle F.Cu 800.0 0.0 0.0)
-    )
-    (shape
-      (circle B.Cu 800.0 0.0 0.0)
-    )
-    (attach off)
-  )
   (via 
     "Via[0-1]_600:300_um" "Via[0-1]_600:300_um" default
+  )
+  (via 
+    "Via[0-1]_800:400_um" "Via[0-1]_800:400_um" default
   )
   (via 
     "Via[0-1]_1000:500_um" "Via[0-1]_1000:500_um" default
@@ -77,10 +80,10 @@
     "Via[0-1]_1400:700_um" "Via[0-1]_1400:700_um" default
   )
   (via 
-    "Via[0-1]_800:400_um" "Via[0-1]_800:400_um" default
+    "Via[0-1]_600:300_um-kicad_default" "Via[0-1]_600:300_um" "kicad_default"
   )
   (via 
-    "Via[0-1]_600:300_um-kicad_default" "Via[0-1]_600:300_um" "kicad_default"
+    "Via[0-1]_800:400_um-kicad_default" "Via[0-1]_800:400_um" "kicad_default"
   )
   (via 
     "Via[0-1]_1000:500_um-kicad_default" "Via[0-1]_1000:500_um" "kicad_default"
@@ -89,19 +92,16 @@
     "Via[0-1]_1400:700_um-kicad_default" "Via[0-1]_1400:700_um" "kicad_default"
   )
   (via 
-    "Via[0-1]_800:400_um-kicad_default" "Via[0-1]_800:400_um" "kicad_default"
+    "Via[0-1]_600:300_um-Power" "Via[0-1]_600:300_um" Power
   )
   (via 
-    "Via[0-1]_600:300_um-Power" "Via[0-1]_600:300_um" Power
+    "Via[0-1]_800:400_um-Power" "Via[0-1]_800:400_um" Power
   )
   (via 
     "Via[0-1]_1000:500_um-Power" "Via[0-1]_1000:500_um" Power
   )
   (via 
     "Via[0-1]_1400:700_um-Power" "Via[0-1]_1400:700_um" Power
-  )
-  (via 
-    "Via[0-1]_800:400_um-Power" "Via[0-1]_800:400_um" Power
   )
   (via_rule
     default "Via[0-1]_600:300_um"
@@ -132,16 +132,16 @@
     "Net-(C65-Pad2)" "Net-(C69-Pad2)" "Net-(C70-Pad2)" "Net-(C72-Pad2)" "Net-(C73-Pad2)" "Net-(J5-PadB8)" "Net-(J5-PadA5)" "Net-(J5-PadA8)"
     "Net-(J5-PadB5)" "Net-(J7-Pad2)" "Net-(J7-Pad1)" "Net-(J8-Pad1)" "Net-(J9-Pad2)" "Net-(J9-Pad1)" "Net-(J12-Pad1)" "Net-(J15-Pad1)"
     "Net-(R7-Pad2)" "Net-(R8-Pad2)" "Net-(R16-Pad2)" "Net-(R17-Pad1)" "Net-(R18-Pad1)" "Net-(R27-Pad1)" "Net-(R29-Pad2)" "Net-(R31-Pad2)"
-    "Net-(R33-Pad2)" "Net-(R35-Pad2)" "Net-(R39-Pad2)" "Net-(R42-Pad2)" "Net-(R43-Pad2)" "Net-(R44-Pad1)" "Net-(R48-Pad2)" "Net-(R50-Pad1)"
-    "Net-(R63-Pad2)" "Net-(U13-Pad9)" "Net-(U14-Pad7)" "Net-(U14-Pad6)" "Net-(U14-Pad5)" "/Mux Demux Matrix/Analog_IN_7" "/Mux Demux Matrix/REG_OUT_11" "/Mux Demux Matrix/REG_OE"
-    "Net-(R13-Pad1)" "Net-(R14-Pad1)" "/Mux Demux Matrix/Analog_IN_1" "/Mux Demux Matrix/Analog_IN_3" "/Mux Demux Matrix/Analog_IN_5" "/Mux Demux Matrix/Analog_IN_4" "/Mux Demux Matrix/Analog_IN_6" "Net-(R41-Pad1)"
-    "Net-(R65-Pad1)" "Net-(R66-Pad1)" "Net-(R67-Pad1)" "Net-(R68-Pad1)" "Net-(R69-Pad1)" "/Mux Demux Matrix/REG_DAT" "/Mux Demux Matrix/REG_LAT" "/Mux Demux Matrix/REG_CLK"
-    "/Mux Demux Matrix/Analog_MUX" "Net-(U14-Pad9)" "Net-(U20-Pad9)" "Net-(D1-Pad2)" "Net-(D3-Pad2)" "Net-(D3-Pad1)" "Net-(D4-Pad2)" "Net-(D4-Pad1)"
-    "Net-(D5-Pad15)" "Net-(D5-Pad16)" "Net-(D5-Pad13)" "Net-(D5-Pad12)" "Net-(D5-Pad10)" "Net-(D5-Pad9)" "Net-(D5-Pad14)" "Net-(D5-Pad11)"
-    "Net-(D5-Pad8)" "Net-(D5-Pad7)" "Net-(D5-Pad6)" "Net-(D5-Pad5)" "Net-(D5-Pad4)" "Net-(D5-Pad3)" "Net-(D5-Pad2)" "Net-(D5-Pad1)"
-    "Net-(D8-Pad2)" "Net-(D9-Pad2)" "Net-(D10-Pad2)" "Net-(D11-Pad2)" "Net-(D12-Pad2)" "Net-(J6-Pad1)" "Net-(R30-Pad2)" "Net-(R32-Pad2)"
-    "Net-(R34-Pad2)" "Net-(R36-Pad2)" "Net-(R38-Pad2)" "Net-(R40-Pad2)" "Net-(J5-PadS1)" /Encoders/ENCODER2 /Encoders/ENCODER4 /Encoders/ENCODER5
-    /Encoders/ENCODER6 "Net-(D14-Pad2)" "Net-(D15-Pad1)" "Net-(Q3-Pad2)" "Net-(Q3-Pad1)"
+    "Net-(R33-Pad2)" "Net-(R35-Pad2)" "Net-(R39-Pad2)" "Net-(R42-Pad2)" "Net-(R43-Pad2)" "Net-(R48-Pad2)" "Net-(R63-Pad2)" "Net-(U13-Pad9)"
+    "Net-(U14-Pad7)" "Net-(U14-Pad6)" "Net-(U14-Pad5)" "/Mux Demux Matrix/Analog_IN_7" "/Mux Demux Matrix/REG_OUT_11" "/Mux Demux Matrix/REG_OE" "Net-(R13-Pad1)" "Net-(R14-Pad1)"
+    "/Mux Demux Matrix/Analog_IN_1" "/Mux Demux Matrix/Analog_IN_3" "/Mux Demux Matrix/Analog_IN_5" "/Mux Demux Matrix/Analog_IN_4" "/Mux Demux Matrix/Analog_IN_6" "Net-(R41-Pad1)" "Net-(R65-Pad1)" "Net-(R66-Pad1)"
+    "Net-(R67-Pad1)" "Net-(R68-Pad1)" "Net-(R69-Pad1)" "/Mux Demux Matrix/REG_DAT" "/Mux Demux Matrix/REG_LAT" "/Mux Demux Matrix/REG_CLK" "/Mux Demux Matrix/Analog_MUX" "Net-(U14-Pad9)"
+    "Net-(U20-Pad9)" "Net-(D1-Pad2)" "Net-(D3-Pad2)" "Net-(D3-Pad1)" "Net-(D4-Pad2)" "Net-(D4-Pad1)" "Net-(D5-Pad15)" "Net-(D5-Pad16)"
+    "Net-(D5-Pad13)" "Net-(D5-Pad12)" "Net-(D5-Pad10)" "Net-(D5-Pad9)" "Net-(D5-Pad14)" "Net-(D5-Pad11)" "Net-(D5-Pad8)" "Net-(D5-Pad7)"
+    "Net-(D5-Pad6)" "Net-(D5-Pad5)" "Net-(D5-Pad4)" "Net-(D5-Pad3)" "Net-(D5-Pad2)" "Net-(D5-Pad1)" "Net-(D8-Pad2)" "Net-(D9-Pad2)"
+    "Net-(D10-Pad2)" "Net-(D11-Pad2)" "Net-(D12-Pad2)" "Net-(J6-Pad1)" "Net-(R30-Pad2)" "Net-(R32-Pad2)" "Net-(R34-Pad2)" "Net-(R36-Pad2)"
+    "Net-(R38-Pad2)" "Net-(R40-Pad2)" "Net-(J5-PadS1)" /Encoders/ENCODER2 /Encoders/ENCODER4 /Encoders/ENCODER5 /Encoders/ENCODER6 "Net-(D14-Pad2)"
+    "Net-(D15-Pad1)" "Net-(Q3-Pad2)" "Net-(Q3-Pad1)" "Net-(C23-Pad1)" "Net-(C25-Pad2)" "Net-(R76-Pad1)" "Net-(R77-Pad1)"
     (clearance_class "kicad_default")
     (via_rule kicad_default)
     (rule
