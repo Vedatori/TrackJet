@@ -6,7 +6,7 @@
 class SemiIntelligentServo {
     static const uint8_t servoFreqPWM = 50;
     static const uint8_t servoResolPWM = 16;
-    static const uint16_t servoCountLow = 1707;
+    static const uint16_t servoCountLow = 1300; //1707
     static const uint16_t servoCountHigh = 8187;
     uint8_t pwmPin;
     uint8_t pwmChannel;
@@ -15,9 +15,9 @@ class SemiIntelligentServo {
     float speed;
     bool targetAchieved;
 
-    void setPWM(float aPosition);
 public:
     SemiIntelligentServo(uint8_t aPwmPin, uint8_t aPwmChannel);
+    void setPWM(float aPosition);
     void setPosition(float aPosition);
     void setSpeed(float aSpeed);
     void updatePWM();

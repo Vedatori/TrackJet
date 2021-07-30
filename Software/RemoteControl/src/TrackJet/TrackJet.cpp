@@ -35,6 +35,40 @@ void TJ::updatePWM(void * param) {
         vTaskDelay(TJ::controlPeriod);
     }
 }
+void TJ::updateEnc(void * parameter) {
+    for(;;) {
+        static uint8_t prevEncState = encGetState();
+        uint8_t encState = encGetState();
+
+        if((encState == (prevEncState + 1)) || (encState == (prevEncState - 3))) {
+            TrackJet.encSteps2++;
+        }
+        else if((encState == (prevEncState - 1)) || (encState == (prevEncState + 3))){
+            TrackJet.encSteps2--;
+        }
+        prevEncState = encState;
+        
+        delay(2);
+    }
+}
+uint8_t TJ::encGetState() {
+    bool encA = (adc1_get_raw(TJ::ADC_CH_ENC_FL) > TJ::encThreshold);
+    bool encB = (adc1_get_raw(TJ::ADC_CH_ENC_RL) > TJ::encThreshold);
+    if(encA && encB) {
+        return 0;
+    }
+    if(encA && !encB) {
+        return 1;
+    }
+    if(!encA && !encB) {
+        return 2;
+    }
+    if(!encA && encB) {
+        return 3;
+    }
+    return 0;
+}
+
 void TJ::handleRot(){
     quadEnc.updatePosition();
 }
@@ -90,6 +124,7 @@ void TrackJetClass::begin() {
     TJ::serialPWM.setPWM(STEP_EN, 100);   // Turn on motor step up
     display(dispWelcome);
     xTaskCreate(TJ::updatePWM, "updatePWM", 10000 , (void*) 0, 1, NULL);
+    xTaskCreate(TJ::updateEnc, "updateEnc", 10000 , (void*) 0, 1, NULL);
     TJ::serialPWM.set_output(true);
 
     pinMode(TJ::BUTTON, INPUT_PULLUP);
@@ -98,7 +133,12 @@ void TrackJetClass::begin() {
     attachInterrupt(TJ::ENC_SW, TJ::handleSW, RISING);
 
     adc1_config_width(ADC_WIDTH_BIT_12);
-    adc1_config_channel_atten(TJ::ADC_CH, ADC_ATTEN_DB_11);
+    adc1_config_channel_atten(TJ::ADC_CH_COM, ADC_ATTEN_DB_11);
+    adc1_config_channel_atten(TJ::ADC_CH_ENC_FR, ADC_ATTEN_DB_11);
+    adc1_config_channel_atten(TJ::ADC_CH_ENC_RL, ADC_ATTEN_DB_11);
+    adc1_config_channel_atten(TJ::ADC_CH_ENC_RR, ADC_ATTEN_DB_11);
+    adc1_config_channel_atten(TJ::ADC_CH_ENC_FL, ADC_ATTEN_DB_11);
+
 }
 
 bool TrackJetClass::buttonRead() {
@@ -200,8 +240,17 @@ void TrackJetClass::controlMovement(const int8_t joystickX, const int8_t joystic
     motorsSetSpeed(engineRightSpeed, 1);
 }
 
+float TrackJetClass::encoderGetSpeed() {
+    static int16_t prevEncSteps2 = 0;
+    static uint32_t prevTime = 0;
+    float encSpeed = (encSteps2 - prevEncSteps2) / ((millis() - prevTime) * 0.001) * 2.75; // [mm/s]
+    prevTime = millis();
+    prevEncSteps2 = encSteps2;
+    return encSpeed;
+}
+
 void TrackJetClass::servoSetPosition(uint8_t servoID, float position) {
-    TJ::servo[servoID].setPosition(position);
+    TJ::servo[servoID].setPWM(position);    //.setPosition() to move slowly
 }
 void TrackJetClass::servoSetSpeed(uint8_t servoID, float speed) {
     TJ::servo[servoID].setSpeed(speed);
@@ -257,7 +306,7 @@ uint16_t TrackJetClass::analogRead(uint8_t pin) {
     TJ::serialPWM.setPWM(MUXB, uint8_t(((pin >> 1) & 0x01)*100));
     TJ::serialPWM.setPWM(MUXC, uint8_t(((pin >> 2) & 0x01)*100));
 
-    return adc1_get_raw(TJ::ADC_CH);
+    return adc1_get_raw(TJ::ADC_CH_COM);
 }
 
 uint16_t TrackJetClass::lidarDistance() {

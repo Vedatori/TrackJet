@@ -29,12 +29,18 @@ const uint8_t ENC_SW = 23;
 const uint8_t BUTTON = 18;
 const uint8_t LIDAR = 19;
 const uint8_t ADC_MUX = 39;
-const adc1_channel_t ADC_CH = ADC1_CHANNEL_3;
+const adc1_channel_t ADC_CH_COM = ADC1_CHANNEL_3;
+const adc1_channel_t ADC_CH_ENC_FR = ADC1_CHANNEL_4;
+const adc1_channel_t ADC_CH_ENC_RL = ADC1_CHANNEL_5;
+const adc1_channel_t ADC_CH_ENC_RR = ADC1_CHANNEL_6;
+const adc1_channel_t ADC_CH_ENC_FL = ADC1_CHANNEL_7;
 
 #define SERVO_COUNT 3
-const uint8_t SERVO[SERVO_COUNT] = {27, 32, 33};
+const uint8_t SERVO[SERVO_COUNT] = {27, 16, 36};
 
 const float MOTOR_SPEED_FILTER_UPDATE_COEF = 0.15;
+
+const uint16_t encThreshold = 1600;
 
 const uint8_t FREQ_PWM_THRESHOLD = 40;
 const uint16_t controlPeriod = 10;  // [ms]
@@ -50,6 +56,8 @@ extern SemiIntelligentServo servo[SERVO_COUNT];
 extern MPU6050 mpu;
 extern VL53L0X lidar;
 void updatePWM(void * param);
+void updateEnc(void * param);
+uint8_t encGetState();
 void handleRot();
 void handleSW();
 }
@@ -77,6 +85,7 @@ class TrackJetClass {
     String displayTextBuffer;
 
 public:
+    int16_t encSteps2 = 0;
     TrackJetClass();
     void begin();
 
@@ -90,6 +99,8 @@ public:
     void motorsSetSpeed(const int8_t speed, const int8_t index);
     void motorsUpdateSpeed();
     void controlMovement(const int8_t joystickX, const int8_t joystickY);
+
+    float encoderGetSpeed();
 
     void servoSetPosition(uint8_t servoID, float position);     // servoID 0, 1, 2; position 0-180 [°]
     void servoSetSpeed(uint8_t servoID, float speed);    // speed 0-600 [°/s]
