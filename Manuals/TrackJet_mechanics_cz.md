@@ -5,19 +5,26 @@ ___
 * [Příprava překližkových dílů](#preklizka)
 * [Sestavení velkých kol](#kolo)
 * [Sestavení malých kol](#kolecka)
-* [Příprava bočnic](#bocnice1)
+* [Příprava bočnic #1](#bocnice1)
 * [Příprava držáků motorů](#drzaky)
 * [Sestavení bočnic](#bocnice2)
 * [Nasazení kol](#kola)
-* [Kompletace šasi](#sasi)
+* [Kompletace šasi #1](#sasi1)
+* [Příprava bočnic #2](#bocnice3)
+* [Kompletace šasi #2](#sasi2)
+* [Držák servo motoru](#serva)
+* [Sestavení radlice](#radlice)
 * [Polepení pásů](#pasy1)
 * [Slepení pásů](#pasy2)
 * [Nasazení pásů](#pasy3)
 ___
 
 ## <a name = preklizka>Příprava překližkových dílů</a>
+**Potřebné díly:**
+* všechny díly z překližky
+
 **Nástroje:**
-* Smirek
+* smirek
 
 ![alt](SupportFiles/IMG_0552.jpeg)
 
@@ -28,7 +35,6 @@ ___
 ## <a name = kolo>Sestavení velkých kol</a>
 **Potřebné díly:**
 
-![alt](SupportFiles/IMG_0557.jpeg)
 * 2x kolo neozubené velké z překližky
 * 1x kolo ozubené velké z překližky
 * 1x kolo ozubené velké 3D tisk
@@ -36,71 +42,56 @@ ___
 * 3x šroub M3x22
 
 **Nástroje:**
-* Křížový šroubovák
-* Maticový klíč
+* křížový šroubovák
+* maticový klíč
+
+![alt](SupportFiles/IMG_0557.jpeg)
 
 **Postup:**
 1. Pořadí navlékání
-
     ![alt](SupportFiles/IMG_0560_3.jpeg)
-1. Provléct šroub skrz díru pod malou dírkou. Hlava šroubu zapadne do vyhloubení. Navléct ozebené kolo z překližky. Malé dírky musí padnout na sebe. 
-
+1. Provléct šroub skrz díru pod malou dírkou ve velkém kole z překližky. Hlava šroubu zapadne do vyhloubení. Navléct ozubené kolo z překližky. *Malé dírky musí padnout na sebe.*
     ![alt](SupportFiles/IMG_0561_2.jpeg)
-1. Navléct 3D tištěný díl tak, aby výstupek pro zastrčení osy směřoval směrem od dřevěných dílů. 
-
+1. Navléct 3D tištěný díl tak, aby výstupek pro zastrčení osy směřoval směrem od dřevěných dílů. *Malé dírky musí opět padnout na sebe.*
     ![alt](SupportFiles/DSCN8358.JPG)
-1. Navléct neozubené kolo z překližky. 
+1. Navléct neozubené velké kolo z překližky. Zašroubovat matku. Neutahovat.
     ![alt](SupportFiles/IMG_0565.jpeg)
-1. Zašroubovat matku. Neutahovat.
-
+1. Doplnit zbylé šrouby a matky.
     ![alt](SupportFiles/IMG_0568.jpeg)
-1. Doplnit zbylé šrouby a matky. Díly vystředit vůči sobě. Všechny matky utáhnout maticovým klíčem. 
+1. Díly vystředit vůči sobě. Všechny matky utáhnout maticovým klíčem. 
     ![alt](SupportFiles/IMG_0571.jpeg)
-1. Celý postup zopakujeme pro druhé kolo.
+1. Celý postup zopakovat pro druhé kolo.
 
 ## <a name = kolecka>Sestavení malých kol</a>
 **Potřebné díly:**
 
 ![alt](SupportFiles/IMG_0572.jpeg)
-* 2x kolo neozubené malé z překližky
-* 2x kolo neozubené maličké z překližky
+* 2x malé kolo neozubené z překližky
+* 2x maličké kolo neozubené z překližky
 * 1x vymezovač kola 3D tisk
 * 3x matice M3
-* 3x šroub M3x22
+* 3x šroub M3 22 mm?
 
 **Nástroje:**
-* Křížový šroubovák
-* Maticový klíč
+* křížový šroubovák
+* maticový klíč
 
 **Postup:**
 1. Provléct šroub skrz malé kolo. Provléct vymezovač do díry v prostřed kola.
     ![alt](SupportFiles/IMG_0576.jpeg)
 1. Hlava šroubu musí zapadnout do vyhloubení.
     ![alt](SupportFiles/IMG_0578.jpeg)
-1. Navléct 2 maličké kolečka a jedno velké. Matka přijde do zahloubení.
+1. Navléct 2 maličké kolečka a jedno velké. 
     ![alt](SupportFiles/IMG_0580.jpeg)
 1. Zašroubovat matičku do zahloubení, neutahovat.
     ![alt](SupportFiles/IMG_0591.jpeg)
 1. Doplnit zbylé šrouby a matky. Díly vystředit vůči sobě. Všechny matky utáhnout. 
-    ![alt](SupportFiles/DSCN8374.JPG)
+    ![alt](SupportFiles/IMG_0581.jpeg)
 1. Stejným postupem sestavit zbylá kola. Celkově jich bude 6. 
     ![alt](SupportFiles/IMG_0585_2.jpeg)
 
-## <a name = bocnice1>Příprava bočnic #1</a>
-**Potřebné díly:**
-* 1x šasi z 3D tisku
 
-**Nástroje:**
-* kleště 
-
-![alt](SupportFiles/IMG_0543.jpeg)
-**Postup:**
-1. Vystříhat přebytečné podpory 3D tisku. 
-    ![alt](SupportFiles/IMG_0547.jpeg)
-1. Výsledný vzhled. 
-    ![alt](SupportFiles/IMG_0548.jpeg)
-
-## <a name = bocnice1>Příprava bočnic #1</a>
+## <a name = bocnice1>Příprava bočnic</a>
 **Potřebné díly:**
 * 1x šasi z 3D tisku
 
@@ -141,9 +132,9 @@ ___
 
 ## <a name = bocnice2>Sestavení bočnic</a>
 **Potřebné díly:**
-* Osazené šasi motory
+* osazené šasi motory
 * 2x bočnice z překližky
-* 2x sřoub M3 22 mm?
+* 4x sřoub M3 12 mm?
 * 2x šroub s plochou hlaovou xx mm?
 * 6x matka
 
@@ -159,7 +150,7 @@ ___
     ![alt](SupportFiles/IMG_0630.jpeg)
 1. Obdobně přichytit šroub do spodní díry.
     ![alt](SupportFiles/IMG_0634.jpeg)
-1. Prosšroubovat šroub s plochou hlavou zadním uchycením.
+1. Prošroubovat šroub s plochou hlavou zadním uchycením.
     ![alt](SupportFiles/IMG_0637.jpeg)
 1. Zachytit při prošroubovávání matku prstem.
     ![alt](SupportFiles/IMG_0640.jpeg)
@@ -169,16 +160,16 @@ ___
 
 ## <a name = kola>Nasazení kol</a>
 **Potřebné díly:**
-* Osazené šasi motory
+* osazené šasi
 * 2x kolo
 * 2x vrut xy? mm
 
 **Nástroje:**
 * šroubovák
 
-![alt](SupportFiles/IMG_0656.jpeg)
+![alt](SupportFiles/IMG_0652.jpeg)
 **Postup:**
-1. Nasadit kolo na osu a přitlačit na kraj.
+1. Nasadit kolo na osu a přitlačit k bočnici z překližky
     ![alt](SupportFiles/IMG_0644.jpeg)
 1. Prošroubovat vrut.
     ![alt](SupportFiles/IMG_0649.jpeg)
@@ -210,10 +201,9 @@ ___
 1. Výsledný vzhled.
     ![alt](SupportFiles/IMG_0678.jpeg)
 
-## <a name = bočnice>Příprava bočnic</a>
+## <a name = bocnice3>Příprava bočnic #2</a>
 **Potřebné díly:**
-* Šasi
-* Bočnice z plexiskla
+* bočnice z plexiskla
 
 ![alt](SupportFiles/IMG_0680.jpeg)
 **Postup:**
@@ -224,9 +214,8 @@ ___
 
 ## <a name = sasi2>Kompletace šasi #2</a>
 **Potřebné díly:**
-* Šasi
-* 1x podsada z překližky
-* 6x kolo
+* šasi
+* 6x malé kolo
 * 6x osa kola z 3D tisku
 * 2x podložka matky z 3D tisku
 * 6x šroub M3 xy mm
@@ -263,10 +252,10 @@ ___
 
 ## <a name = serva>Držák servo motoru</a>
 **Potřebné díly:**
-* Držák motorů s jmenovkou z 3D tisku
+* držák motorů s jmenovkou z 3D tisku
 * 2x balení servo motoru 
 * 2x šroub M3 xy mm ?
-* Ozubené kolo z 3D tisku
+* ozubené kolo z 3D tisku
 
 **Nástroje:**
 * šroubovák
@@ -291,7 +280,7 @@ ___
 * 6x díl z 3D tisku
 * 4x matka
 * 4x šroub M3 xy mm ?
-* Ozubené kolo z 3D tisku
+* ozubené kolo z 3D tisku
 
 **Nástroje:**
 * reflexní páska
@@ -378,24 +367,21 @@ ___
 **Postup:**
 
 1. Nastříhejte z filamentu 4 kusy po 0,9 cm.
-
     ![alt](SupportFiles/DSCN8564.JPG)
 1. Pomocí kleští vsuňte kus filamentu na spojnici mezi pásy.
-
     ![alt](SupportFiles/DSCN8568.JPG) 
 1. Zalepte kus filamentu z obou stran. **Pozor:** Použijte malé množství lepidla, aby se nedostalo do kloubů pásu.
-
     ![alt](SupportFiles/DSCN8570.JPG)
-1. Lepidlo nechte zaschnout  min. 20 minut. Po tuto dobu s pásy výrazně nehýbejte, nesnažte se je nasadit na robota!
+1. Lepidlo nechte zaschnout min. 20 minut. Po tuto dobu s pásy výrazně nehýbejte, nesnažte se je nasadit na robota!
 
 ## <a name = pasy3>Nasazení pásů</a>
 
 **Potřebné díly:**
 * 2x zkompletované pásy
-* 1x zkompletované šasi
+* šasi
 
 **Nástroje:**
-* Šroubovák
+* šroubovák
 
 **Postup:**
 
