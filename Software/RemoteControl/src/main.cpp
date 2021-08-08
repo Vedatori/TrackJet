@@ -5,7 +5,7 @@ uint32_t prevControlTime = 0;
 
 void setup() {
     TrackJet.begin();
-    TrackJet.startWiFiCaptain("TrackJet", "12345678");    // password length minimally 8 characters
+    TrackJet.startWiFiCaptain("<your_name>");
     TrackJet.displayText(ipToDisp());
     TrackJet.servoSetSpeed(0, 60);
 }

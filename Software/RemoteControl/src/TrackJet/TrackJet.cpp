@@ -408,11 +408,19 @@ bool TrackJetClass::displayIsBusy() {
     return !displayTextBuffer.isEmpty();
 }
 
-void TrackJetClass::startWiFiCaptain(String ssid, String password) {
+void TrackJetClass::startWiFiCaptain(String name, String password) {
     if(!beginCalled) {
         begin();
     }
-    setApCredentials(ssid, password);
+
+    String ssid_final = "TrackJet-";
+    if(name.isEmpty() || name == "<your_name>") {
+        ssid_final += WiFi.macAddress();
+    }
+    else {
+        ssid_final += name;
+    }
+    setApCredentials(ssid_final, password);
     wifiCaptInit();
     connectionEnabled = true;
 }
