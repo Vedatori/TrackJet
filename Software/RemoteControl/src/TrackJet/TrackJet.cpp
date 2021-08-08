@@ -123,7 +123,7 @@ void TrackJetClass::begin() {
 
     TJ::serialPWM.setPWM(STEP_EN, 100);   // Turn on motor step up
     display(dispWelcome);
-    xTaskCreate(TJ::updatePWM, "updatePWM", 10000 , (void*) 0, 1, NULL);
+    xTaskCreatePinnedToCore(TJ::updatePWM, "updatePWM", 10000 , (void*) 0, 1, NULL, 1);
     xTaskCreate(TJ::updateEnc, "updateEnc", 10000 , (void*) 0, 1, NULL);
     TJ::serialPWM.set_output(true);
 

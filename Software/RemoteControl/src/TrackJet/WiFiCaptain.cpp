@@ -1,12 +1,12 @@
 #include "WiFiCaptain.h"
 
-#include <DNSserver.h>            //Local DNS webserver used for redirecting all requests to the configuration portal
-#include "SPIFFS.h"
 #include <WiFi.h>
+#include <DNSServer.h>
 #include <WiFiClient.h>
-#include <Webserver.h>
+#include <WebServer.h>
 #include "Preferences.h"
 #include "WebSocketsServer.h"   //https://github.com/Links2004/arduinoWebSockets
+#include "SPIFFS.h"
 
 #include "TrackJet.h"
 
