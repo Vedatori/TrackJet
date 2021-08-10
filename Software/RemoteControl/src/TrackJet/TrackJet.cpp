@@ -92,26 +92,27 @@ TrackJetClass::TrackJetClass(void) {
 void TrackJetClass::begin() {
     beginCalled = true;
     Serial.begin(115200);
-    
-    preferences.begin("TrackJet", false);
-    gyroOffsets[0] = preferences.getFloat("gyroOffYaw", 0);
-    gyroOffsets[1] = preferences.getFloat("gyroOffPitch", 0);
-    gyroOffsets[2] = preferences.getFloat("gyroOffRoll", 0);
-    
-    accelOffsets[0] = preferences.getFloat("accOffX", 0);
-    accelOffsets[1] = preferences.getFloat("accOffY", 0);
-    accelOffsets[2] = preferences.getFloat("accOffZ", 0);
-    preferences.end();
 
     Wire.begin(TJ::I2C_SDA, TJ::I2C_SCL);
 
     if(TJ::mpu.begin() == 0) {
         gyroStatus = 1;
+
+        preferences.begin("TrackJet", false);
+        gyroOffsets[0] = preferences.getFloat("gyroOffYaw", 0);
+        gyroOffsets[1] = preferences.getFloat("gyroOffPitch", 0);
+        gyroOffsets[2] = preferences.getFloat("gyroOffRoll", 0);
+        
+        accelOffsets[0] = preferences.getFloat("accOffX", 0);
+        accelOffsets[1] = preferences.getFloat("accOffY", 0);
+        accelOffsets[2] = preferences.getFloat("accOffZ", 0);
+        preferences.end();
+
         TJ::mpu.setGyroOffsets(gyroYPR[1], gyroYPR[2], gyroYPR[0]);
         TJ::mpu.setAccOffsets(accelOffsets[0], accelOffsets[1], accelOffsets[2]);
     }
     else
-        Serial.printf("Error connecting to gyro MPU6050.\n");
+        Serial.printf("Gyroscope MPU6050 not connected.\n");
 
     pinMode(TJ::LIDAR, OUTPUT);
     digitalWrite(TJ::LIDAR, 1);
@@ -121,7 +122,7 @@ void TrackJetClass::begin() {
         TJ::lidar.startContinuous(TJ::controlPeriod);
     }
     else
-        Serial.printf("Error connecting to lidar VL53L0X.\n");
+        Serial.printf("Lidar VL53L0X not connected.\n");
 
     TJ::serialPWM.setPWM(STEP_EN, 100);   // Turn on motor step up
     display(dispWelcome);
