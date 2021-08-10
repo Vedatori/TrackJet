@@ -13,9 +13,10 @@ Deska pro TrackRay je již z výroby osazena SMD (bezvývodovými) součástkami
 * [Pájení malých součástek](#male)
 * [Pájení větších součástek](#vetsi)
 * [Pájení konektorů a senzorů čáry](#konektory)
-* [Vložení desky do robota a propojení](#finalizace)
-
-## <a name = LED>Pájení SMD</a>
+* [Zakrytování PCB, propojení periferií](#finalizace1)
+* [LIDAR](#finalizace2)
+* [LIDAR2](#finalizace3)
+## <a name = smd>Pájení SMD</a>
 **Potřebujeme:**
 * 2x SMD rezistor 1206; 0,15 Ω
 * pinzeta
@@ -59,7 +60,7 @@ Deska pro TrackRay je již z výroby osazena SMD (bezvývodovými) součástkami
 1. Otestujte, zda PCB padne do šasi. *Při usazování netlačte. Pokud deska nezapadne hladce, zavolejte vedoucího.*
 ![alt](SupportFiles/IMG_0874.jpeg)
 
-## <a name = LED1>Pájení LED </a>
+## <a name = LED2>Pájení LED</a>
 **Potřebujeme:**
 * kleště
 * 2x zelená LED
@@ -141,3 +142,61 @@ Deska pro TrackRay je již z výroby osazena SMD (bezvývodovými) součástkami
 ![alt](SupportFiles/IMG_0965.jpeg)
 1. Překontrolujte desku zezadu.
 ![alt](SupportFiles/IMG_0964.jpeg)
+
+**Nechte desku překontrolovat vedoucím. Nechte si od něj vložit baterku.**
+
+
+## <a name = finalizace1>Zakrytování PCB, propojení periferií</a>
+**Potřebujeme:**
+* kryt desky z 3D tisku ve tvaru plástve
+* 2x stahovací páska
+* oboustranná lepicí páská
+* kleště
+
+
+**Postup:**
+1. Přichyťte baterku a kryt k PCB pomocí velkých upínacích pásků, jejich konce zastřihněte kleštěmi. Pásky protahujte díryami H5 a H6 v desce.
+![alt](SupportFiles/IMG_0969.jpeg)
+![alt](SupportFiles/IMG_0974.jpeg)
+1. Konce pásků zastřihněte kleštěmi.
+![alt](SupportFiles/IMG_0980.jpeg)
+1. Konce pásků zastřihněte kleštěmi.
+![alt](SupportFiles/IMG_0980.jpeg)
+1. Vystřihněte kousek oboustranné lepicí pásky. Vlepte jej do prostoru mezi otvory pro senzory čáry.
+![alt](SupportFiles/IMG_0982.jpeg)
+1. Zachyťe kabely od servomotorů na pásku.
+![alt](SupportFiles/IMG_0986.jpeg)
+1. Zastrčte konektory motoru do desky, jak je naznačeno na obrázku.
+![alt](SupportFiles/IMG_0992.jpeg)
+1. Připojte vývody od servo motoru na kolíkovou lištu. Výstup SERVO 1 je určen pro radlici. Výstup SERVO 2 je určen pro LIDAR.
+![alt](SupportFiles/IMG_0992.jpeg)
+
+## <a name = finalizace2>LIDAR</a>
+**Potřebujeme:**
+* 2x šroub M3 ??
+* LIDAR
+
+![alt](SupportFiles/IMG_0999.jpeg)
+
+**Postup:**
+1. Připojte vývod LIDARu na konektor LIDAR. Kabel proveďte okolo PCB stejně jako na obrázku.
+![alt](SupportFiles/IMG_1005.jpeg)
+1. Přišroubujte desku pomocí sřoubů k šasi.
+![alt](SupportFiles/IMG_1009.jpeg)
+
+## <a name = finalizace3>LIDAR 2</a>
+**Potřebujeme:**
+* vrut z balení k servomotoru
+* 2x šroub xy mm
+
+![alt](SupportFiles/IMG_1009_2.jpeg)
+
+**Postup:**
+1. *Vytočte servo motor na maximum doleva.* Nasaďte na servomotor držák v úhlu 90° vůči šasi.
+![alt](SupportFiles/IMG_1012.jpeg)
+1. Přišroubujte držák pomocí vrutu z balení k servomotoru.
+![alt](SupportFiles/IMG_1016.jpeg)
+1. Vložte LIDAR a zašroubujte kryt.
+![alt](SupportFiles/IMG_1019.jpeg)
+1. Výsledná podoba.
+![alt](SupportFiles/IMG_1024.jpeg)
