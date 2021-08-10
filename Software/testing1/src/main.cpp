@@ -17,13 +17,13 @@ VL53L0X sensor;
 void IRAM_ATTR encARising() {
     encSteps += (digitalRead(encB)) ? 1 : -1;
 }
-void IRAM_ATTR IRAM_ATTR encAFalling() {
+void IRAM_ATTR encAFalling() {
     encSteps += (!digitalRead(encB)) ? 1 : -1;
 }
 void IRAM_ATTR encBRising() {
     encSteps += (!digitalRead(encA)) ? 1 : -1;
 }
-void IRAM_ATTR IRAM_ATTR encBFalling() {
+void IRAM_ATTR encBFalling() {
     encSteps += (digitalRead(encA)) ? 1 : -1;
 }
 

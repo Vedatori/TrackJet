@@ -1,12 +1,12 @@
 #include "WiFiCaptain.h"
 
-#include <DNSserver.h>            //Local DNS webserver used for redirecting all requests to the configuration portal
-#include "SPIFFS.h"
 #include <WiFi.h>
+#include <DNSServer.h>
 #include <WiFiClient.h>
-#include <Webserver.h>
+#include <WebServer.h>
 #include "Preferences.h"
 #include "WebSocketsServer.h"   //https://github.com/Links2004/arduinoWebSockets
+#include "SPIFFS.h"
 
 #include "TrackJet.h"
 
@@ -148,7 +148,12 @@ void handleNotFound() {
 }
 
 void softApEnable() {
-    WiFi.softAP(apCredentials.ssid, apCredentials.password);
+    if(strlen(apCredentials.password) < 8) {
+        WiFi.softAP(apCredentials.ssid, NULL);  // Set no password
+    }
+    else {
+        WiFi.softAP(apCredentials.ssid, apCredentials.password);    // Set password
+    }
     WiFi.softAPsetHostname(apCredentials.ssid);
 
     // Setup the DNS server redirecting all the domains to the apIP
@@ -217,9 +222,8 @@ void handleClients(void * param) {
 }
 
 void wifiCaptInit() {
-    if(strlen(apCredentials.ssid) == 0 || strlen(apCredentials.password) < 8) {
+    if(strlen(apCredentials.ssid) == 0) {
         sprintf(apCredentials.ssid, "TrackJet");
-        sprintf(apCredentials.password, "12345678");
     }
     softApEnable();
     

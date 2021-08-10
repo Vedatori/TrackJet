@@ -128,7 +128,7 @@ public:
     void displayText(String text = "", bool sweep = true);
     bool displayIsBusy();
 
-    void startWiFiCaptain(String ssid, String password);
+    void startWiFiCaptain(String name="", String password="");
     void checkConnection();
     String commandGet();
     String commandGetIndexed(uint8_t index);
