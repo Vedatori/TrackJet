@@ -19,6 +19,7 @@ VL53L0X TJ::lidar;
 
 void TJ::updatePWM(void * param) {
     for(;;) {
+        TrackJet.updateAnalogMux();
         serialPWM.update();
 
         TrackJet.checkConnection();
@@ -83,6 +84,8 @@ TrackJetClass::TrackJetClass(void) {
         gyroYPR[i] = 0;
         gyroOffsets[i] = 0;
         accelOffsets[i] = 0;
+        analogReadData[i] = 0;
+        analogReadData[i + 4] = 0;
     }
 }
 
@@ -98,7 +101,6 @@ void TrackJetClass::begin() {
     accelOffsets[0] = preferences.getFloat("accOffX", 0);
     accelOffsets[1] = preferences.getFloat("accOffY", 0);
     accelOffsets[2] = preferences.getFloat("accOffZ", 0);
-    bool prefsPresent = preferences.getBool("prefsPresent", false);
     preferences.end();
 
     Wire.begin(TJ::I2C_SDA, TJ::I2C_SCL);
@@ -138,7 +140,6 @@ void TrackJetClass::begin() {
     adc1_config_channel_atten(TJ::ADC_CH_ENC_RL, ADC_ATTEN_DB_11);
     adc1_config_channel_atten(TJ::ADC_CH_ENC_RR, ADC_ATTEN_DB_11);
     adc1_config_channel_atten(TJ::ADC_CH_ENC_FL, ADC_ATTEN_DB_11);
-
 }
 
 bool TrackJetClass::buttonRead() {
@@ -146,7 +147,7 @@ bool TrackJetClass::buttonRead() {
     return !digitalRead(TJ::BUTTON);
 }
 uint16_t TrackJetClass::potentiometerRead() {
-    return 0;
+    return analogReadData[POTENTIOMETER];
 }
 bool TrackJetClass::encoderReadButton() {
     return TJ::quadEnc.getSWPressed();
@@ -289,7 +290,6 @@ void TrackJetClass::gyroCalibrate() {
     preferences.putFloat("accOffX", accelOffsets[0]);
     preferences.putFloat("accOffY", accelOffsets[1]);
     preferences.putFloat("accOffZ", accelOffsets[2]);
-    preferences.putBool("prefsPresent", true);
     preferences.end();
 }
 void TrackJetClass::gyroUpdate() {
@@ -301,12 +301,43 @@ void TrackJetClass::gyroUpdate() {
     gyroYPR[2] = -TJ::mpu.getAngleY();   // roll
 }
 
-uint16_t TrackJetClass::analogRead(uint8_t pin) {
-    TJ::serialPWM.setPWM(MUXA, uint8_t(((pin >> 0) & 0x01)*100));
-    TJ::serialPWM.setPWM(MUXB, uint8_t(((pin >> 1) & 0x01)*100));
-    TJ::serialPWM.setPWM(MUXC, uint8_t(((pin >> 2) & 0x01)*100));
+void TrackJetClass::updateAnalogMux() {
+    static uint8_t analogReadIndex = 0;
+    analogReadData[analogReadIndex] = adc1_get_raw(TJ::ADC_CH_COM);
+    if(analogReadIndex == BAT_VOLT) {
+        float newPercent = battPercentCalc(battVolt());
+        battPercentFiltered = (1 - TJ::BATT_PERCENT_UPDATE_COEF)*battPercentFiltered + TJ::BATT_PERCENT_UPDATE_COEF*newPercent;
+    }
+    if(++analogReadIndex >= 8) {
+        analogReadIndex = 0;
+    }
 
-    return adc1_get_raw(TJ::ADC_CH_COM);
+    // Set analog mux for next ADC reading
+    TJ::serialPWM.setPWM(MUXA, uint8_t(((analogReadIndex >> 0) & 0x01)*100));
+    TJ::serialPWM.setPWM(MUXB, uint8_t(((analogReadIndex >> 1) & 0x01)*100));
+    TJ::serialPWM.setPWM(MUXC, uint8_t(((analogReadIndex >> 2) & 0x01)*100));
+}
+
+float TrackJetClass::battVolt() {
+    return float(analogReadData[BAT_VOLT])/4095*4/3*3.3;
+}
+float TrackJetClass::battPercentCalc(float voltage) {
+    float percent = -740 + 200*voltage;; // Linear between 3,7~0% and 4.2~100%
+    if(percent < 0)
+        percent = 0;
+    else if(percent > 100)
+        percent = 100;
+    return percent;
+}
+uint8_t TrackJetClass::battPercent() {
+    return uint8_t(battPercentFiltered + 0.5);  // Add 0.5 to round correctly
+}
+
+uint16_t TrackJetClass::lineLeft() {
+    return analogReadData[LINE_SENSOR_LEFT];
+}
+uint16_t TrackJetClass::lineRight() {
+    return analogReadData[LINE_SENSOR_RIGHT];
 }
 
 uint16_t TrackJetClass::lidarDistance() {

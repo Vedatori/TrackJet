@@ -39,6 +39,7 @@ const adc1_channel_t ADC_CH_ENC_FL = ADC1_CHANNEL_7;
 const uint8_t SERVO[SERVO_COUNT] = {27, 16, 36};
 
 const float MOTOR_SPEED_FILTER_UPDATE_COEF = 0.15;
+const float BATT_PERCENT_UPDATE_COEF = 0.05;
 
 const uint16_t encThreshold = 1600;
 
@@ -67,6 +68,10 @@ enum shiftRegPins {
     XSHUT, LED2, LED1, MUXA, MUXB, MUXC
 };
 
+enum adcMuxPins {
+    LINE_SENSOR_RIGHT, NC, LINE_SENSOR_LEFT, SERVO_CURR_1, SERVO_CURR_2, SERVO_CURR_3, BAT_VOLT, POTENTIOMETER
+};
+
 class TrackJetClass {
     bool beginCalled = false;
     int8_t motorsSpeed[3];
@@ -75,6 +80,7 @@ class TrackJetClass {
     float gyroYPR[3];
     float gyroOffsets[3];
     float accelOffsets[3];
+    uint16_t analogReadData[8];
     uint8_t lidarStatus = 0;    // 0-disabled, 1-running
     uint16_t lidarDist = 0;
     Preferences preferences;
@@ -83,6 +89,7 @@ class TrackJetClass {
     bool connectionActive = false;
     uint32_t beepingEnd = 0;
     String displayTextBuffer;
+    float battPercentFiltered = 50;
 
 public:
     int16_t encSteps2 = 0;
@@ -115,7 +122,14 @@ public:
         printf("offsets: %f %f %f %f %f %f\n", gyroOffsets[0], gyroOffsets[1], gyroOffsets[2], accelOffsets[0], accelOffsets[1], accelOffsets[2]);
     }
 
-    uint16_t analogRead(uint8_t pin);
+    void updateAnalogMux();
+
+    float battVolt();
+    float battPercentCalc(float voltage);
+    uint8_t battPercent();
+
+    uint16_t lineLeft();
+    uint16_t lineRight();
 
     uint16_t lidarDistance();
     void lidarUpdate();
