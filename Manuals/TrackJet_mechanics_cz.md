@@ -390,3 +390,7 @@ ___
    ![alt](SupportFiles/IMG_0800.jpeg))
 1. Vypněte pás a dotáhněte pohyblivé kolo. 
     ![alt](SupportFiles/IMG_0805.jpeg)
+
+## <a name = elektronika>Elektronika</a>
+
+[*Pájení je v samostatném návodu.*](TrackJet_electronics_cz.md)
