@@ -1,4 +1,6 @@
-Toto je návod na programování robotického pásového vozidla TrackRay. Začněte instalací vývojového prostředí na váš PC a následně si budeme ukazovat základní pravidla programovacího jazyka C++ na příkladech.
+Toto je návod na programování robotického pásového vozidla TrackJet. Začneme instalací vývojového prostředí na váš PC, následně si ukážeme základní pravidla programovacího jazyka C++ a poté začneme využívat funkce robota TrackJet.
+
+V tomto návodu se budeme zabývat programováním mikrokontroléru (mikropočítače) ESP32. K tomu je od výrobce ESP32 připraven framework (sada nástrojů urychlujících vývoj) ESP-IDF v jazyce C. Nadstavbou tohoto frameworku je další framework [arduino-esp32](https://github.com/espressif/arduino-esp32), který přidává další sadu nástrojů a je již napsán v jazyce C++. Arduino-esp32 používáme v našem projektu pro TrackJet. Bylo k němu potřeba přidat množství kódu (knihovna *TrackJet*), který se stará o *základní životní funkce* TrackJet a umožňuje jednodušší používání jeho funkcionalit (z `main.cpp`). V tomto návodě se budeme zabývat jen uživatelským pohledem na používání knihovny *TrackJet*.
 
 ___
 # Obsah
@@ -16,41 +18,45 @@ ___
 * [Motory](#motory)
 * [Sériová linka](#seriovka)
 * [Výpis textu na LED panel](#panelLed)
-* [Bzučák a kanón](#buzzerCannon)
-* [Gyroskop](#gyroskop)
+* [Potenciometr](#potenciometr)
+* [Ekodér](#enkoder)
+* [Bzučák](#buzzer)
+* [LIDAR](#lidar)
 * [Připojení k WiFi](#wifi)
 * [Vzdálený příkazový řádek](#remoteCmd)
-* [Kamera](#kamera)
 ___
 ## <a name = IDE>Vývojové prostředí</a>
 
-Pro programování TrackRay je použito vývojové prostředí [Visual Studio Code](https://code.visualstudio.com/download) s rozšířením PlatformIO. Pro instalaci prostředí a rozšíření můžete použít tento [návod](https://docs.platformio.org/en/latest/ide/vscode.html#installation), jehož hlavní část je na obrázku níže:
+Pro programování TrackJet je použito vývojové prostředí [Visual Studio Code](https://code.visualstudio.com/download) s rozšířením PlatformIO. Pro instalaci prostředí a rozšíření můžete použít tento [návod](https://docs.platformio.org/en/latest/ide/vscode.html#installation), jehož hlavní část je na obrázku níže:
 
 ![alt](SupportFiles/prog_install_PlatformIO.png)
 
 ___
 ## <a name = kontrola>Dálkové ovládání - kontrola robota</a>
 
-V této části nahrajeme do TrackRay předpřipravený program pro jeho otestování. Program umožňuje dálkové ovládání TrackRay pomocí vašeho chytrého zařízení.
+V této části nahrajete do TrackJet připravený program pro jeho otestování. Program umožňuje dálkové ovládání TrackJet pomocí tvého chytrého zařízení.
 
-1. Pro naprogramování TrackRay si stáhněte [sbírku příkladů](https://github.com/vedatori/TrackRay-examples/archive/master.zip). Stáhnutý soubor *TrackRay-examples-master.zip* si rozbalte na disk svého PC na libovolnou lokaci tak, abyste ho našli. 
-**Pozor:** PlatformIO má chybu - nedokáže pracovat s diakritikou v cestě k projektu. Všechny projekty musí být uloženy v cestě bez háčků a čárek!
-Pokud vaše uživatelské jméno obsahuje diakritiku, tak nemůžete používat Plochu ani složku Dokumenty, ale musíte vytvořit například *C:/Vedatori/TrackRay-examples-master*.
+1. Pro naprogramování TrackJet si stáhněte [tento repozitář](https://github.com/vedatori/TrackJet/archive/refs/heads/main.zip). Stáhnutý soubor *TrackJet-main.zip* si rozbalte na disk svého PC na libovolnou lokaci tak, abyste ho našli. 
+**Pozor:** PlatformIO má chybu - nedokáže pracovat s diakritikou v cestě k projektu, tedy projekt nesmí být součástí složky, která má diakritiku v názvu. Všechny projekty musí být uloženy v cestě bez háčků a čárek!
+Pokud vaše uživatelské jméno obsahuje diakritiku, tak nemůžete používat Plochu ani složku Dokumenty, ale musíte vytvořit například *C:/Vedatori/TrackJet-main*.
 
-1. Ve VS Code otevřete nabídku *File*, klikněte na *Open Folder* a zvolte složku *RemoteControl* z dříve rozbalené sbírky příkladů *TrackRay-examples-master*.
+1. Ve VS Code otevřete nabídku *File*, klikněte na *Open Folder* a zvolte složku *RemoteControl* z dříve rozbalené sbírky příkladů *TrackJet-main*.
 
     ![alt](SupportFiles/prog_open_folder.png)
 1. Otevřete soubor *main.cpp* který je v cestě *RemoteControl/src/main.cpp*.
 
     ![alt](SupportFiles/prog_open_main.png)
-1. Na řádku 11 upravte název robota "TrackRay" tak, aby byl poznatelný, např. ve formátu "TrackRay_jmeno". Můžete upravit i heslo, ale pozor, aby mělo alespoň 8 znaků.
+1. V souboru *main.cpp* upravte název robota "<your_name>" tak, aby byl poznatelný, např. jako "MarPta" nebo "MartinP". 
+Je možné přidat i heslo pro přihlašování např. takto
+"`TrackJet.startWiFiCaptain("<your_name>", "12345678");`".
+Heslo musí mít minimálně 8 znaků, jinak nebude použito.
 
     ![alt](SupportFiles/prog_set_name.png)
 1. Po otevření projektu bude VS Code chvíli pracovat. Pokud ještě pracuje, počkejte, dokud text na dolní liště nezmizí.
    
     ![alt](SupportFiles/Prog_wait_for_load.png)
-1. Připojte TrackRay pomocí USB Mini B kabelu k PC.
-1. V dolní liště PlatformIO stiskněte šipku a tím nahrejte program do TrackRay.
+1. Připojte TrackJet pomocí USB-C kabelu k PC.
+1. V dolní liště PlatformIO stiskněte šipku a tím nahrejte program do TrackJet.
 
     ![alt](SupportFiles/prog_upload.png)
 1. Počkejte, až se dokončí nahrávání a zobrazí v dolním terminálu *SUCCESS*.
@@ -59,48 +65,40 @@ Pokud vaše uživatelské jméno obsahuje diakritiku, tak nemůžete používat 
 1. V dolní liště PlatformIO stiskněte tlačítko úplně v pravo a tím spusťe PlatformIO terminál.
 
     ![alt](SupportFiles/prog_uploadFS1.png)
-1. Do nově otevřeného termínálu v dolní částí VS Code zadejte příkaz 'pio run -t uploadfs' a stiskněte *ENTER*.
+1. Do nově otevřeného termínálu v dolní částí VS Code zadejte příkaz `pio run -t uploadfs` a stiskněte *ENTER*.
 
     ![alt](SupportFiles/prog_uploadFS2.png)
 1. Počkejte, až se dokončí nahrávání a zobrazí v dolním terminálu *SUCCESS*.
 
     ![alt](SupportFiles/prog_success.png)
-1. Nyní je robot plně naprogramován. Pro ovládání na svém chytrém zařízení vyhledejte WiFi síť s názvem *TrackRay* nebo s vámi zvoleným jménem a heslem. Podle typu vašeho zařízení vám pak může vyskočit tlačítko na přihlášení do sítě "Sign in" jako např. pro Android:
-
-    <img src="SupportFiles/prog_ap_sign_in.png" width="400"/>
-1. Pokud se žádná výzva k přihlášení neobjeví, zadejte do webového prohlížeče adresu *192.168.4.1* nebo jakoukoli jinou ve tvaru *www.neco.cz*. Načte se hlavní stránka pro ovládání TrackRay. Joystickem ovládejte pohyb. Na počítači můžeš použít šipky. Do políčka *Command entry* zadávejte speciální příkazy.
+1. Nyní je robot plně naprogramován. Pro ovládání na svém chytrém zařízení vyhledejte WiFi síť s názvem *TrackJet_<your_name>*. Zadejte do webového prohlížeče adresu *192.168.4.1* nebo jakoukoli jinou ve tvaru *www.neco.cz*. Načte se hlavní stránka pro ovládání TrackJet. Joystickem ovládejte pohyb. Na počítači můžete použít i šipky. Do políčka *Command entry* můžete zadávat speciální příkazy.
 
     <img src="SupportFiles/prog_web_root.png" width="400"/>
-1. Pro přihlášení TrackRay k externí WiFi síti klikněte na tlačítko *WiFi setup*. Na následující stránce zadejte přihlašovací údaje od externí WiFi a potvrďte přihlášení.
+1. Pro přihlášení TrackJet k externí WiFi síti klikněte na tlačítko *WiFi setup*. Na následující stránce zadejte přihlašovací údaje od externí WiFi a potvrďte přihlášení.
 
     <img src="SupportFiles/prog_web_wifi.png" width="400"/>
-1. Pokud přihlášení proběhne úspěšně, objeví se potvrzení *connected* a přidělená IP adresa. Tato síť bude vyhledána i po restartu. Připojte se svým chytrým zařízením také na externí WiFi a zadejte do prohlížeče přidělenou IP adresu. V tomto případě *192.168.1.152*. Tato adresa bude po restartu zobrazena i na panelu TrackRay. 
+1. Pokud přihlášení proběhne úspěšně, objeví se potvrzení *connected* a přidělená IP adresa. Tato síť bude uložena a vyhledána i po restartu. Připojte se se svým chytrým zařízením také na externí WiFi a zadejte do prohlížeče IP adresu přidělenou TrackJet. V tomto případě *192.168.1.152*. Tato adresa bude po restartu zobrazena i na LED panelu TrackJet. 
 
     <img src="SupportFiles/prog_web_connected.png" width="400"/>
-1. Načte se opět hlavní stránka ovládání TrackRay. Tímto je vypnuta interní WiFi *TrackRay_jmeno*. Pro její opětovné zapnutí přejděte do nastavení WiFi a klikněte na tlačítko *Enable AP* nebo restartujte TrackRay.
+1. Načte se opět hlavní stránka ovládání TrackJet. Tímto je vypnuta interní WiFi *TrackJet_<your_name>*. Pro její opětovné zapnutí přejděte do nastavení WiFi a klikněte na tlačítko *Enable AP* nebo restartujte TrackJet.
 
     <img src="SupportFiles/prog_web_softAP.png" width="400"/>
-1. Pro ovládání TrackRay textovými příkazy z dema *RemoteControl* můžete používat následující příkazy. Příkazy nejsou citlivé na velikost použitých písmen.
-    * `flash on` - Zapne přední reflektor na plný výkon. Pozor, LED je poměrně silná. Nedoporučejeme používat příliš dlouho. Může dojít k *utavení* plastového držáku zrcadla a čočky.
-    * `flash half` - Zapne přední reflektor na poloviční výkon
-    * `flash off` - Vypne přední reflektor
-    * `flash 49` - Zapne přední reflektor na 49% výkon. Můžeš poučít libovolné celé číslo <0, 100>.
-    * `cam on` - Zapne kamerový přenos z TrackRay.
-    * `cam off` - Vypne kamerový přenos.
-    * `shoot` - Vystřelí čili zapne motor děla na 1 vteřinu.
-    * `beep` - Zapne buzzer na 0,5 vteřiny.
+1. Pro ovládání TrackJet s připraveným programem můžete používat následující příkazy. Příkazy nejsou citlivé na velikost použitých písmen.
+    * `blade <angle>` - Nastaví výšku radlice na daný úhel serva. 0-dole, 180-nahoře
+    * `lidar <angle>` - Nastaví pozici serva LIDARu. 0-vpravo, 180-vlevo
+    * `beep` - Zapne buzzer na 0,5 vteřiny
 
 ___
 ## <a name = novyProjekt>Nový projekt</a>
 
-Vytvoříme nový projekt a nahrajeme program do TrackRay.
+Vytvoříme nový projekt a nahrajeme program do TrackJet.
 
-1. Vytvoř si na disku svého PC složku pro tvé budoucí programy, například *C:/Vedatori/TrackRay-moje-programy*.
-1. Do této nové složky překopíruj složku *TRACKRAY-PROJECT-TEMPLATE* ze sbírky příkladů *TrackRay-examples-master*. Tato složka *TRACKRAY-PROJECT-TEMPLATE* bude sloužit jako šablona tvých budoucích programů pro TrackRay. 
-1. Překopírovanou složku *TRACKRAY-PROJECT-TEMPLATE* přejmenuj na *01_prvni_program*.
+1. Vytvoř si na disku svého PC složku pro tvé budoucí programy, například *C:/Vedatori/TrackJet-moje-programy*.
+1. Do této nové složky překopíruj složku *TrackJet-PROJECT-TEMPLATE* ze sbírky příkladů *TrackJet-main*. Tato složka *TrackJet-PROJECT-TEMPLATE* bude sloužit jako šablona tvých budoucích programů pro TrackJet. 
+1. Překopírovanou složku *TrackJet-PROJECT-TEMPLATE* přejmenuj na *01_prvni_program*.
 1. Ve VS Code otevři složku *01_prvni_program* pomocí *File*->*Open folder*.
-1. Připojte TrackRay pomocí USB Mini B kabelu k PC.
-1. V dolní liště PlatformIO stiskněte šipku a tím nahrejte program do TrackRay.
+1. Připojte TrackJet pomocí USB Mini B kabelu k PC.
+1. V dolní liště PlatformIO stiskněte šipku a tím nahrejte program do TrackJet.
     ![alt](SupportFiles/prog_upload.png)
 1. Počkejte až se dokončí nahrávání a zobrazí v dolním terminálu *SUCCESS*.
     ![alt](SupportFiles/prog_success.png)
@@ -111,7 +109,7 @@ Rozebereme si každý řádek šablony a napíšeme náš první program.
 
 Zde je celý program šablony:
 ```
-#include "TrackRay/TrackRay.h"
+#include "TrackJet/TrackJet.h"
 
 void setup() {
     trrBegin();
@@ -123,23 +121,23 @@ void loop() {
 }
 ```
 
-1. `#include "TrackRay/TrackRay.h"` - Příkaz *#include* značí co všechno můžeš ve svém programu používat. Nyní nám bude stačit přidání knihovny *TrackRay.h*.
-1. `void setup() {}` - To, co vidíš zde, je funkce. Funkce jsou kusy kódu, které můžeš opakovaně spustit tak, že zavoláš jméno. Kód každé funkce je ohraničen složenými závorkami { a }, a uvnitř také odsazen. Tato funkce se jmenuje *setup* a je spuštěna jedenkrát po zapnutí TrackRay.
+1. `#include "TrackJet/TrackJet.h"` - Příkaz *#include* značí co všechno můžeš ve svém programu používat. Nyní nám bude stačit přidání knihovny *TrackJet.h*.
+1. `void setup() {}` - To, co vidíš zde, je funkce. Funkce jsou kusy kódu, které můžeš opakovaně spustit tak, že zavoláš jméno. Kód každé funkce je ohraničen složenými závorkami { a }, a uvnitř také odsazen. Tato funkce se jmenuje *setup* a je spuštěna jedenkrát po zapnutí TrackJet.
 1. `trrBegin();`
-1. `void loop()` - Tato funkce se jmenuje *loop* a je spouštěna stále pořád dokola dokud je TrackRay zapnutý.
+1. `void loop()` - Tato funkce se jmenuje *loop* a je spouštěna stále pořád dokola dokud je TrackJet zapnutý.
 
 ###Tvůj kód
-Nyní napíšeš svůj první vlastní program na TrackRay. Na příslušné místo v tvém kódu přepiš řádek `trrSetLedDigital(D1, true);`. Tento řádek patří na konec funkce *setup*, tedy před uzavírací závorku }.
+Nyní napíšeš svůj první vlastní program na TrackJet. Na příslušné místo v tvém kódu přepiš řádek `trrSetLedDigital(D1, true);`. Tento řádek patří na konec funkce *setup*, tedy před uzavírací závorku }.
 
-Všimni si, že při psaní ti VS Code napovídá. Stačí napsat *trr* a uvidíš všechny metody, které můžeš používat na řízení TrackRay. Pokud se tak nestane, nabídku vyvoláš stisknutím *Ctrl + Space*.
+Všimni si, že při psaní ti VS Code napovídá. Stačí napsat *trr* a uvidíš všechny metody, které můžeš používat na řízení TrackJet. Pokud se tak nestane, nabídku vyvoláš stisknutím *Ctrl + Space*.
 
 ![alt](SupportFiles/prog_hint.png)
 
-Funkce *trrSetLedDigital* slouží k zapínání a vypínání LED světel na TrackRay. Jedná se o volání funkce s parametry v kulatých závorkách ( a ).
+Funkce *trrSetLedDigital* slouží k zapínání a vypínání LED světel na TrackJet. Jedná se o volání funkce s parametry v kulatých závorkách ( a ).
 1. parametr udává kterou LED chceme ovládat. V tomto případě budeme ovládat LED úplně vlevo nahoře, která se jmenuje *D1*.
 1. parametr udává jestli má LED od nyní svítit (`true`) nebo nesvítit (`false`).
 
-Nahraj program do TrackRay a počkej až se první LED rozsvítí. Gratulujeme, toto byl tvůj první vlastní program pro TrackRay :-)
+Nahraj program do TrackJet a počkej až se první LED rozsvítí. Gratulujeme, toto byl tvůj první vlastní program pro TrackJet :-)
 
 ___
 ## <a name = komentare>Komentáře</a>
@@ -152,7 +150,7 @@ V jazyce C++ máme 2 typy komentářů:
 
 Příklad: Tento program nerozsvítí LEDku.
 ```
-#include "TrackRay/TrackRay.h"
+#include "TrackJet/TrackJet.h"
 
 void setup() {
     trrBegin();
@@ -201,7 +199,7 @@ nazev_promenne = hodnota;
 
 Příklad:
 ```
-#include "TrackRay/TrackRay.h"
+#include "TrackJet/TrackJet.h"
 
 void setup() {
     trrBegin();
@@ -323,7 +321,7 @@ Při programování se nám často stane, že potřebujeme některé úkony vyko
 
 Pro jedno bliknutí LEDkou poslouží tento program:
 ```
-#include "TrackRay/TrackRay.h"
+#include "TrackJet/TrackJet.h"
 
 void setup() {
     trrBegin();
@@ -341,7 +339,7 @@ V tomto programu používáme příkaz *delay()* pro čekání na místu v kódu
 
 Pro 3 bliknutí LEDkou poslouží tento program, ve kterém jsme pouze zopakovali příkazy z minulého:
 ```
-#include "TrackRay/TrackRay.h"
+#include "TrackJet/TrackJet.h"
 
 void setup() {
     trrBegin();
@@ -376,7 +374,7 @@ while(podminka){
 }
 ```
 
-V následném kódu budeme blikat LEDkou dokud bude TrackRay zapnutý:
+V následném kódu budeme blikat LEDkou dokud bude TrackJet zapnutý:
 ```
 while(true){
     trrSetLedDigital(D1, true);
@@ -418,9 +416,9 @@ ___
 
 ___
 ## <a name = ledky>LEDky</a>
-V této kapitole konečně rozsvítíme LEDky na panelu Trackray.
+V této kapitole konečně rozsvítíme LEDky na panelu TrackJet.
 
-Pro ovládání LED na TrackRay můžete použít následující funkce:
+Pro ovládání LED na TrackJet můžete použít následující funkce:
 * `trrSetLedDigital()` - rozsvícení a zhasnutí jedné LED
 * `trrSetLedAnalog()` - nastavení jasu jedné LED v rozsahu 0 (nesvítí) až 100 (plně svítí)
 * `trrSetLedAllDigital()` - rozsvícení a zhasnutí všech LED na panelu
@@ -439,7 +437,7 @@ trrSetLedAnalog(1, 100);
 Obdobným způsobem ovládáme zbylé LEDky.
 ___
 ## <a name = tlacitko>Tlačítko</a>
-Nejjednodušším způsobem, jak můžete TrackRay ovládat je pomocí tlačítka **SW1**, které najdete v pravém horním rohu desky elektroniky. Pro zjištění jestli je tlačítko zmáčknuto budeme používat příkaz `trrReadButton` v náslející konstrukci.
+Nejjednodušším způsobem, jak můžete TrackJet ovládat je pomocí tlačítka **SW1**, které najdete v pravém horním rohu desky elektroniky. Pro zjištění jestli je tlačítko zmáčknuto budeme používat příkaz `trrReadButton` v náslející konstrukci.
 ```
 bool tlacitko_zmacknuto = trrReadButton();
 ```
@@ -447,7 +445,7 @@ Zde je vytvořenap roměnná `tlacitko_zmacknuto` a následně do ní uložen st
 
 Příklad: Tento program rozsvítí LED 1 na panelu při stisku tlačítka SW1.
 ```
-#include "TrackRay/TrackRay.h"
+#include "TrackJet/TrackJet.h"
 
 void setup() {
     trrBegin();
@@ -465,7 +463,7 @@ void loop() {
 
 Protože příkaz `trrReadButton` nabývá pravdivostní hodnoty `true` nebo `false`, můžeme předchozí program zapsat úsporněji, ale funkčně stejně jako:
 ```
-#include "TrackRay/TrackRay.h"
+#include "TrackJet/TrackJet.h"
 
 void setup() {
     trrBegin();
@@ -477,14 +475,14 @@ void loop() {
 ```
 ___
 ## <a name = motory>Motory</a>
-Nyní konečně pořádně oživíme TrackRay a začneme s ním pohybovat.
+Nyní konečně pořádně oživíme TrackJet a začneme s ním pohybovat.
 
 Pro řízení motorů můžete použít následující příkazy:
 * `trrMotorsSetSpeed()` - nastaví rychlost obou motorů podle 2 zadaných číselných parametrů v rozshahu -100 až 100.
 * `trrMotorsSetSpeedLeft()` - nastaví rychlost levého motoru podle zadaného číselného parametru v rozshahu -100 až 100.
 * `trrMotorsSetSpeedRight()` - nastaví rychlost pravého motoru podle zadaného číselného parametru v rozshahu -100 až 100.
 
-Příklad: Následujícím příkazem rozjedeme TrackRay na poloviční rychlost dopředu:
+Příklad: Následujícím příkazem rozjedeme TrackJet na poloviční rychlost dopředu:
 ```
 trrMotorsSetSpeed(50, 50);
 ```
@@ -511,7 +509,7 @@ Při programování robotů se často stane, že potřebujete s programem v robo
 ### Program pro výpis textu na sériové lince
 Pro výpis textu na sériové lince budeme používat příkaz `printf`. Abychom na sériové lince jedenkrát vypsali text *Hello World!*, použijeme následující program:
 ```
-#include "TrackRay/TrackRay.h"
+#include "TrackJet/TrackJet.h"
 
 void setup() {
     trrBegin();
@@ -525,11 +523,11 @@ void loop() {
 Okolo textu, který chceme vypsat je třeba vložit dvojité uvozovky `"text"`. Řetězec `/n` označuje znak pro odřádkování, čili obdoba tlačítku *ENTER* v textových editorech. 
 
 ### Spuštění sériové linky
-1. Po nahrání programu do TrackRay necháme TrackRay připojený USB kabelem k PC.
+1. Po nahrání programu do TrackJet necháme TrackJet připojený USB kabelem k PC.
 1. Pomocí tlačítka v levé dolní liště PlatformIO ve tvaru zásuvky spustíme sériovou linku.
 
     ![alt](SupportFiles/prog_serial.png)
-1. Se spuštěnou sériovou linkou je třeba resetovat TrackRay, aby mohl jednou po startu vypsat žádaný text. Provedeme to stisknutím tlačítka RESET ze spodní strany modulu *ESP-CAM*:
+1. Se spuštěnou sériovou linkou je třeba resetovat TrackJet, aby mohl jednou po startu vypsat žádaný text. Provedeme to stisknutím tlačítka RESET ze spodní strany modulu *ESP-CAM*:
 
     ![alt](SupportFiles/prog_reset.jpg)
 1. Na otevřené sériové lince v dolní částí okna VS Code najedte zadatý textový řetězec *Hellp World!*:
@@ -547,9 +545,9 @@ Pro úpravu formátu vypisovaných proměnných máme mnoho dalších možností
 printf("%d\n", cele_cislo);
 ```
 
-Příklad: Pro opakovaný výpis času od startu TrackRay použijeme následující program. Hodnota času je uvedena v milisekundách:
+Příklad: Pro opakovaný výpis času od startu TrackJet použijeme následující program. Hodnota času je uvedena v milisekundách:
 ```
-#include "TrackRay/TrackRay.h"
+#include "TrackJet/TrackJet.h"
 
 void setup() {
     trrBegin();
@@ -564,17 +562,17 @@ Funkce `millis()` nám vrací počet uplynulých milisekund od startu programu j
 
 ___
 ## <a name = panelLed>Výpis textu na LED panel</a>
-Pro výpis textu na LED panel TrackRay slouží následující funkce:
+Pro výpis textu na LED panel TrackJet slouží následující funkce:
 * `trrDisplayText(String text, bool sweep = true)` - postupně vypíše zadaný *text* v datovém typu *String*. Druhý pravdivostní parametr *sweep* je nepovinný a určuje, zda bude text odjíždět vlevo (*true*) nebo budou znaky pouze přeblikávat bez animace (*false*). Bez uvedení parametru *sweep* bude text odjíždět vlevo.
 * `trrIsDisplayingText()` - vrací pravdivostní hodnotu (*true* nebo *false*) označující jestli je aktuálně vypisován zadaný text.
 
-Příklad: Následující program při startu vypíše text "TrackRay is starting" v pohyblivém módu textu.
+Příklad: Následující program při startu vypíše text "TrackJet is starting" v pohyblivém módu textu.
 ```
-#include "TrackRay/TrackRay.h"
+#include "TrackJet/TrackJet.h"
 
 void setup() {
     trrBegin();
-    trrDisplayText("TrackRay is starting");
+    trrDisplayText("TrackJet is starting");
 }
 
 void loop() {
@@ -583,103 +581,26 @@ void loop() {
 ```
 
 ___
-## <a name = buzzerCannon>Bzučák a kanón</a>
+## <a name = buzzer>Bzučák</a>
 
 Pro ovládání bzučáku slouží funkce `trrBuzzerBeep()`. Jako parametr uvedeme délku pípnutí v milisekundách. Následující příkaz pípne bzučákem na půl vteřiny:
 
 `trrBuzzerBeep(500);`
 
-Pro ovládání kanónu můžete použít i funkci `trrCanonShoot()`. Funkce zapne motor kanónu na plný výkon (100) po dobu uvedenou v parametru funkce, obdobně jako u bzučáku. Následující příkaz zapne motor kanónu na 1 vteřinu, což odpovídá přibližně jednomu výstřelu.
-
-`trrCanonShoot();`
-
-___
-## <a name = gyroskop>Gyroskop a akcelerometr</a>
-
-### Motivace
-Při programování TrackRay je výhodné něco vědět o jeho orientaci v prostoru. Díky tomu budeme moci TrackRay naučit jezdit více samostatně. 
-
-### Orientace v prostoru
-V desce elektroniky tvého TrackRay je osazen gyroskop a akcelerometr. 
-* **Gyroskop** je senozor, pomocí kterého měříme rychlost otáčení TrackRay podél každé ze 3 prostorových os. 
-* **Akcelerometr** je senzor, pomocí kterého měříme pohybové zrychlení TrackRay v každé ze 3 os.
-
-Chytrou kombinací těchto senzorů si dokážeme udělat poměrně dobrou představu o orientaci tvého TrackRay v prostoru. Orientaci TrackRay v prostoru budeme vyjadřovat pomocí 3 úhlů:
-* **Yaw** nebo česky klopení.
-* **Pitch** nebo česky klonění.
-* **Roll** nebo česky bočení.
-
-Orientaci těchto úhlů v prostoru můžeš vidět na obrázku:
-
-![alt](SupportFiles/prog_gyroscope.png)
-
-Pro vyčítání dat z gyroskopu budeme používat následující funkce:
-* `trrGyroYaw()` - vrátí nám úhel *yaw* v rozsahu -180° až 180°.
-* `trrGyroPitch()` - vrátí nám úhel *pitch* v rozsahu -180° až 180°. Na rovné ploše vrací úhel 0°.
-* `trrGyroRoll()` - vrátí nám úhel *roll* v rozsahu -180° až 180°. Na rovné ploše vrací úhel 0°.
-* `trrGyroData()` - umožňuje vyčíst všechny 3 úhly zaráz.
-* `trrGyroEnabled()` - vrátí nám pravdivostní hodnotu `true` nebo `false` podle toho, jestli je senzor správně připojen.
-* `trrGyroCalibrate()` - umožňuje kalibrovat gyroskop a akcelerometr.
-* `void trrGyroUpdate()` - aktualizuje aktuální hodnoty čtené z gyroskopu a akcelerometru
-
-Příklad: Následující program bude zobrazovat úhly natočení TrackRay do sériové linky:
-```
-#include "TrackRay/TrackRay.h"
-
-void setup() {
-    trrBegin();
-}
-
-void loop() {
-    trrGyroUpdate();
-    printf("%f %f %f\n", trrGyroYaw(), trrGyroPitch(), trrGyroRoll());
-    delay(200);
-}
-```
-
-Příklad: Následující program bude zobrazovat úhly natočení TrackRay do sériové linky pomocí funkce `trrGyroData()`:
-```
-#include "TrackRay/TrackRay.h"
-
-void setup() {
-    trrBegin();
-}
-
-void loop() {
-    trrGyroUpdate();
-    float ypr[3];
-    trrGyroData(ypr);
-    printf("%f %f %f\n", ypr[0], ypr[1], ypr[2]);
-    delay(200);
-}
-```
-
-### Kalibrace
-Gyroskop a akcelerometr tvého TrackRay byl zkalibrován při jeho prvním spuštění. Pokud budeš chtít měřená data senzorů zpřesnit, můžeš provést kalibraci.
-1. Umísti TrackRay na podstavec tak, aby deska elektroniky byla vodorovně a nepohybovala se.
-1. Příkazem `trrGyroCalibrate();` spustíš kalibraci. Ta může trvat několik minut. Během kalibrace je vypisován stav na sériovou linku.
-1. Po ukončení kalibrace jsou vypsány kalibrační hodnoty na sériovou linku a uloženy.
-
-___
-## <a name = wifi>Připojení k WiFi</a>
-Pro připojení TrackRay k WiFi slouží funkce `trrWiFiControlStart()`. Ta vytvoří vlastní WiFi přístupový bod (AP) dle uvedených přihlašovacích údajů. K tomuto bodu je po zavolání funkce možné se připojit chytrým zařízením, začít ovládat TrackRay a připojit ho k externí WiFi síti. Následující příkaz aktivuje WiFi a vytvoří vlastní WiFi přístupový bod s názvem (SSID) *TrackRay* a heslem *12345678*. Pozor, heslo musí mít minimálně 8 znaků.
-
-`trrWiFiControlStart("TrackRay", "12345678");`
-
 ___
 ## <a name = remoteCmd>Vzdálený příkazový řádek</a>
-Pro dálkové ovládání TrackRay můžeš použít i textové příkazy. Ty budeš zadávat do pole *Command entry* na webové stránce dálkového ovládání. Po stisku tlačítka *Enter* (funguje i na klávesnici) je zadaný příkaz odeslán do TrackRay. K použítí přijatého příkazu budeme používat následující funkce:
+Pro dálkové ovládání TrackJet můžeš použít i textové příkazy. Ty budeš zadávat do pole *Command entry* na webové stránce dálkového ovládání. Po stisku tlačítka *Enter* (funguje i na klávesnici) je zadaný příkaz odeslán do TrackJet. K použítí přijatého příkazu budeme používat následující funkce:
 * `trrCommandGet()` - vrací textový řetězec (proměnnou typu *String*) obsahující aktuálně přijatý příkaz.
 * `trrCommandGetIndexed(uint8_t index)` - vrací textový řetězec obsahující jedno slovo z přijatého příkazu. Slova jsou oddělena mezerami a číslována od 0.
 * `trrCommandClear()` - vymaže obsah aktuálně přijatého příkazu.
 
 Příklad: Následující program blikne LED reflektorem po obdržení příkazu "flash":
 ```
-#include "TrackRay/TrackRay.h"
+#include "TrackJet/TrackJet.h"
 
 void setup() {
     trrBegin();
-    trrWiFiControlStart("TrackRay", "12345678");    // password length minimally 8 characters
+    trrWiFiControlStart("TrackJet", "12345678");    // password length minimally 8 characters
 }
 
 void loop() {
@@ -695,11 +616,11 @@ void loop() {
 
 Příklad: Následující program rozsvítí LED na příkaz "flash on" a zhasne na příkaz "flash off":
 ```
-#include "TrackRay/TrackRay.h"
+#include "TrackJet/TrackJet.h"
 
 void setup() {
     trrBegin();
-    trrWiFiControlStart("TrackRay", "12345678");    // password length minimally 8 characters
+    trrWiFiControlStart("TrackJet", "12345678");    // password length minimally 8 characters
 }
 
 void loop() {
@@ -716,16 +637,16 @@ void loop() {
 }
 ```
 
-TrackRay umožňuje textovou komunikaci i opačným směrem, tedy z TrackRay do webové stránky dálkového ovládání.
-* `trrCommandSend(String command)` - odešle textový příkaz z TrackRay a zobrazí ho šedě v poli *Command entry*.
+TrackJet umožňuje textovou komunikaci i opačným směrem, tedy z TrackJet do webové stránky dálkového ovládání.
+* `trrCommandSend(String command)` - odešle textový příkaz z TrackJet a zobrazí ho šedě v poli *Command entry*.
 
-Příklad: Následující program bude v textovém poli *Command entry* vypisovat stav tlačítka TrackRay:
+Příklad: Následující program bude v textovém poli *Command entry* vypisovat stav tlačítka TrackJet:
 ```
-#include "TrackRay/TrackRay.h"
+#include "TrackJet/TrackJet.h"
 
 void setup() {
     trrBegin();
-    trrWiFiControlStart("TrackRay", "12345678");    // password length minimally 8 characters
+    trrWiFiControlStart("TrackJet", "12345678");    // password length minimally 8 characters
 }
 
 void loop() {
@@ -734,8 +655,3 @@ void loop() {
 }
 ```
 
-___
-## <a name = kamera>Kamera</a>
-Pro používání kamery je možné použít následující funkce:
-* `trrCamEnable();` - aktivuje přenos obrazu do webové stránky dálkového ovládání. Pokud není kamera připojena, nic se nestane.
-* `trrCamDisable();` - deaktivuje přenos obrazu.
