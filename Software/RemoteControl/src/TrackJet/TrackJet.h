@@ -148,6 +148,7 @@ public:
     String commandGetIndexed(uint8_t index);
     void commandClear();
     void commandSend(String command);
+    void internCommandHandle();
 };
 
 extern TrackJetClass TrackJet;

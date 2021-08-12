@@ -33,6 +33,8 @@ void TJ::updatePWM(void * param) {
         TrackJet.gyroUpdate();
         TrackJet.lidarUpdate();
 
+        TrackJet.internCommandHandle();
+
         vTaskDelay(TJ::controlPeriod);
     }
 }
@@ -495,6 +497,12 @@ void TrackJetClass::commandClear() {
 
 void TrackJetClass::commandSend(String command) {
     commandSendCaptain(command);
+}
+
+void TrackJetClass::internCommandHandle() {
+    if(TrackJet.commandGetIndexed(0) == "reset") {
+        ESP.restart();
+    }
 }
 
 TrackJetClass TrackJet;
