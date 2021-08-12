@@ -10,7 +10,7 @@ ___
 * [První program](#prvniProgram)
 * [Komentáře](#komentare)
 * [Proměnné](#promenne)
-* [Větvení](#vetveni)
+* [Podmínky](#podminky)
 * [Cyklus](#cyklus)
 * [Funkce](#funkce)
 * [LEDky](#ledky)
@@ -37,7 +37,7 @@ ___
 V této části nahrajete do TrackJet připravený program pro jeho otestování. Program umožňuje dálkové ovládání TrackJet pomocí tvého chytrého zařízení.
 
 1. Pro naprogramování TrackJet si stáhněte [tento repozitář](https://github.com/vedatori/TrackJet/archive/refs/heads/main.zip). Stáhnutý soubor *TrackJet-main.zip* si rozbalte na disk svého PC na libovolnou lokaci tak, abyste ho našli. 
-**Pozor:** PlatformIO má chybu - nedokáže pracovat s diakritikou v cestě k projektu, tedy projekt nesmí být součástí složky, která má diakritiku v názvu. Všechny projekty musí být uloženy v cestě bez háčků a čárek!
+**Pozor:** PlatformIO nedokáže pracovat s diakritikou v cestě k projektu. Projekt tedy nesmí být součástí složky, která má diakritiku v názvu. Všechny projekty musí být uloženy v cestě bez háčků a čárek!
 Pokud vaše uživatelské jméno obsahuje diakritiku, tak nemůžete používat Plochu ani složku Dokumenty, ale musíte vytvořit například *C:/Vedatori/TrackJet-main*.
 
 1. Ve VS Code otevřete nabídku *File*, klikněte na *Open Folder* a zvolte složku *RemoteControl* z dříve rozbalené sbírky příkladů *TrackJet-main*.
@@ -93,27 +93,38 @@ ___
 
 Vytvoříme nový projekt a nahrajeme program do TrackJet.
 
-1. Vytvoř si na disku svého PC složku pro tvé budoucí programy, například *C:/Vedatori/TrackJet-moje-programy*.
-1. Do této nové složky překopíruj složku *TrackJet-PROJECT-TEMPLATE* ze sbírky příkladů *TrackJet-main*. Tato složka *TrackJet-PROJECT-TEMPLATE* bude sloužit jako šablona tvých budoucích programů pro TrackJet. 
-1. Překopírovanou složku *TrackJet-PROJECT-TEMPLATE* přejmenuj na *01_prvni_program*.
-1. Ve VS Code otevři složku *01_prvni_program* pomocí *File*->*Open folder*.
-1. Připojte TrackJet pomocí USB Mini B kabelu k PC.
-1. V dolní liště PlatformIO stiskněte šipku a tím nahrejte program do TrackJet.
+1. Vytvořte si na disku svého PC složku pro vaše budoucí programy, například *C:/TrackJet-moje-programy*.
+1. Do této nové složky překopírujte složku *RemoteControl* ze stáhnutého repozitáře *TrackJet-main*. Tato složka bude sloužit jako šablona tvých budoucích programů pro TrackJet. 
+1. Překopírovanou složku *RemoteControl* přejmenuj novým názvem, například na *01_prvni_program*.
+1. Ve VS Code otevřete složku *01_prvni_program* pomocí *File*->*Open folder*.
+1. Ve VS Code otevřete soubor *main.cpp* a nahraď jeho obsah následujícím kódem šablony:
+    ```
+    #include "TrackJet/TrackJet.h"
+
+    void setup() {
+        TrackJet.begin();
+    }
+
+    void loop() {
+        
+    }
+    ```
+1. Připojte TrackJet pomocí USB-C kabelu k PC.
+1. V dolní liště PlatformIO stiskněte šipku (*Upload*) a tím nahrajte program do TrackJet.
     ![alt](SupportFiles/prog_upload.png)
-1. Počkejte až se dokončí nahrávání a zobrazí v dolním terminálu *SUCCESS*.
+1. Počkejte až se dokončí nahrávání a zobrazí v dolním terminálu *SUCCESS*. Nyní je nový program nahrán.
     ![alt](SupportFiles/prog_success.png)
 
 ___
 ## <a name = prvniProgram>První program</a>
 Rozebereme si každý řádek šablony a napíšeme náš první program.
 
-Zde je celý program šablony:
+Zde je kód šablony:
 ```
 #include "TrackJet/TrackJet.h"
 
 void setup() {
-    trrBegin();
-    trrSetLedDigital(D1, true);
+    TrackJet.begin();
 }
 
 void loop() {
@@ -121,28 +132,29 @@ void loop() {
 }
 ```
 
-1. `#include "TrackJet/TrackJet.h"` - Příkaz *#include* značí co všechno můžeš ve svém programu používat. Nyní nám bude stačit přidání knihovny *TrackJet.h*.
-1. `void setup() {}` - To, co vidíš zde, je funkce. Funkce jsou kusy kódu, které můžeš opakovaně spustit tak, že zavoláš jméno. Kód každé funkce je ohraničen složenými závorkami { a }, a uvnitř také odsazen. Tato funkce se jmenuje *setup* a je spuštěna jedenkrát po zapnutí TrackJet.
-1. `trrBegin();`
-1. `void loop()` - Tato funkce se jmenuje *loop* a je spouštěna stále pořád dokola dokud je TrackJet zapnutý.
+1. `#include "TrackJet/TrackJet.h"` - Příkaz *#include* přidává do našeho programu kód z jiných míst. Nyní nám stačí přidání knihovny *TrackJet.h* ze složky TrackJet.
+1. `void setup() {}` - Toto je definice funkce. Funkce jsou kusy kódu, které můžeš opakovaně spustit tak, že zavoláš jméno. Kód (tělo) funkce je ohraničen složenými závorkami { a }, a mezi nimi odsazen. Tato funkce se jmenuje *setup* a je spuštěna jedenkrát po zapnutí TrackJet. O to se postará arduino-esp32 framework.
+1. `TrackJet.begin();` - Toto je volání funkce z knihovny *TrackJet*, která knihovnu inicializuje a připraví všechny její komponenty pro budoucí použití. Toto je třeba provést pouze jednou po startu robota, proto je příkaz umístěn ve funkci *setup*.
+1. `void loop()` - Toto je definice funkce *loop*. Ta je spouštěna stále pořád dokola dokud je TrackJet zapnutý.
 
 ###Tvůj kód
-Nyní napíšeš svůj první vlastní program na TrackJet. Na příslušné místo v tvém kódu přepiš řádek `trrSetLedDigital(D1, true);`. Tento řádek patří na konec funkce *setup*, tedy před uzavírací závorku }.
+Nyní napíšete svůj první vlastní program pro TrackJet. Na konec funkce *setup* připiště `TrackJet.ledWrite(1, true);`, tedy nad uzavírací závorku }. Tento příkaz zapříčiní, že se LED číslo 1 rozsvítí.
 
-Všimni si, že při psaní ti VS Code napovídá. Stačí napsat *trr* a uvidíš všechny metody, které můžeš používat na řízení TrackJet. Pokud se tak nestane, nabídku vyvoláš stisknutím *Ctrl + Space*.
+Všimněte si, že při psaní vám VS Code napovídá. Stačí napsat `TrackJet.` a uvidíte nabídku připravených funkcí z knihovny *TrackJet*. Pokud se tak nestane, nabídku vyvoláte stisknutím *Ctrl + Space*.
 
 ![alt](SupportFiles/prog_hint.png)
 
-Funkce *trrSetLedDigital* slouží k zapínání a vypínání LED světel na TrackJet. Jedná se o volání funkce s parametry v kulatých závorkách ( a ).
-1. parametr udává kterou LED chceme ovládat. V tomto případě budeme ovládat LED úplně vlevo nahoře, která se jmenuje *D1*.
-1. parametr udává jestli má LED od nyní svítit (`true`) nebo nesvítit (`false`).
 
-Nahraj program do TrackJet a počkej až se první LED rozsvítí. Gratulujeme, toto byl tvůj první vlastní program pro TrackJet :-)
+Funkce *ledWrite* slouží k zapínání a vypínání LED světel na TrackJet. Jedná se o volání funkce s parametry v kulatých závorkách ( a ).
+1. parametr udává, kterou LED chceme ovládat. V tomto případě budeme ovládat první LED, která se jmenuje *D1*.
+1. parametr udává, jestli má LED od nyní svítit (`true`) nebo nesvítit (`false`).
+
+Nahrajte program do TrackJet a počkejte, až se první LED rozsvítí. Gratulujeme, toto byl váš první vlastní program pro TrackJet :-)
 
 ___
 ## <a name = komentare>Komentáře</a>
 
-Do svého kódu je někdy vhodné psát komentáře. Komentáře jsou kusy textu, které jsou viditelné pro programátora, čili tebe, ale TracRay si jich nevšímá. Jsou vhodné zejména v místech, kdy ze samotného funkčního kódu není zřejmé co dělá a k čemu slouží.
+Do svého kódu je někdy vhodné psát komentáře. Komentáře jsou kusy textu, které jsou viditelné pro programátora, čili vás, ale TracJet si jich nevšímá (ani se do něj nenahrají). Jsou vhodné zejména v místech, kdy ze samotného funkčního kódu není zřejmé, co dělá a k čemu slouží.
 
 V jazyce C++ máme 2 typy komentářů:
 1. Jenořádkový komentář je uvozen dvojitým lomítkem `//`. Celý zbytek řádku za dvojitým lomítkem je považován za komentář.
@@ -153,8 +165,8 @@ Příklad: Tento program nerozsvítí LEDku.
 #include "TrackJet/TrackJet.h"
 
 void setup() {
-    trrBegin();
-    // trrSetLedDigital(D1, true);
+    TrackJet.begin();
+    //TrackJet.ledWrite(1, true);
 }
 
 void loop() {
@@ -166,7 +178,7 @@ ___
 ## <a name = promenne>Proměnné</a>
 
 ### Motivace
-Při psaní programů brzy dojdete k tomu, že potřebujete aby si program něco *zapamatoval*. Může se jednat o výsledek matematicé rovnice, počítadlo kroků, uchování měřené hodnoty a tak dále. K tomuto účelu se v programech používají **proměnné**. Proměnné si můžeme představovat jako šuplíky s textovými popisky na sobě. Do šuplíku můžeme *vložit* nějakou informaci a někdy později ji opět vytáhnout. Popisek šuplíku zde představuje název proměnné.
+Při psaní programů brzy dojdete k tomu, že potřebujete, aby si program něco *zapamatoval*. Může se jednat o výsledek matematicé operace, počítadlo kroků, uchování měřené hodnoty a tak dále. K tomuto účelu se v programech používají **proměnné**. Proměnné si můžeme představovat jako šuplíky s textovými popisky na sobě. Do šuplíku můžeme *vložit* nějakou informaci a někdy později ji opět vytáhnout. Popisek šuplíku zde představuje název proměnné.
 
 ### Vytvoření proměnné
 Proměnnou vytvoříme následujícím příkazem:
@@ -179,7 +191,7 @@ typ_promenne nazev_promenne = hodnota;
 
 `=` je operátor sloužící k přiřazení (vložení) určité hodnoty do proměnné.
 
-`;` čili středník slouží k oddělování příkazů a píšeme ho vždy na konec příkazu. Na české klávesnici se nachází pod klávesou *ESC*.
+`;` čili středník slouží k oddělování příkazů a píšeme ho vždy na konec příkazu. Na české klávesnici se nachází pod klávesou *ESC* vlevo nahoře.
 
 ### Základní datové typy proměnných
 * `int` označuje proměnnou pro ukládání celých čísel, například `3`.
@@ -202,11 +214,11 @@ Příklad:
 #include "TrackJet/TrackJet.h"
 
 void setup() {
-    trrBegin();
+    TrackJet.begin();
     int cele_cislo = 0;
     cele_cislo = cele_cislo + 10;   // Zvýšíme hodnotu v proměnné o 10
-    cele_cislo += 10;   // Zkrácený zápis toho stejného
-    // Nyní je v proměnné cele_cislo uloženo 20
+    cele_cislo += 10;   // Zkrácený zápis stejné operace jako výše
+    // Nyní je v proměnné cele_cislo uložena hodnota 20
 }
 
 void loop() {
@@ -229,25 +241,25 @@ char znak = 'a';
 bool otevreno = true; 
 
 // proměnná pro textový řetězec s hodnotou "nejaky text"
-std::string text = "nejaky text";
+String text = "nejaky text";
 ```
 ___
-## <a name = vetveni>Větvení</a>
+## <a name = podminky>Podmínky</a>
 
 ### Motivace
-Při programování brzo zjistíš, že potřebuješ, aby se tvůj program choval různě v různých situacích. Jinými slovy aby prováděl určité úseky kódu pouze za splnění daných podmínek. Tomuto chování říkáme *větvení* a umožňuje programu provádět *rozhodnutí*.
+Při programování brzo zjistíte, že potřebujete, aby se váš program choval různě v různých situacích. Jinými slovy aby prováděl určité úseky kódu pouze za splnění daných podmínek. K tomu se používají *podmínky*. Ty umožňují programu provádět *rozhodnutí*.
 
 ### Konstrukce `if`
-`if` je základní podmíněný příkaz. Základem této konstrukce je *podmínka*, která se uvádí za slovo if do kulatých závorek. Podmínka může být proměnná nebo logický výraz.
+`if` je základní podmínka. Základem této konstrukce je *podmínka*, která se uvádí za `if` do kulatých závorek. Podmínka může být proměnná nebo logický výraz.
 ```
 if(podminka) {
     ...kód který se provede, pokud je podmínka splněna (true)...
 }
 ```
-U `if` konstrukce docházi k vyhodnocení podmínky, tj. zjistí se, zda je podmínka pravdivá (`true`) nebo nepravdivá ((`false(`). Pokud je pravdivá, provede se kód, který je za `if` uveden ve složených závorkách `{...kód...}`. V opačném případě program pokračuje až za `if`.
+U `if` konstrukce docházi k vyhodnocení podmínky, tj. zjistí se, zda je podmínka pravdivá (`true`) nebo nepravdivá (`false(`). Pokud je pravdivá, provede se kód, který je za `if` uveden ve složených závorkách `{...kód...}`. V opačném případě program pokračuje až za `if`.
 
 ### Konstrukce `else`
-Může existovat jen v případě, kdy před ní byl vyvořený `if`. Úkolem `else` je provést kód v něm napsaný jen v případě, že předchozí `if` nebyl splněn.
+Může existovat jen v případě, že před ní byl uvedený `if`. Úkolem `else` je provést kód v něm napsaný jen v případě, že předchozí `if` nebyl splněn.
 ```
 if(podminka) {
     ...kód který se provede, pokud je podmínka splněna (true)...
@@ -278,7 +290,7 @@ Podmínka dotazovaná při větvení určuje zda se bude daný úsek kódu prov�
 ```
 bool podminka = true;
 if(podminka) {
-    ...kód, který je vykonán, protože podmínka je pravdivá...
+    ...kód je vykonán, protože podmínka je pravdivá...
 }
 ```
 
@@ -298,7 +310,7 @@ if(cele_cislo < 5) {
         cele_cislo = 0;
     }
 }
-// V proměnné cele_cislo je uložena hodnota 0
+// V proměnné cele_cislo je uložena hodnota 0, protože obě podmínky byly splněny
 ```
 
 ### Propojování podmínek
@@ -311,7 +323,7 @@ int cele_cislo = 3;
 if(cele_cislo < 5 && cele_cislo > -5) {
     cele_cislo = 0;
 }
-// V proměnné cele_cislo je uložena hodnota 0
+// V proměnné cele_cislo je uložena hodnota 0, protože obě podmínky byly splněny
 ```
 ___
 ## <a name = cyklus>Cyklus</a>
@@ -324,10 +336,10 @@ Pro jedno bliknutí LEDkou poslouží tento program:
 #include "TrackJet/TrackJet.h"
 
 void setup() {
-    trrBegin();
-    trrSetLedDigital(D1, true);
+    TrackJet.begin();
+    TrackJet.ledWrite(1, true);
     delay(500);
-    trrSetLedDigital(D1, false);
+    TrackJet.ledWrite(1, false);
     delay(500);
 }
 
@@ -343,19 +355,19 @@ Pro 3 bliknutí LEDkou poslouží tento program, ve kterém jsme pouze zopakoval
 
 void setup() {
     trrBegin();
-    trrSetLedDigital(D1, true);
+    TrackJet.ledWrite(1, true);
     delay(500);
-    trrSetLedDigital(D1, false);
-    delay(500);
-
-    trrSetLedDigital(D1, true);
-    delay(500);
-    trrSetLedDigital(D1, false);
+    TrackJet.ledWrite(1, false);
     delay(500);
 
-    trrSetLedDigital(D1, true);
+    TrackJet.ledWrite(1, true);
     delay(500);
-    trrSetLedDigital(D1, false);
+    TrackJet.ledWrite(1, false);
+    delay(500);
+
+    TrackJet.ledWrite(1, true);
+    delay(500);
+    TrackJet.ledWrite(1, false);
     delay(500);
 }
 
@@ -377,9 +389,9 @@ while(podminka){
 V následném kódu budeme blikat LEDkou dokud bude TrackJet zapnutý:
 ```
 while(true){
-    trrSetLedDigital(D1, true);
+    TrackJet.ledWrite(1, true);
     delay(500);
-    trrSetLedDigital(D1, false);
+    TrackJet.ledWrite(1, false);
     delay(500);
 }
 ```
@@ -392,7 +404,7 @@ for(vytvoreni_promenne; podminka; operace){
 }
 ```
 
-Oproti cyklu while je zde podmínková část složitější, než v případě while cyklu. Skládá se ze 3 částí:
+Oproti cyklu while je zde podmínková část složitější. Skládá se ze 3 částí:
 * Vytvoř proměnnou, kterou využiješ v podmínce
 * Zadej podmínku, která bude udávat, do kdy máme kód opakovat
 * Uprav hodnotu proměnné, pokud je podmínka splněna
@@ -400,13 +412,13 @@ Oproti cyklu while je zde podmínková část složitější, než v případě 
 Následující program ukazuje, jak bliknout 10x s LED číslo 1 pomocí cyklus `for`.
 ```
 for(int pocet_bliku = 0; pocet_bliku < 10; pocet_bliku++){
-    trrSetLedDigital(1, true);
+    TrackJet.ledWrite(1, true);
     delay(500);
-    trrSetLedDigital(1, false);
+    TrackJet.ledWrite(1, false);
     delay(500);
 }
 ```
-Vytvořili jsme proměnnou `pocet_bliku`, která obsahuje celé číslo 0. Dokud je tato proměnná menší než 10, tak se k ní přičte hodnota 1 a provede se kód.
+Vytvořili jsme proměnnou `pocet_bliku`, která obsahuje celé číslo 0. Dokud je hodnota této proměnné menší než 10, zvýší se její hodnota 1 a provede se kód uvnitř cyklu. Jakmile hodnota proměnné rovna 10, cyklus se ukončí a program pokračuje směrem dolů.
 
 <!---
 ___
@@ -416,25 +428,25 @@ ___
 
 ___
 ## <a name = ledky>LEDky</a>
-V této kapitole konečně rozsvítíme LEDky na panelu TrackJet.
+V této kapitole si pořádně ukážeme ovládání LEDek na TrackJet.
 
-Pro ovládání LED na TrackJet můžete použít následující funkce:
-* `trrSetLedDigital()` - rozsvícení a zhasnutí jedné LED
-* `trrSetLedAnalog()` - nastavení jasu jedné LED v rozsahu 0 (nesvítí) až 100 (plně svítí)
-* `trrSetLedAllDigital()` - rozsvícení a zhasnutí všech LED na panelu
-* `trrSetLedAllAnalog()` - nastavení jasu všech LED na panelu v rozsahu 0 (nesvítí) až 100 (plně svítí)
-* `trrSetFlashLightDigital(const bool state)` - rozsvícení a zhasnutí LED reflektoru
-* `void trrSetFlashLightAnalog(const int8_t value))` - nastavení jasu LED reflektoru
+Pro ovládání samostatných LED pod panelem TrackJet použijeme funkce:
+* `TrackJet.ledWrite(state)` - rozsvícení a zhasnutí jedné LED. Parametr `state` je 0-nesvítí, 1-svítí.
+* `TrackJet.ledWriteAnalog(brightness)` - nastavení jasu jedné LED. Parametr `brightness` je v rozsahu 0-nesvítí až do 100-plně svítí.
 
-Pro rozsvícení LED číslo 1 vlevo nahoře použijeme příkaz:
+Pro ovládání LED na panelu TrackJet použijeme následující funkce:
+* `TrackJet.displaySingle(row, col, state);` - rozsvícení a zhasnutí jedné LED na panelu. Parametr `row` udává číslo řádku v rozsahu 0-nahoře po 7-dole. Parametr `col` udává číslo sloupce v rozsahu 0-vlevo po 7-vpravo. Parametr `state` je 0-nesvítí, 1-svítí.
+* `TrackJet.displaySingleAnalog(row, col, brightness);` - nastavení jasu jedné LED na panelu. Parametr `row` udává číslo řádku v rozsahu 0-nahoře po 7-dole. Parametr `col` udává číslo sloupce v rozsahu 0-vlevo po 7-vpravo. Parametr `brightness` je v rozsahu 0-nesvítí až do 12-plně svítí.
+* `TrackJet.displayAll()` - nastavení jasu všech LED na panelu. arametr `brightness` je v rozsahu 0-nesvítí až do 12-plně svítí.
+
+Například pro rozsvícení LED na panelu vlevo dole použijeme příkaz:
 ```
-trrSetLedDigital(1, true);
+TrackJet.displaySingle(7, 0, true);
 ```
 Stejně tak můžeme pro rozsvícení použít příkaz:
 ```
-trrSetLedAnalog(1, 100);
+TrackJet.displaySingleAnalog(7, 0, 12);
 ```
-Obdobným způsobem ovládáme zbylé LEDky.
 ___
 ## <a name = tlacitko>Tlačítko</a>
 Nejjednodušším způsobem, jak můžete TrackJet ovládat je pomocí tlačítka **SW1**, které najdete v pravém horním rohu desky elektroniky. Pro zjištění jestli je tlačítko zmáčknuto budeme používat příkaz `trrReadButton` v náslející konstrukci.

@@ -358,8 +358,25 @@ void TrackJetClass::lidarUpdate() {
     lidarDist = TJ::lidar.readRangeContinuousMillimeters();
 }
 
-void TrackJetClass::displaySingle(uint8_t row, uint8_t col, int8_t value) {
-    TJ::serialPWM.setDispSingle(row, col, value);
+void TrackJetClass::ledWrite(uint8_t id, bool state) {
+    if(id==1)
+        TJ::serialPWM.setPWM(LED1, state*100);
+    else if(id == 2)
+        TJ::serialPWM.setPWM(LED2, state*100);
+}
+void TrackJetClass::ledWriteAnalog(uint8_t id, uint8_t brightness) {
+    if(brightness > 100)
+        brightness = 100;
+    if(id==1)
+        TJ::serialPWM.setPWM(LED1, brightness);
+    else if(id == 2)
+        TJ::serialPWM.setPWM(LED2, brightness);
+}
+void TrackJetClass::displaySingle(uint8_t row, uint8_t col, bool state) {
+    TJ::serialPWM.setDispSingle(row, col, state*DISP_PWM_RESOLUTION);
+}
+void TrackJetClass::displaySingleAnalog(uint8_t row, uint8_t col, int8_t brightness) {
+    TJ::serialPWM.setDispSingle(row, col, brightness);
 }
 void TrackJetClass::displayAll(int8_t value) {
     TJ::serialPWM.setDispAll(value);

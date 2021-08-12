@@ -138,7 +138,11 @@ public:
     uint16_t lidarDistance();
     void lidarUpdate();
 
-    void displaySingle(uint8_t row, uint8_t col, int8_t value);
+    void ledWrite(uint8_t id, bool state);
+    void ledWriteAnalog(uint8_t id, uint8_t brightness);    // brightness 0-100
+
+    void displaySingle(uint8_t row, uint8_t col, bool state);
+    void displaySingleAnalog(uint8_t row, uint8_t col, int8_t brightness);   // brightness 0-12
     void displayAll(int8_t value);
     void display(uint8_t state[][DISP_COLS]);
     void displayDigit(const uint8_t digit);
