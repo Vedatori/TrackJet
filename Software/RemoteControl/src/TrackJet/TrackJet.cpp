@@ -39,24 +39,32 @@ void TJ::updatePWM(void * param) {
     }
 }
 void TJ::updateEnc(void * parameter) {
+    static uint8_t prevEncState[2] = {0, 0};
     for(;;) {
-        static uint8_t prevEncState = encGetState();
-        uint8_t encState = encGetState();
+        for(uint8_t encID = 0; encID < 2; ++encID) {
+            uint8_t encState = encGetState(encID);
 
-        if((encState == (prevEncState + 1)) || (encState == (prevEncState - 3))) {
-            TrackJet.encSteps2++;
+            if((encState == (prevEncState[encID] + 1)) || (encState == (prevEncState[encID] - 3))) {
+                TrackJet.encSteps[encID]++;
+            }
+            else if((encState == (prevEncState[encID] - 1)) || (encState == (prevEncState[encID] + 3))){
+                TrackJet.encSteps[encID]--;
+            }
+            prevEncState[encID] = encState;
         }
-        else if((encState == (prevEncState - 1)) || (encState == (prevEncState + 3))){
-            TrackJet.encSteps2--;
-        }
-        prevEncState = encState;
-        
-        delay(2);
+        delayMicroseconds(500);
     }
 }
-uint8_t TJ::encGetState() {
-    bool encA = (adc1_get_raw(TJ::ADC_CH_ENC_FL) > TJ::encThreshold);
-    bool encB = (adc1_get_raw(TJ::ADC_CH_ENC_RL) > TJ::encThreshold);
+uint8_t TJ::encGetState(uint8_t encID) {
+    bool encA = 0, encB = 0;
+    if(encID == 0) {
+        encA = (adc1_get_raw(TJ::ADC_CH_ENC_FL) > TJ::encThreshold);
+        encB = (adc1_get_raw(TJ::ADC_CH_ENC_RL) > TJ::encThreshold);
+    }
+    else if(encID == 1) {
+        encA = (adc1_get_raw(TJ::ADC_CH_ENC_FR) > TJ::encThreshold);
+        encB = (adc1_get_raw(TJ::ADC_CH_ENC_RR) > TJ::encThreshold);
+    }
     if(encA && encB) {
         return 0;
     }
@@ -129,7 +137,7 @@ void TrackJetClass::begin() {
     TJ::serialPWM.setPWM(STEP_EN, 100);   // Turn on motor step up
     display(dispWelcome);
     xTaskCreatePinnedToCore(TJ::updatePWM, "updatePWM", 10000 , (void*) 0, 1, NULL, 1);
-    xTaskCreate(TJ::updateEnc, "updateEnc", 10000 , (void*) 0, 1, NULL);
+    xTaskCreatePinnedToCore(TJ::updateEnc, "updateEnc", 10000 , (void*) 0, 1, NULL, 1);
     TJ::serialPWM.set_output(true);
 
     pinMode(TJ::BUTTON, INPUT_PULLUP);
@@ -146,6 +154,8 @@ void TrackJetClass::begin() {
     adc1_config_channel_atten(TJ::ADC_CH_ENC_FL, ADC_ATTEN_DB_11);
 
     ledcSetup(TJ::BUZZER_CHANNEL, 1000, 10);
+    encSteps[0] = 0;
+    encSteps[0] = 0;
 }
 
 bool TrackJetClass::buttonRead() {
@@ -243,12 +253,12 @@ void TrackJetClass::controlMovement(const int8_t joystickX, const int8_t joystic
     motorsSetSpeed(engineRightSpeed, 1);
 }
 
-float TrackJetClass::encoderGetSpeed() {
-    static int16_t prevEncSteps2 = 0;
+float TrackJetClass::encoderGetSpeed(uint8_t encID) {
+    static int16_t prevEncSteps = 0;
     static uint32_t prevTime = 0;
-    float encSpeed = (encSteps2 - prevEncSteps2) / ((millis() - prevTime) * 0.001) * 2.75; // [mm/s]
+    float encSpeed = (encSteps[encID] - prevEncSteps) / ((millis() - prevTime) * 0.001) * 2.75; // [mm/s]
     prevTime = millis();
-    prevEncSteps2 = encSteps2;
+    prevEncSteps = encSteps[encID];
     return encSpeed;
 }
 

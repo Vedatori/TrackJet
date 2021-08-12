@@ -61,7 +61,7 @@ extern MPU6050 mpu;
 extern VL53L0X lidar;
 void updatePWM(void * param);
 void updateEnc(void * param);
-uint8_t encGetState();
+uint8_t encGetState(uint8_t encID);
 void handleRot();
 void handleSW();
 }
@@ -94,7 +94,7 @@ class TrackJetClass {
     float battPercentFiltered = 50;
 
 public:
-    int16_t encSteps2 = 0;
+    int16_t encSteps[2];    // 0-Left, 1-right
     TrackJetClass();
     void begin();
 
@@ -109,7 +109,7 @@ public:
     void motorsUpdateSpeed();
     void controlMovement(const int8_t joystickX, const int8_t joystickY);
 
-    float encoderGetSpeed();
+    float encoderGetSpeed(uint8_t encID);
 
     void servoSetPosition(uint8_t servoID, float position);     // servoID 0, 1, 2; position 0-180 [°]
     void servoSetSpeed(uint8_t servoID, float speed);    // speed 0-600 [°/s]

@@ -3,6 +3,8 @@
 const uint8_t CONTROL_PERIOD = 100;
 uint32_t prevControlTime = 0;
 
+uint16_t prevEnc = 0;
+
 void setup() {
     TrackJet.begin();
     TrackJet.startWiFiCaptain("<your_name>");
@@ -26,9 +28,11 @@ void loop() {
         }
         //Serial.printf("Button %d, Enc %d, %d, %d\n", TrackJet.buttonRead(), TrackJet.encoderRead(), TrackJet.encoderReadButton(), TrackJet.encoderReadButtonPulse());
         //Serial.printf("%d\n", TrackJet.lidarDistance());
+
         
-        //Serial.printf("FL %d RL %d enc %d speed %f\n", adc1_get_raw(TJ::ADC_CH_ENC_FL), adc1_get_raw(TJ::ADC_CH_ENC_RL), TrackJet.encSteps2, TrackJet.encoderGetSpeed());
-        Serial.printf("pot %d battV %f battP %d lineL %d lineR %d\n", TrackJet.potentiometerRead(), TrackJet.battVolt(), TrackJet.battPercent(), TrackJet.lineLeft(), TrackJet.lineRight());
+        Serial.printf("FL %d RL %d enc0 %d enc1 %d speed0 %d\n", adc1_get_raw(TJ::ADC_CH_ENC_FL), adc1_get_raw(TJ::ADC_CH_ENC_RL), TrackJet.encSteps[0], TrackJet.encSteps[1], TrackJet.encSteps[0] - prevEnc);
+        prevEnc = TrackJet.encSteps[0];
+        //Serial.printf("pot %d battV %f battP %d lineL %d lineR %d\n", TrackJet.potentiometerRead(), TrackJet.battVolt(), TrackJet.battPercent(), TrackJet.lineLeft(), TrackJet.lineRight());
 
         if(TrackJet.commandGetIndexed(0) == "blade") {
             TrackJet.servoSetPosition(0, TrackJet.commandGetIndexed(1).toInt());
