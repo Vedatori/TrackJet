@@ -20,9 +20,9 @@ void loop() {
                 TrackJet.displaySingle(i, 6, 0);
             }
             for(uint8_t i = 0; i < TrackJet.battPercent()/12; ++i) {
-                TrackJet.displaySingle(7 - i, 7, 12);
+                TrackJet.displaySingle(7 - i, 7, 1);
             }
-            TrackJet.displaySingle(TrackJet.lidarDistance()/100, 6, 12);
+            TrackJet.displaySingle(TrackJet.lidarDistance()/100, 6, 1);
         }
         //Serial.printf("Button %d, Enc %d, %d, %d\n", TrackJet.buttonRead(), TrackJet.encoderRead(), TrackJet.encoderReadButton(), TrackJet.encoderReadButtonPulse());
         //Serial.printf("%d\n", TrackJet.lidarDistance());
@@ -44,5 +44,6 @@ void loop() {
             TrackJet.soundEnd();
             TrackJet.commandClear();
         }
+        TrackJet.ledWrite(1, TrackJet.buttonRead());
     }
 }
