@@ -31,19 +31,18 @@ void loop() {
         Serial.printf("pot %d battV %f battP %d lineL %d lineR %d\n", TrackJet.potentiometerRead(), TrackJet.battVolt(), TrackJet.battPercent(), TrackJet.lineLeft(), TrackJet.lineRight());
 
         if(TrackJet.commandGetIndexed(0) == "blade") {
-            TrackJet.commandClear();
             TrackJet.servoSetPosition(0, TrackJet.commandGetIndexed(1).toInt());
+            TrackJet.commandClear();
         }
         else if(TrackJet.commandGetIndexed(0) == "lidar") {
-            TrackJet.commandClear();
             TrackJet.servoSetPosition(1, TrackJet.commandGetIndexed(1).toInt());
+            TrackJet.commandClear();
         }
         else if(TrackJet.commandGetIndexed(0) == "beep") {
-            TrackJet.commandClear();
             TrackJet.soundTone();
             delay(500);
             TrackJet.soundEnd();
-
+            TrackJet.commandClear();
         }
     }
 }
