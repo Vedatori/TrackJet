@@ -113,6 +113,7 @@ ___
 **Potřebné díly:**
 * 2x držák motoru z 3D tisku
 * 2x žlutý motor
+* šasi
 
 **Nástroje:**
 * zalamovací nůž 
@@ -123,6 +124,13 @@ ___
     ![alt](SupportFiles/IMG_0596.jpeg)
 1. Dočistit zalamovacím nožem.
     ![alt](SupportFiles/IMG_0598.jpeg)
+1. Opakovat postup pro šasi. 
+    ![alt](SupportFiles/IMG_0450.jpg)
+    ![alt](SupportFiles/IMG_0452.jpg)
+1. Protlačit šroub skrze díry v šasi. 
+    ![alt](SupportFiles/IMG_0443.jpg)
+1. vytlačený přebytek plastu.
+    ![alt](SupportFiles/IMG_0452.jpg)
 1. Nasadit držák na motor. Mezera v držáku směřuje na opačnou stranu než výstupek motoru.
     ![alt](SupportFiles/IMG_0603_2.jpg)
 1. Posunout držák do pozice.
