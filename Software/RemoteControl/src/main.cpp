@@ -3,7 +3,8 @@
 const uint8_t CONTROL_PERIOD = 100;
 uint32_t prevControlTime = 0;
 
-uint16_t prevEnc = 0;
+uint16_t prevEnc0 = 0;
+uint16_t prevEnc1 = 0;
 
 void setup() {
     TrackJet.begin();
@@ -30,8 +31,10 @@ void loop() {
         //Serial.printf("%d\n", TrackJet.lidarDistance());
 
         
-        Serial.printf("FL %d RL %d enc0 %d enc1 %d speed0 %d\n", adc1_get_raw(TJ::ADC_CH_ENC_FL), adc1_get_raw(TJ::ADC_CH_ENC_RL), TrackJet.encSteps[0], TrackJet.encSteps[1], TrackJet.encSteps[0] - prevEnc);
-        prevEnc = TrackJet.encSteps[0];
+        Serial.printf("FL %d RL %d enc0 %d enc1 %d speed0 %d speed1 %d\n", adc1_get_raw(TJ::ADC_CH_ENC_FL), adc1_get_raw(TJ::ADC_CH_ENC_RL), TrackJet.encSteps[0], TrackJet.encSteps[1], TrackJet.encSteps[0] - prevEnc0, TrackJet.encSteps[1] - prevEnc1);
+        prevEnc0 = TrackJet.encSteps[0];
+        prevEnc1 = TrackJet.encSteps[1];
+
         //Serial.printf("pot %d battV %f battP %d lineL %d lineR %d\n", TrackJet.potentiometerRead(), TrackJet.battVolt(), TrackJet.battPercent(), TrackJet.lineLeft(), TrackJet.lineRight());
 
         if(TrackJet.commandGetIndexed(0) == "blade") {
@@ -46,6 +49,10 @@ void loop() {
             TrackJet.soundTone();
             delay(500);
             TrackJet.soundEnd();
+            TrackJet.commandClear();
+        }
+        else if(TrackJet.commandGetIndexed(0) == "enc") {
+            TrackJet.encoderCalibrate(5000);
             TrackJet.commandClear();
         }
         TrackJet.ledWrite(1, TrackJet.buttonRead());

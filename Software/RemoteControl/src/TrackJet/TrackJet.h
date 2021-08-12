@@ -44,7 +44,7 @@ const uint8_t BUZZER_CHANNEL = 3;
 const float MOTOR_SPEED_FILTER_UPDATE_COEF = 0.15;
 const float BATT_PERCENT_UPDATE_COEF = 0.05;
 
-const uint16_t encThreshold = 1600;
+const uint16_t encThresholdInit = 1600;
 
 const uint8_t FREQ_PWM_THRESHOLD = 40;
 const uint16_t controlPeriod = 10;  // [ms]
@@ -94,6 +94,7 @@ class TrackJetClass {
     float battPercentFiltered = 50;
 
 public:
+    uint16_t encThreshold[4];   // 0-FL, 1-RL, 2-FR, 3-RR
     int16_t encSteps[2];    // 0-Left, 1-right
     TrackJetClass();
     void begin();
@@ -157,6 +158,8 @@ public:
     void commandClear();
     void commandSend(String command);
     void internCommandHandle();
+
+    void encoderCalibrate(uint16_t duration);
 };
 
 extern TrackJetClass TrackJet;

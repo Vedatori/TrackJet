@@ -58,12 +58,12 @@ void TJ::updateEnc(void * parameter) {
 uint8_t TJ::encGetState(uint8_t encID) {
     bool encA = 0, encB = 0;
     if(encID == 0) {
-        encA = (adc1_get_raw(TJ::ADC_CH_ENC_FL) > TJ::encThreshold);
-        encB = (adc1_get_raw(TJ::ADC_CH_ENC_RL) > TJ::encThreshold);
+        encA = (adc1_get_raw(TJ::ADC_CH_ENC_FL) > TrackJet.encThreshold[0]);
+        encB = (adc1_get_raw(TJ::ADC_CH_ENC_RL) > TrackJet.encThreshold[1]);
     }
     else if(encID == 1) {
-        encA = (adc1_get_raw(TJ::ADC_CH_ENC_FR) > TJ::encThreshold);
-        encB = (adc1_get_raw(TJ::ADC_CH_ENC_RR) > TJ::encThreshold);
+        encA = (adc1_get_raw(TJ::ADC_CH_ENC_FR) > TrackJet.encThreshold[2]);
+        encB = (adc1_get_raw(TJ::ADC_CH_ENC_RR) > TrackJet.encThreshold[3]);
     }
     if(encA && encB) {
         return 0;
@@ -96,7 +96,10 @@ TrackJetClass::TrackJetClass(void) {
         accelOffsets[i] = 0;
         analogReadData[i] = 0;
         analogReadData[i + 4] = 0;
+        encThreshold[i] = TJ::encThresholdInit;
     }
+    encSteps[0] = 0;
+    encSteps[1] = 0;
 }
 
 void TrackJetClass::begin() {
@@ -154,8 +157,6 @@ void TrackJetClass::begin() {
     adc1_config_channel_atten(TJ::ADC_CH_ENC_FL, ADC_ATTEN_DB_11);
 
     ledcSetup(TJ::BUZZER_CHANNEL, 1000, 10);
-    encSteps[0] = 0;
-    encSteps[0] = 0;
 }
 
 bool TrackJetClass::buttonRead() {
@@ -535,6 +536,32 @@ void TrackJetClass::commandSend(String command) {
 void TrackJetClass::internCommandHandle() {
     if(TrackJet.commandGetIndexed(0) == "reset") {
         ESP.restart();
+    }
+}
+
+void TrackJetClass::encoderCalibrate(uint16_t duration) {
+    uint32_t startTime = millis();
+    uint16_t encNew[4] = {TJ::encThresholdInit, };
+    uint16_t encMin[4] = {TJ::encThresholdInit, };
+    uint16_t encMax[4] = {TJ::encThresholdInit, };
+    while(millis() < (startTime + duration)) {
+        encNew[0] = adc1_get_raw(TJ::ADC_CH_ENC_FL);
+        encNew[1] = adc1_get_raw(TJ::ADC_CH_ENC_RL);
+        encNew[2] = adc1_get_raw(TJ::ADC_CH_ENC_FR);
+        encNew[3] = adc1_get_raw(TJ::ADC_CH_ENC_RR);
+        for(uint8_t i = 0; i < 4; ++i) {
+            if(encNew[i] > encMax[i]) {
+                encMax[i] = encNew[i];
+            }
+            else if(encNew[i] < encMin[i]) {
+                encMin[i] = encNew[i];
+            }
+        }
+        delay(1);
+    }
+    for(uint8_t i = 0; i < 4; ++i) {
+        TrackJet.encThreshold[i] = uint16_t((encMax[i] + encMin[i])/1.5);
+        Serial.printf("Enc%d %d\n", i, TrackJet.encThreshold[i]);
     }
 }
 
