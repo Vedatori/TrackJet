@@ -28,6 +28,7 @@ const uint8_t ENC_B = 5;
 const uint8_t ENC_SW = 23;
 const uint8_t BUTTON = 18;
 const uint8_t LIDAR = 19;
+const uint8_t BUZZER = 17;
 const uint8_t ADC_MUX = 39;
 const adc1_channel_t ADC_CH_COM = ADC1_CHANNEL_3;
 const adc1_channel_t ADC_CH_ENC_FR = ADC1_CHANNEL_4;
@@ -37,6 +38,8 @@ const adc1_channel_t ADC_CH_ENC_FL = ADC1_CHANNEL_7;
 
 #define SERVO_COUNT 3
 const uint8_t SERVO[SERVO_COUNT] = {27, 16, 36};
+const uint8_t SERVO_CHANNEL[SERVO_COUNT] = {0, 1, 2};
+const uint8_t BUZZER_CHANNEL = 3;
 
 const float MOTOR_SPEED_FILTER_UPDATE_COEF = 0.15;
 const float BATT_PERCENT_UPDATE_COEF = 0.05;
@@ -87,7 +90,6 @@ class TrackJetClass {
     uint32_t prevCommunicationTime = 0;
     bool connectionEnabled = false;
     bool connectionActive = false;
-    uint32_t beepingEnd = 0;
     String displayTextBuffer;
     float battPercentFiltered = 50;
 
@@ -112,7 +114,9 @@ public:
     void servoSetPosition(uint8_t servoID, float position);     // servoID 0, 1, 2; position 0-180 [°]
     void servoSetSpeed(uint8_t servoID, float speed);    // speed 0-600 [°/s]
 
-    void buzzerBeep(const uint16_t length);
+    void soundNote(note_t note = NOTE_C, uint8_t octave = 5);
+    void soundTone(float freq = 1000);
+    void soundEnd();
     
     uint8_t gyroGetStatus();
     float gyroAngleYPR(uint8_t index) ;
@@ -148,6 +152,7 @@ public:
     String commandGetIndexed(uint8_t index);
     void commandClear();
     void commandSend(String command);
+    void internCommandHandle();
 };
 
 extern TrackJetClass TrackJet;

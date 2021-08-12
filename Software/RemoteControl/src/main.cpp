@@ -38,8 +38,11 @@ void loop() {
             TrackJet.servoSetPosition(1, TrackJet.commandGetIndexed(1).toInt());
             TrackJet.commandClear();
         }
-        else if(TrackJet.commandGetIndexed(0) == "restart") {
-            ESP.restart();
+        else if(TrackJet.commandGetIndexed(0) == "beep") {
+            TrackJet.soundTone();
+            delay(500);
+            TrackJet.soundEnd();
+            TrackJet.commandClear();
         }
     }
 }

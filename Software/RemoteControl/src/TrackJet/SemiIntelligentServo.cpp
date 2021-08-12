@@ -11,6 +11,7 @@ SemiIntelligentServo::SemiIntelligentServo(uint8_t aPwmPin, uint8_t aPwmChannel)
     targetAchieved = true;  // at start stay in original position by not sending PWM
     currentPosition = 90;   // initial servo moving position
     targetPosition = 90;
+    prevUpdateTime = 0;
 }
 void SemiIntelligentServo::setPWM(float aPosition) {
     if(aPosition < 0)
@@ -36,7 +37,6 @@ void SemiIntelligentServo::setSpeed(float aSpeed) {
     speed = aSpeed;
 }
 void SemiIntelligentServo::updatePWM() {
-    static uint32_t prevUpdateTime = 0;
     
     float step = speed*(millis() - prevUpdateTime)/1000.0;
     if(targetPosition > currentPosition + step)

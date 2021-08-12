@@ -11,9 +11,9 @@
 
 SerialPWM TJ::serialPWM(TJ::REG_DAT, TJ::REG_LATCH, TJ::REG_CLK, TJ::REG_OE, TJ::PWM_FREQUENCY);
 QuadEncoder TJ::quadEnc(TJ::ENC_A, TJ::ENC_B, TJ::ENC_SW);
-SemiIntelligentServo TJ::servo[] = {SemiIntelligentServo(TJ::SERVO[0], 0),
-                                    SemiIntelligentServo(TJ::SERVO[1], 1), 
-                                    SemiIntelligentServo(TJ::SERVO[2], 2)};
+SemiIntelligentServo TJ::servo[] = {SemiIntelligentServo(TJ::SERVO[0], SERVO_CHANNEL[0]),
+                                    SemiIntelligentServo(TJ::SERVO[1], SERVO_CHANNEL[1]), 
+                                    SemiIntelligentServo(TJ::SERVO[2], SERVO_CHANNEL[2])};
 MPU6050 TJ::mpu(Wire);
 VL53L0X TJ::lidar;
 
@@ -32,6 +32,8 @@ void TJ::updatePWM(void * param) {
 
         TrackJet.gyroUpdate();
         TrackJet.lidarUpdate();
+
+        TrackJet.internCommandHandle();
 
         vTaskDelay(TJ::controlPeriod);
     }
@@ -134,6 +136,7 @@ void TrackJetClass::begin() {
     attachInterrupt(TJ::ENC_A, TJ::handleRot, CHANGE);
     attachInterrupt(TJ::ENC_B, TJ::handleRot, CHANGE);
     attachInterrupt(TJ::ENC_SW, TJ::handleSW, RISING);
+    pinMode(TJ::BUZZER, OUTPUT);
 
     adc1_config_width(ADC_WIDTH_BIT_12);
     adc1_config_channel_atten(TJ::ADC_CH_COM, ADC_ATTEN_DB_11);
@@ -141,6 +144,8 @@ void TrackJetClass::begin() {
     adc1_config_channel_atten(TJ::ADC_CH_ENC_RL, ADC_ATTEN_DB_11);
     adc1_config_channel_atten(TJ::ADC_CH_ENC_RR, ADC_ATTEN_DB_11);
     adc1_config_channel_atten(TJ::ADC_CH_ENC_FL, ADC_ATTEN_DB_11);
+
+    ledcSetup(TJ::BUZZER_CHANNEL, 1000, 10);
 }
 
 bool TrackJetClass::buttonRead() {
@@ -186,10 +191,6 @@ void TrackJetClass::motorsUpdateSpeed() {
         for(uint8_t i = 0; i < 3; ++i) {
             motorsSpeed[i] = 0;
         }
-    }
-    if(beepingEnd != 0 && millis() > beepingEnd) {
-        //TJ::setPWM(TJ::serialPWM[TJ::pwm_index[TJ_OUT27]], 0);
-        beepingEnd = 0;
     }
 
     // Switch PFM/PWM step up converter mode
@@ -252,15 +253,22 @@ float TrackJetClass::encoderGetSpeed() {
 }
 
 void TrackJetClass::servoSetPosition(uint8_t servoID, float position) {
-    TJ::servo[servoID].setPWM(position);    //.setPosition() to move slowly
+    TJ::servo[servoID].setPosition(position);
 }
 void TrackJetClass::servoSetSpeed(uint8_t servoID, float speed) {
     TJ::servo[servoID].setSpeed(speed);
 }
 
-void TrackJetClass::buzzerBeep(const uint16_t length) {
-    //TJ::setPWM(TJ::serialPWM[TJ::pwm_index[TJ_OUT27]], 100);
-    beepingEnd = millis() + length;
+void TrackJetClass::soundNote(note_t note, uint8_t octave) {
+    ledcAttachPin(TJ::BUZZER, TJ::BUZZER_CHANNEL);
+    ledcWriteNote(TJ::BUZZER_CHANNEL, note, octave);
+}
+void TrackJetClass::soundTone(float freq) {
+    ledcAttachPin(TJ::BUZZER, TJ::BUZZER_CHANNEL);
+    ledcWriteTone(TJ::BUZZER_CHANNEL, freq);
+}
+void TrackJetClass::soundEnd() {
+    ledcDetachPin(TJ::BUZZER);
 }
 
 uint8_t TrackJetClass::gyroGetStatus() {
@@ -495,6 +503,12 @@ void TrackJetClass::commandClear() {
 
 void TrackJetClass::commandSend(String command) {
     commandSendCaptain(command);
+}
+
+void TrackJetClass::internCommandHandle() {
+    if(TrackJet.commandGetIndexed(0) == "reset") {
+        ESP.restart();
+    }
 }
 
 TrackJetClass TrackJet;
