@@ -14,6 +14,7 @@ class SemiIntelligentServo {
     float targetPosition;
     float speed;
     bool targetAchieved;
+    uint32_t prevUpdateTime = 0;
 
 public:
     SemiIntelligentServo(uint8_t aPwmPin, uint8_t aPwmChannel);

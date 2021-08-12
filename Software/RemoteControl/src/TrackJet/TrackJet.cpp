@@ -254,7 +254,7 @@ float TrackJetClass::encoderGetSpeed() {
 }
 
 void TrackJetClass::servoSetPosition(uint8_t servoID, float position) {
-    TJ::servo[servoID].setPWM(position);    //.setPosition() to move slowly
+    TJ::servo[servoID].setPosition(position);
 }
 void TrackJetClass::servoSetSpeed(uint8_t servoID, float speed) {
     TJ::servo[servoID].setSpeed(speed);
