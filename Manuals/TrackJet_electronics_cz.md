@@ -26,9 +26,9 @@ Deska pro TrackRay je již z výroby osazena SMD (bezvývodovými) součástkami
 
 ![alt](SupportFiles/IMG_0829.jpeg)
 **Postup:**
-1. Vložte postupně moduly do držáku z 3D tisku. *Je třeba dodržet orientaci diod podle obrázku.* Barvu diod je možné rozpoznat pod světlem např. z LED telefonu.
+1. Vložte postupně moduly do držáku z 3D tisku. *Je třeba dodržet orientaci diod s obrázkem pro jednotlivé strany. Modrá čára na schématu označuje pozici "nosu" na součástce.* Barvu diod je možné rozpoznat pod světlem např. z LED telefonu.
 ![alt](SupportFiles/IMG_0835.jpeg)
-1. Opakujte postup pro druhou stranu. Zarovnejte nožičky podle obrázku, aby obejmuly shora a zespodu PCB a směřovaly doprostřed pájecí plochy.
+1. Opakujte postup pro druhou stranu 2 podle schématu. Zarovnejte nožičky podle obrázku, aby obejmuly shora a zespodu PCB a směřovali doprostřed pájecí plochy. *Nos na součástce je nahoře.*
 ![alt](SupportFiles/IMG_0843.jpeg)
 1. Použijte zarovnávací nástroj z 3D tisku, umístěte do něj moduly podle obrázku. Na vyznačené červené čáře zakraťte vývody kleštěmi.
 ![alt](SupportFiles/IMG_0845.jpeg)
