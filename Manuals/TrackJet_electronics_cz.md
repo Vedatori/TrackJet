@@ -106,8 +106,9 @@ Deska pro TrackRay je již z výroby osazena SMD (bezvývodovými) součástkami
 **Potřebujeme:**
 * kleště
 * 2x konektor se 2 piny
+* 1x konektor se 6 piny
 * 3x kolíková lišta se třemi konektory
-* 2x modul s dvěma LED diodami
+* 2x modul s dvěma diodami
 * 2x podpěry modulu s LED diodami z 3D tisku
 * držák baterie
 
