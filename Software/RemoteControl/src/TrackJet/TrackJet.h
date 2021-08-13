@@ -44,7 +44,7 @@ const uint8_t BUZZER_CHANNEL = 3;
 const float MOTOR_SPEED_FILTER_UPDATE_COEF = 0.15;
 const float BATT_PERCENT_UPDATE_COEF = 0.05;
 
-const uint16_t encThreshold = 1600;
+const uint16_t encThresholdInit = 1600;
 
 const uint8_t FREQ_PWM_THRESHOLD = 40;
 const uint16_t controlPeriod = 10;  // [ms]
@@ -61,7 +61,7 @@ extern MPU6050 mpu;
 extern VL53L0X lidar;
 void updatePWM(void * param);
 void updateEnc(void * param);
-uint8_t encGetState();
+uint8_t encGetState(uint8_t encID);
 void handleRot();
 void handleSW();
 }
@@ -94,7 +94,8 @@ class TrackJetClass {
     float battPercentFiltered = 50;
 
 public:
-    int16_t encSteps2 = 0;
+    uint16_t encThreshold[4];   // 0-FL, 1-RL, 2-FR, 3-RR
+    int16_t encSteps[2];    // 0-Left, 1-right
     TrackJetClass();
     void begin();
 
@@ -109,7 +110,7 @@ public:
     void motorsUpdateSpeed();
     void controlMovement(const int8_t joystickX, const int8_t joystickY);
 
-    float encoderGetSpeed();
+    float encoderGetSpeed(uint8_t encID);
 
     void servoSetPosition(uint8_t servoID, float position);     // servoID 0, 1, 2; position 0-180 [°]
     void servoSetSpeed(uint8_t servoID, float speed);    // speed 0-600 [°/s]
@@ -138,7 +139,11 @@ public:
     uint16_t lidarDistance();
     void lidarUpdate();
 
-    void displaySingle(uint8_t row, uint8_t col, int8_t value);
+    void ledWrite(uint8_t id, bool state);
+    void ledWriteAnalog(uint8_t id, uint8_t brightness);    // brightness 0-100
+
+    void displaySingle(uint8_t row, uint8_t col, bool state);
+    void displaySingleAnalog(uint8_t row, uint8_t col, int8_t brightness);   // brightness 0-12
     void displayAll(int8_t value);
     void display(uint8_t state[][DISP_COLS]);
     void displayDigit(const uint8_t digit);
@@ -153,6 +158,8 @@ public:
     void commandClear();
     void commandSend(String command);
     void internCommandHandle();
+
+    void encoderCalibrate(uint16_t duration);
 };
 
 extern TrackJetClass TrackJet;

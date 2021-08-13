@@ -39,24 +39,32 @@ void TJ::updatePWM(void * param) {
     }
 }
 void TJ::updateEnc(void * parameter) {
+    static uint8_t prevEncState[2] = {0, 0};
     for(;;) {
-        static uint8_t prevEncState = encGetState();
-        uint8_t encState = encGetState();
+        for(uint8_t encID = 0; encID < 2; ++encID) {
+            uint8_t encState = encGetState(encID);
 
-        if((encState == (prevEncState + 1)) || (encState == (prevEncState - 3))) {
-            TrackJet.encSteps2++;
+            if((encState == (prevEncState[encID] + 1)) || (encState == (prevEncState[encID] - 3))) {
+                TrackJet.encSteps[encID]++;
+            }
+            else if((encState == (prevEncState[encID] - 1)) || (encState == (prevEncState[encID] + 3))){
+                TrackJet.encSteps[encID]--;
+            }
+            prevEncState[encID] = encState;
         }
-        else if((encState == (prevEncState - 1)) || (encState == (prevEncState + 3))){
-            TrackJet.encSteps2--;
-        }
-        prevEncState = encState;
-        
-        delay(2);
+        delayMicroseconds(500);
     }
 }
-uint8_t TJ::encGetState() {
-    bool encA = (adc1_get_raw(TJ::ADC_CH_ENC_FL) > TJ::encThreshold);
-    bool encB = (adc1_get_raw(TJ::ADC_CH_ENC_RL) > TJ::encThreshold);
+uint8_t TJ::encGetState(uint8_t encID) {
+    bool encA = 0, encB = 0;
+    if(encID == 0) {
+        encA = (adc1_get_raw(TJ::ADC_CH_ENC_FL) > TrackJet.encThreshold[0]);
+        encB = (adc1_get_raw(TJ::ADC_CH_ENC_RL) > TrackJet.encThreshold[1]);
+    }
+    else if(encID == 1) {
+        encA = (adc1_get_raw(TJ::ADC_CH_ENC_FR) > TrackJet.encThreshold[2]);
+        encB = (adc1_get_raw(TJ::ADC_CH_ENC_RR) > TrackJet.encThreshold[3]);
+    }
     if(encA && encB) {
         return 0;
     }
@@ -88,7 +96,10 @@ TrackJetClass::TrackJetClass(void) {
         accelOffsets[i] = 0;
         analogReadData[i] = 0;
         analogReadData[i + 4] = 0;
+        encThreshold[i] = TJ::encThresholdInit;
     }
+    encSteps[0] = 0;
+    encSteps[1] = 0;
 }
 
 void TrackJetClass::begin() {
@@ -129,7 +140,7 @@ void TrackJetClass::begin() {
     TJ::serialPWM.setPWM(STEP_EN, 100);   // Turn on motor step up
     display(dispWelcome);
     xTaskCreatePinnedToCore(TJ::updatePWM, "updatePWM", 10000 , (void*) 0, 1, NULL, 1);
-    xTaskCreate(TJ::updateEnc, "updateEnc", 10000 , (void*) 0, 1, NULL);
+    xTaskCreatePinnedToCore(TJ::updateEnc, "updateEnc", 10000 , (void*) 0, 1, NULL, 1);
     TJ::serialPWM.set_output(true);
 
     pinMode(TJ::BUTTON, INPUT_PULLUP);
@@ -243,12 +254,12 @@ void TrackJetClass::controlMovement(const int8_t joystickX, const int8_t joystic
     motorsSetSpeed(engineRightSpeed, 1);
 }
 
-float TrackJetClass::encoderGetSpeed() {
-    static int16_t prevEncSteps2 = 0;
+float TrackJetClass::encoderGetSpeed(uint8_t encID) {
+    static int16_t prevEncSteps = 0;
     static uint32_t prevTime = 0;
-    float encSpeed = (encSteps2 - prevEncSteps2) / ((millis() - prevTime) * 0.001) * 2.75; // [mm/s]
+    float encSpeed = (encSteps[encID] - prevEncSteps) / ((millis() - prevTime) * 0.001) * 2.75; // [mm/s]
     prevTime = millis();
-    prevEncSteps2 = encSteps2;
+    prevEncSteps = encSteps[encID];
     return encSpeed;
 }
 
@@ -358,8 +369,25 @@ void TrackJetClass::lidarUpdate() {
     lidarDist = TJ::lidar.readRangeContinuousMillimeters();
 }
 
-void TrackJetClass::displaySingle(uint8_t row, uint8_t col, int8_t value) {
-    TJ::serialPWM.setDispSingle(row, col, value);
+void TrackJetClass::ledWrite(uint8_t id, bool state) {
+    if(id==1)
+        TJ::serialPWM.setPWM(LED1, state*100);
+    else if(id == 2)
+        TJ::serialPWM.setPWM(LED2, state*100);
+}
+void TrackJetClass::ledWriteAnalog(uint8_t id, uint8_t brightness) {
+    if(brightness > 100)
+        brightness = 100;
+    if(id==1)
+        TJ::serialPWM.setPWM(LED1, brightness);
+    else if(id == 2)
+        TJ::serialPWM.setPWM(LED2, brightness);
+}
+void TrackJetClass::displaySingle(uint8_t row, uint8_t col, bool state) {
+    TJ::serialPWM.setDispSingle(row, col, state*DISP_PWM_RESOLUTION);
+}
+void TrackJetClass::displaySingleAnalog(uint8_t row, uint8_t col, int8_t brightness) {
+    TJ::serialPWM.setDispSingle(row, col, brightness);
 }
 void TrackJetClass::displayAll(int8_t value) {
     TJ::serialPWM.setDispAll(value);
@@ -508,6 +536,32 @@ void TrackJetClass::commandSend(String command) {
 void TrackJetClass::internCommandHandle() {
     if(TrackJet.commandGetIndexed(0) == "reset") {
         ESP.restart();
+    }
+}
+
+void TrackJetClass::encoderCalibrate(uint16_t duration) {
+    uint32_t startTime = millis();
+    uint16_t encNew[4] = {TJ::encThresholdInit, };
+    uint16_t encMin[4] = {TJ::encThresholdInit, };
+    uint16_t encMax[4] = {TJ::encThresholdInit, };
+    while(millis() < (startTime + duration)) {
+        encNew[0] = adc1_get_raw(TJ::ADC_CH_ENC_FL);
+        encNew[1] = adc1_get_raw(TJ::ADC_CH_ENC_RL);
+        encNew[2] = adc1_get_raw(TJ::ADC_CH_ENC_FR);
+        encNew[3] = adc1_get_raw(TJ::ADC_CH_ENC_RR);
+        for(uint8_t i = 0; i < 4; ++i) {
+            if(encNew[i] > encMax[i]) {
+                encMax[i] = encNew[i];
+            }
+            else if(encNew[i] < encMin[i]) {
+                encMin[i] = encNew[i];
+            }
+        }
+        delay(1);
+    }
+    for(uint8_t i = 0; i < 4; ++i) {
+        TrackJet.encThreshold[i] = uint16_t((encMax[i] + encMin[i])/1.5);
+        Serial.printf("Enc%d %d\n", i, TrackJet.encThreshold[i]);
     }
 }
 
