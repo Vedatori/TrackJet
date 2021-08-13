@@ -140,7 +140,7 @@ void loop() {
 1. `TrackJet.begin();` - Toto je volání funkce z knihovny *TrackJet*, která knihovnu inicializuje a připraví všechny její komponenty pro budoucí použití. Toto je třeba provést pouze jednou po startu robota, proto je příkaz umístěn ve funkci *setup*.
 1. `void loop()` - Toto je definice funkce *loop*. Ta je spouštěna stále pořád dokola dokud je TrackJet zapnutý.
 
-###Tvůj kód
+### Váš kód
 Nyní napíšete svůj první vlastní program pro TrackJet. Na konec funkce *setup* připiště `TrackJet.ledWrite(1, true);`, tedy nad uzavírací závorku }. Tento příkaz zapříčiní, že se LED číslo 1 rozsvítí.
 
 Všimněte si, že při psaní vám VS Code napovídá. Stačí napsat `TrackJet.` a uvidíte nabídku připravených funkcí z knihovny *TrackJet*. Pokud se tak nestane, nabídku vyvoláte stisknutím *Ctrl + Space*.
