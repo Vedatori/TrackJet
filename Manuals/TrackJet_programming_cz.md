@@ -15,14 +15,17 @@ ___
 * [Funkce](#funkce)
 * [LEDky](#ledky)
 * [Tlačítko](#tlacitko)
-* [Motory](#motory)
-* [Sériová linka](#seriovka)
-* [Výpis textu na LED panel](#panelLed)
 * [Potenciometr](#potenciometr)
-* [Ekodér](#enkoder)
-* [Bzučák](#buzzer)
+* [Sériová linka](#seriovka)
+* [Motory](#motory)
+* [Enkodér](#enkoder)
+* [Serva](#serva)
 * [LIDAR](#lidar)
-* [Připojení k WiFi](#wifi)
+* [Výpis textu na LED panel](#panelLed)
+* [Bzučák](#buzzer)
+* [Měření ujeté vzdálenosti](#odometr)
+* [Senzor čáry](#cara)
+* [WiFi](#wifi)
 * [Vzdálený příkazový řádek](#remoteCmd)
 ___
 ## <a name = IDE>Vývojové prostředí</a>
@@ -485,32 +488,9 @@ void loop() {
     trrSetLedDigital(1, trrReadButton());
 }
 ```
+
 ___
-## <a name = motory>Motory</a>
-Nyní konečně pořádně oživíme TrackJet a začneme s ním pohybovat.
-
-Pro řízení motorů můžete použít následující příkazy:
-* `trrMotorsSetSpeed()` - nastaví rychlost obou motorů podle 2 zadaných číselných parametrů v rozshahu -100 až 100.
-* `trrMotorsSetSpeedLeft()` - nastaví rychlost levého motoru podle zadaného číselného parametru v rozshahu -100 až 100.
-* `trrMotorsSetSpeedRight()` - nastaví rychlost pravého motoru podle zadaného číselného parametru v rozshahu -100 až 100.
-
-Příklad: Následujícím příkazem rozjedeme TrackJet na poloviční rychlost dopředu:
-```
-trrMotorsSetSpeed(50, 50);
-```
-Úplně stejně bude fungovat i následující dvojice příkazů:
-```
-trrMotorsSetSpeedLeft(50);
-trrMotorsSetSpeedRight(50);
-```
-
-### Kanón
-Motor kanónu budeme ovládat pomocí příkazu `trrCanonSetSpeed()`. Rychlost motoru bude nastavena podle zadaného číselného parametru v rozshahu 0 až 100.
-
-Pro spuštění motoru kanónu na plno použijeme příkaz:
-```
-trrCanonSetSpeed(100);
-```
+## <a name = potenciometr>Potenciometr</a>
 
 ___
 ## <a name = seriovka>Sériová linka</a>
@@ -573,6 +553,34 @@ void loop() {
 Funkce `millis()` nám vrací počet uplynulých milisekund od startu programu jako celé číslo.
 
 ___
+## <a name = motory>Motory</a>
+Nyní konečně pořádně oživíme TrackJet a začneme s ním pohybovat.
+
+Pro řízení motorů můžete použít následující příkazy:
+* `trrMotorsSetSpeed()` - nastaví rychlost obou motorů podle 2 zadaných číselných parametrů v rozshahu -100 až 100.
+* `trrMotorsSetSpeedLeft()` - nastaví rychlost levého motoru podle zadaného číselného parametru v rozshahu -100 až 100.
+* `trrMotorsSetSpeedRight()` - nastaví rychlost pravého motoru podle zadaného číselného parametru v rozshahu -100 až 100.
+
+Příklad: Následujícím příkazem rozjedeme TrackJet na poloviční rychlost dopředu:
+```
+trrMotorsSetSpeed(50, 50);
+```
+Úplně stejně bude fungovat i následující dvojice příkazů:
+```
+trrMotorsSetSpeedLeft(50);
+trrMotorsSetSpeedRight(50);
+```
+
+___
+## <a name = enkoder>Enkodér</a>
+
+___
+## <a name = serva>Serva</a>
+
+___
+## <a name = lidar>LIDAR</a>
+
+___
 ## <a name = panelLed>Výpis textu na LED panel</a>
 Pro výpis textu na LED panel TrackJet slouží následující funkce:
 * `trrDisplayText(String text, bool sweep = true)` - postupně vypíše zadaný *text* v datovém typu *String*. Druhý pravdivostní parametr *sweep* je nepovinný a určuje, zda bude text odjíždět vlevo (*true*) nebo budou znaky pouze přeblikávat bez animace (*false*). Bez uvedení parametru *sweep* bude text odjíždět vlevo.
@@ -598,6 +606,15 @@ ___
 Pro ovládání bzučáku slouží funkce `trrBuzzerBeep()`. Jako parametr uvedeme délku pípnutí v milisekundách. Následující příkaz pípne bzučákem na půl vteřiny:
 
 `trrBuzzerBeep(500);`
+
+___
+## <a name = odometr>Měření ujeté vzdálenosti</a>
+
+___
+## <a name = cara>Senzor čáry</a>
+
+___
+## <a name = wifi>WiFi</a>
 
 ___
 ## <a name = remoteCmd>Vzdálený příkazový řádek</a>
