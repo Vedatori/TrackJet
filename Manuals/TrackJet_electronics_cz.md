@@ -22,7 +22,7 @@ Deska pro TrackRay je již z výroby osazena SMD (bezvývodovými) součástkami
 * 4x modul s LED a fotodiodou
 * 2x plastový držák pro modul z 3D tisku
 * 2x plastový vymezovač z 3D tisku
-* 2x šroub M3x8
+* 2x šroub M3x8 
 
 ![alt](SupportFiles/IMG_0829.jpeg)
 **Postup:**
