@@ -131,12 +131,8 @@ void TrackJetClass::begin() {
         Serial.printf("Gyroscope MPU6050 not connected.\n");
 
     preferences.begin("TrackJet", false);
-    preferences.getBytes("encoderThreshold", TrackJet.encThreshold, 4);
+    preferences.getBytes("encThres", TrackJet.encThreshold, 8);
     preferences.end();
-
-    for(uint8_t i = 0; i < 4; ++i) {
-        Serial.printf("Enc%d %d\n", i, TrackJet.encThreshold[i]);
-    }
 
     pinMode(TJ::LIDAR, OUTPUT);
     digitalWrite(TJ::LIDAR, 1);
@@ -575,7 +571,7 @@ void TrackJetClass::encoderCalibrate(uint16_t duration) {
         //Serial.printf("Enc%d %d\n", i, TrackJet.encThreshold[i]);
     }
     preferences.begin("TrackJet", false);
-    preferences.putBytes("encoderThreshold", TrackJet.encThreshold, 4);
+    preferences.putBytes("encThres", TrackJet.encThreshold, 8);
     preferences.end();
 }
 
