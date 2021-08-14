@@ -452,40 +452,40 @@ TrackJet.displaySingleAnalog(7, 0, 12);
 ```
 ___
 ## <a name = tlacitko>Tlačítko</a>
-Nejjednodušším způsobem, jak můžete TrackJet ovládat je pomocí tlačítka **SW1**, které najdete v pravém horním rohu desky elektroniky. Pro zjištění jestli je tlačítko zmáčknuto budeme používat příkaz `trrReadButton` v náslející konstrukci.
+Nejjednodušším způsobem, jak můžete TrackJet ovládat je pomocí tlačítka **SW1**, které najdete v pravém horním rohu desky elektroniky. Pro zjištění jestli je tlačítko zmáčknuto budeme používat příkaz `TrackJet.buttonRead` v náslející konstrukci.
 ```
-bool tlacitko_zmacknuto = trrReadButton();
+bool tlacitko_zmacknuto = TrackJet.buttonRead();
 ```
-Zde je vytvořenap roměnná `tlacitko_zmacknuto` a následně do ní uložen stav tlačítka voláním příkazu `trrReadButton`, který nabývá pravdivostní hodnoty `true` nebo `false`.
+Zde je vytvořena proměnná `tlacitko_zmacknuto` a následně do ní uložen stav tlačítka voláním příkazu `TrackJet.buttonRead`, který nabývá pravdivostní hodnoty `true` nebo `false`.
 
-Příklad: Tento program rozsvítí LED 1 na panelu při stisku tlačítka SW1.
+Příklad: Tento program rozsvítí LED 1 pod panelem při stisku tlačítka SW1.
 ```
 #include "TrackJet/TrackJet.h"
 
 void setup() {
-    trrBegin();
+    TrackJet.begin();
 }
 
 void loop() {
-    if(trrReadButton()) {
-        trrSetLedDigital(1, true);
+    if(TrackJet.buttonRead()) {
+        TrackJet.ledwWrite(1, true);
     }
     else {
-        trrSetLedDigital(1, false);
+        TrackJet.ledWrite(1, false);
     }
 }
 ```
 
-Protože příkaz `trrReadButton` nabývá pravdivostní hodnoty `true` nebo `false`, můžeme předchozí program zapsat úsporněji, ale funkčně stejně jako:
+Protože příkaz `TrackJet.buttonRead` nabývá pravdivostní hodnoty `true` nebo `false`, můžeme předchozí program zapsat úsporněji, ale funkčně stejně:
 ```
 #include "TrackJet/TrackJet.h"
 
 void setup() {
-    trrBegin();
+    TrackJet.begin();
 }
 
 void loop() {
-    trrSetLedDigital(1, trrReadButton());
+    TrackJet.ledWrite(1, TrackJet.buttonRead());
 }
 ```
 
@@ -679,7 +679,7 @@ void setup() {
 }
 
 void loop() {
-    trrCommandSend(String(trrReadButton()));
+    trrCommandSend(String(TrackJet.buttonRead;()));
     delay(200);
 }
 ```
