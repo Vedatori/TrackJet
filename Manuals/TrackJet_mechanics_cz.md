@@ -309,6 +309,8 @@ ___
     ![alt](SupportFiles/IMG_0750.jpeg)
 1. Ořezat přebytečnou pásku zalamovacím nožem. Ořezání porvádět na podložce, ne na stole!
     ![alt](SupportFiles/IMG_0753.jpeg)
+1. Díly na enkodér nejsou shodné. V jednom díle je výřez, ten se dá vedle plochého dílu (v něm je také výřez).
+    ![alt](SupportFiles/Enkodery_dpolneni.jpg)    
 1. Poskládat sendvič dle obrázku. Protáhnout šroub skrz. 
     ![alt](SupportFiles/IMG_0763.jpeg)
 1. Umístit do pozice na obrázku. Protáhnout šroub druhou volnou dírou.
