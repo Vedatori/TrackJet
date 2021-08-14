@@ -31,7 +31,7 @@ void loop() {
         //Serial.printf("%d\n", TrackJet.lidarDistance());
 
         
-        Serial.printf("FL %d RL %d enc0 %d enc1 %d speed0 %d speed1 %d\n", adc1_get_raw(TJ::ADC_CH_ENC_FL), adc1_get_raw(TJ::ADC_CH_ENC_RL), TrackJet.encSteps[0], TrackJet.encSteps[1], TrackJet.encSteps[0] - prevEnc0, TrackJet.encSteps[1] - prevEnc1);
+        Serial.printf("FL %d RL %d FR %d RR %d enc0 %d enc1 %d speed0 %d speed1 %d\n", adc1_get_raw(TJ::ADC_CH_ENC_FL), adc1_get_raw(TJ::ADC_CH_ENC_RL), adc1_get_raw(TJ::ADC_CH_ENC_FR), adc1_get_raw(TJ::ADC_CH_ENC_RR), TrackJet.encSteps[0], TrackJet.encSteps[1], TrackJet.encSteps[0] - prevEnc0, TrackJet.encSteps[1] - prevEnc1);
         prevEnc0 = TrackJet.encSteps[0];
         prevEnc1 = TrackJet.encSteps[1];
 

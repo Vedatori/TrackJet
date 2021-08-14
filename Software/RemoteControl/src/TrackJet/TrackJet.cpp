@@ -94,6 +94,8 @@ TrackJetClass::TrackJetClass(void) {
         gyroYPR[i] = 0;
         gyroOffsets[i] = 0;
         accelOffsets[i] = 0;
+    }
+    for(uint8_t i = 0; i < 4; ++i) {
         analogReadData[i] = 0;
         analogReadData[i + 4] = 0;
         encThreshold[i] = TJ::encThresholdInit;
@@ -105,6 +107,7 @@ TrackJetClass::TrackJetClass(void) {
 void TrackJetClass::begin() {
     beginCalled = true;
     Serial.begin(115200);
+    Serial.printf("Mac address: %s\n", WiFi.macAddress().c_str());
 
     Wire.begin(TJ::I2C_SDA, TJ::I2C_SCL);
 
@@ -126,6 +129,14 @@ void TrackJetClass::begin() {
     }
     else
         Serial.printf("Gyroscope MPU6050 not connected.\n");
+
+    preferences.begin("TrackJet", false);
+    preferences.getBytes("encoderThreshold", TrackJet.encThreshold, 4);
+    preferences.end();
+
+    for(uint8_t i = 0; i < 4; ++i) {
+        Serial.printf("Enc%d %d\n", i, TrackJet.encThreshold[i]);
+    }
 
     pinMode(TJ::LIDAR, OUTPUT);
     digitalWrite(TJ::LIDAR, 1);
@@ -541,9 +552,9 @@ void TrackJetClass::internCommandHandle() {
 
 void TrackJetClass::encoderCalibrate(uint16_t duration) {
     uint32_t startTime = millis();
-    uint16_t encNew[4] = {TJ::encThresholdInit, };
-    uint16_t encMin[4] = {TJ::encThresholdInit, };
-    uint16_t encMax[4] = {TJ::encThresholdInit, };
+    uint16_t encNew[4] = {TJ::encThresholdInit, TJ::encThresholdInit, TJ::encThresholdInit, TJ::encThresholdInit};
+    uint16_t encMin[4] = {TJ::encThresholdInit, TJ::encThresholdInit, TJ::encThresholdInit, TJ::encThresholdInit};
+    uint16_t encMax[4] = {TJ::encThresholdInit, TJ::encThresholdInit, TJ::encThresholdInit, TJ::encThresholdInit};
     while(millis() < (startTime + duration)) {
         encNew[0] = adc1_get_raw(TJ::ADC_CH_ENC_FL);
         encNew[1] = adc1_get_raw(TJ::ADC_CH_ENC_RL);
@@ -560,9 +571,12 @@ void TrackJetClass::encoderCalibrate(uint16_t duration) {
         delay(1);
     }
     for(uint8_t i = 0; i < 4; ++i) {
-        TrackJet.encThreshold[i] = uint16_t((encMax[i] + encMin[i])/1.5);
-        Serial.printf("Enc%d %d\n", i, TrackJet.encThreshold[i]);
+        TrackJet.encThreshold[i] = uint16_t((encMax[i] + encMin[i])/2);
+        //Serial.printf("Enc%d %d\n", i, TrackJet.encThreshold[i]);
     }
+    preferences.begin("TrackJet", false);
+    preferences.putBytes("encoderThreshold", TrackJet.encThreshold, 4);
+    preferences.end();
 }
 
 TrackJetClass TrackJet;
