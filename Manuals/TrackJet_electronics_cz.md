@@ -56,13 +56,13 @@ Deska pro TrackRay je již z výroby osazena SMD (bezvývodovými) součástkami
 <span style="color: red;">**POZOR: LED mají definovanou polaritu!**</span> U každé LED zkontrolujte, že kratší nožku vsouváte do čtveraté díry! 
 1. Na každou LED navlékněte distanční sloupek.
 ![alt](SupportFiles/IMG_0881.jpeg)
-1. Provlékněte červenou LED místem označeným D4 CHARGE. Zahněte nožičky natěsno u PCB. Cín se nanáší ze strany s logem Coufal Elektronika. Zapájejte.
+1. Provlékněte červenou LED místem označeným D4 CHARGING. Zahněte nožičky natěsno u PCB. Cín se nanáší ze strany s logem Coufal Elektronika. Zapájejte.
 ![alt](SupportFiles/IMG_0886.jpeg)
-1. Provlékněte červenou LED místem označeným D3 FULL. Opakujte stejný postup pájení jako v předchozím kroku.
+1. Provlékněte zelenou LED místem označeným D3 FULL. Opakujte stejný postup pájení jako v předchozím kroku.
 ![alt](SupportFiles/IMG_0893.jpeg)
 1. Zastřihněte nožičky u PCB. *Stříhanou nožičku držte rokou, aby neodletěla sousedovi do oka.*
 ![alt](SupportFiles/IMG_0899.jpeg)
-1. Obdobným postupem zapájejte zelenou LED místem ozančeným D13 a vybrané LED místy označenými D1 a D2.
+1. Obdobným postupem zapájejte zelenou LED místem ozančeným D14 a vybrané LED místy označenými D1 a D2.
 ![alt](SupportFiles/IMG_0899.jpeg)
 
 ## <a name = male>Pájení malých součástek</a>
