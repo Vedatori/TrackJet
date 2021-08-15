@@ -491,7 +491,31 @@ void loop() {
 
 ___
 ## <a name = potenciometr>Potenciometr</a>
+Dalším způsobem, jak můžete TrackJet ovládat je pomocí potenciometru **RV1**, který najdete v levém horním rohu desky elektroniky. Pro zjištění stavu potenciometru budeme používat příkaz `TrackJet.potentiometerRead`. Tento příkaz vrací hodnotu `0` až `100` podle natočení potenciometru.
 
+Příklad: Tento program řídí jas LED podle natočení potenciometru.
+```
+#include "TrackJet/TrackJet.h"
+
+void setup() {
+    TrackJet.begin();
+}
+
+void loop() {
+	// Vytvoření celočíselné proměnné
+	int jas = 0;
+	
+	// Přečtení stavu potenciometru (0-100) a uložení do proměnné
+	jas = TrackJet.potentiometerRead();
+	
+	// Nastavení jasu LED1 podle stavu proměnné
+	TrackJet.ledWriteAnalog(1, jas);
+
+    delay(100);
+}
+```
+
+Protože příkaz `TrackJet.potentiometerRead` vrací celočíselnou hodnotu od `0` do `100`, můžeme předchozí program zapsat úsporněji, ale funkčně stejně.
 ___
 ## <a name = seriovka>Sériová linka</a>
 
