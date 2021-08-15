@@ -77,10 +77,10 @@ Heslo musí mít minimálně 8 znaků, jinak nebude použito.
 1. Nyní je robot plně naprogramován. Pro ovládání na svém chytrém zařízení vyhledejte WiFi síť s názvem *TrackJet_<your_name>*. Zadejte do webového prohlížeče adresu *192.168.4.1* nebo jakoukoli jinou ve tvaru *www.neco.cz*. Načte se hlavní stránka pro ovládání TrackJet. Joystickem ovládejte pohyb. Na počítači můžete použít i šipky. Do políčka *Command entry* můžete zadávat speciální příkazy.
 
     <img src="SupportFiles/prog_web_root.png" width="400"/>
-1. Pro přihlášení TrackJet k externí WiFi síti klikněte na tlačítko *WiFi setup*. Na následující stránce zadejte přihlašovací údaje od externí WiFi a potvrďte přihlášení.
+1. Pro přihlášení TrackJet k externí WiFi síti klikněte na tlačítko *WiFi setup*. Na následující stránce zadejte přihlašovací údaje od externí WiFi a potvrďte přihlášení. Poté je potřeba restartovat TrackJet a znovu se k němu připojit.
 
     <img src="SupportFiles/prog_web_wifi.png" width="400"/>
-1. Pokud přihlášení proběhne úspěšně, objeví se potvrzení *connected* a přidělená IP adresa. Tato síť bude uložena a vyhledána i po restartu. Připojte se se svým chytrým zařízením také na externí WiFi a zadejte do prohlížeče IP adresu přidělenou TrackJet. V tomto případě *192.168.1.152*. Tato adresa bude po restartu zobrazena i na LED panelu TrackJet. 
+1. Pokud přihlášení k externí WiFi proběhne úspěšně, objeví se potvrzení *connected* a přidělená IP adresa. Tato síť bude uložena a vyhledána i po restartu. Připojte se se svým chytrým zařízením také na externí WiFi a zadejte do prohlížeče IP adresu přidělenou TrackJet. V tomto případě *192.168.88.197*. Tato adresa bude po restartu zobrazena i na LED panelu TrackJet. 
 
     <img src="SupportFiles/prog_web_connected.png" width="400"/>
 1. Načte se opět hlavní stránka ovládání TrackJet. Tímto je vypnuta interní WiFi *TrackJet_<your_name>*. Pro její opětovné zapnutí přejděte do nastavení WiFi a klikněte na tlačítko *Enable AP* nebo restartujte TrackJet.

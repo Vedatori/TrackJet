@@ -3,8 +3,7 @@
 const uint8_t CONTROL_PERIOD = 100;
 uint32_t prevControlTime = 0;
 
-uint16_t prevEnc0 = 0;
-uint16_t prevEnc1 = 0;
+uint8_t prevEnc0 = 0, prevEnc1 = 0;
 
 void setup() {
     TrackJet.begin();
@@ -51,8 +50,8 @@ void loop() {
             TrackJet.soundEnd();
             TrackJet.commandClear();
         }
-        else if(TrackJet.commandGetIndexed(0) == "enc") {
-            TrackJet.encoderCalibrate(5000);
+        else if(TrackJet.commandGetIndexed(0) == "encoder calibrate ") {
+            TrackJet.encoderCalibrate(5000);    //calibrate for 5s
             TrackJet.commandClear();
         }
         TrackJet.ledWrite(1, TrackJet.buttonRead());
