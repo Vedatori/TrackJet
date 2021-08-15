@@ -100,7 +100,7 @@ public:
     void begin();
 
     bool buttonRead();
-    uint16_t potentiometerRead();
+    uint16_t potentiometerRead();   // 0-100
     bool encoderReadButton();
     bool encoderReadButtonPulse();
     int16_t encoderRead();

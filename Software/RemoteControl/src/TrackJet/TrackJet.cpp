@@ -171,7 +171,7 @@ bool TrackJetClass::buttonRead() {
     return !digitalRead(TJ::BUTTON);
 }
 uint16_t TrackJetClass::potentiometerRead() {
-    return analogReadData[POTENTIOMETER];
+    return map(analogReadData[POTENTIOMETER], 0, 4095, 0, 100); 
 }
 bool TrackJetClass::encoderReadButton() {
     return TJ::quadEnc.getSWPressed();
