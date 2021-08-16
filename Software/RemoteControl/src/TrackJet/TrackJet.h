@@ -67,7 +67,7 @@ void handleSW();
 }
 
 enum shiftRegPins {
-    MOTA1, MOTA2, MOTB1, MOTB2, STEP_EN, STEP_MODE, MOT1, MOT2, MOT3, MOT4, 
+    MOT1A, MOT1B, MOT2A, MOT2B, STEP_EN, STEP_MODE, MOT3, MOT4, MOT5, MOT6, 
     XSHUT, LED2, LED1, MUXA, MUXB, MUXC
 };
 
@@ -77,8 +77,8 @@ enum adcMuxPins {
 
 class TrackJetClass {
     bool beginCalled = false;
-    int8_t motorsSpeed[3];
-    float motorsSpeedFiltered[3];
+    int8_t motorsSpeed[2];
+    //float motorsSpeedFiltered[2];
     uint8_t gyroStatus = 0; // 0-disabled, 1-running, 2-calibrating
     float gyroYPR[3];
     float gyroOffsets[3];
@@ -106,7 +106,7 @@ public:
     int16_t encoderRead();
     void encoderReset();
 
-    void motorsSetSpeed(const int8_t speed, const int8_t index);
+    void motorsSetSpeed(int8_t speed, const int8_t index);
     void motorsUpdateSpeed();
     void controlMovement(const int8_t joystickX, const int8_t joystickY);
 
