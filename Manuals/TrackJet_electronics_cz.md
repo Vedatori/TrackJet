@@ -102,7 +102,7 @@ Deska pro TrackJet je již z výroby osazena SMD (bezvývodovými) součástkami
 ![alt](SupportFiles/IMG_0937.jpeg)
 1. Zahněte pomocí kleští krajní nožičky, aby matice nevypadávala při pájení z desky. Zavolejte vedoucího na kontrolu polarity, oprava špatně otočeného matrixu je téměř neproveditelná!
 ![alt](SupportFiles/IMG_0939.jpeg)
-1. Zapájejte matici LEDek. Na závěr zapájejte tlačítko do místa označeného SW3.
+1. Zapájejte matici LEDek. Na závěr zapájejte tlačítko do místa označeného SW2.
 ![alt](SupportFiles/IMG_0941.jpeg)
 
 ## <a name = konektory>Pájení konektorů a senzorů čáry</a>
