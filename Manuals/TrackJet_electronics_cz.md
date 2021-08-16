@@ -1,6 +1,6 @@
 V tomto dokumentu je uveden návod na osazení desky plošných spojů. Část je osazena již z výroby SMD součástkami. Zbytek osazení je předmětem tohoto návodu.
 Pro tento návod si uvedeme následující pojmy: DPS = PCB = deska - Deska Plošných Spojů.
-Deska pro TrackRay je již z výroby osazena SMD (bezvývodovými) součástkami. THT (vývodové) se pájí následujícím způsobem:
+Deska pro TrackJet je již z výroby osazena SMD (bezvývodovými) součástkami. THT (vývodové) se pájí následujícím způsobem:
 * Součástku vkládáme ze strany, kde je naznačena silkscreenem (kde je bílou barvou natištěn její obrys).
 * Součástku přitlačíme až k desce nebo co nejblíž.
 * Součástku pájíme ze strany, na kterou trčí vývody.
@@ -54,7 +54,7 @@ Deska pro TrackRay je již z výroby osazena SMD (bezvývodovými) součástkami
 
 **Postup:**
 <span style="color: red;">**POZOR: LED mají definovanou polaritu!**</span> U každé LED zkontrolujte, že kratší nožku vsouváte do čtveraté díry! 
-1. Na každou LED navlékněte distanční sloupek.
+1. Na každou LED navlékněte distanční sloupek. Použijte ty bílé, které máte v sáčku s mechanikou
 ![alt](SupportFiles/IMG_0881.jpeg)
 1. Provlékněte červenou LED místem označeným D4 CHARGING. Zahněte nožičky natěsno u PCB. Cín se nanáší ze strany s logem Coufal Elektronika. Zapájejte.
 ![alt](SupportFiles/IMG_0886.jpeg)
@@ -73,7 +73,7 @@ Deska pro TrackRay je již z výroby osazena SMD (bezvývodovými) součástkami
 * 3x elektrolytický kondenzátor 1000 µF (větší pouzdro)
 
 **Postup:** 
-1. Zapájejte buzzer do levého horního rohu. Pozor na polaritu, delší vývod (u symbolu plus na etiketě buzzeru) musí být umístěn do otvoru označeným symbolem +. 
+1. Zapájejte buzzer do levého horního rohu. Pozor na polaritu, delší vývod (u symbolu plus na plastovém pouzdře buzzeru) musí být umístěn do otvoru označeným symbolem +. Buzzer mírně nesedí tak, jak by měl, proto je potřeba jeho vývody mírně rozevřít od sebe.
 ![alt](SupportFiles/IMG_0906.jpeg)
 1. Na místa označená C51, C54 a C45 zapájejte elektolytické kondenzátory 100 µF. Pozor na polaritu, delší vývod musí směřovat do otvoru, u kterého je smybol + a jeho okolí není zabarvené bílou barvou. 
 ![alt](SupportFiles/IMG_0913.jpeg)
@@ -87,6 +87,7 @@ Deska pro TrackRay je již z výroby osazena SMD (bezvývodovými) součástkami
 * rotační enkodér
 * ponteciometr
 * matice LED
+* tlačítko
 
 **Postup:** 
 1. Zapájejte přepínač na místo označené SW3.
@@ -97,9 +98,9 @@ Deska pro TrackRay je již z výroby osazena SMD (bezvývodovými) součástkami
 ![alt](SupportFiles/IMG_0933.jpeg)
 1. Vložte matici LEDek do PCB. Kód na horní straně musí být blíž k čipu s nápisem Espressif, aby byla zachována polarita, viz obrázek.
 ![alt](SupportFiles/IMG_0937.jpeg)
-1. Zahněte pomocí kleští krajní nožičky, aby matice nevypadávala při pájení z desky.
+1. Zahněte pomocí kleští krajní nožičky, aby matice nevypadávala při pájení z desky. Zavolejte vedoucího na kontrolu polarity, oprava špatně otočeného matrixu je téměř neproveditelná!
 ![alt](SupportFiles/IMG_0939.jpeg)
-1. Zapájejte matici LEDek.
+1. Zapájejte matici LEDek. Na závěr zapájejte tlačítko do místa označeného SW3.
 ![alt](SupportFiles/IMG_0941.jpeg)
 
 ## <a name = konektory>Pájení konektorů a senzorů čáry</a>
