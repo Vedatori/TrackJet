@@ -187,7 +187,7 @@ int16_t TrackJetClass::encoderRead() {
 void TrackJetClass::encoderReset() {
     TJ::quadEnc.clear();
 }
-void TrackJetClass::motorsSetSpeed(int8_t speed, const int8_t index) {
+void TrackJetClass::motorSetSpeed(const int8_t index, int8_t speed) {
     if(index == 1 || index == 2) {
         if(speed < -100)
             speed = -100;
@@ -265,8 +265,8 @@ void TrackJetClass::controlMovement(const int8_t joystickX, const int8_t joystic
     engineLeftSpeed = constrain(engineLeftSpeed, -100, 100);
     engineRightSpeed = constrain(engineRightSpeed, -100, 100);
 
-    motorsSetSpeed(engineLeftSpeed, 1);
-    motorsSetSpeed(engineRightSpeed, 2);
+    motorSetSpeed(1, engineLeftSpeed);
+    motorSetSpeed(2, engineRightSpeed);
 }
 
 float TrackJetClass::encoderGetSpeed(uint8_t encID) {

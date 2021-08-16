@@ -106,7 +106,7 @@ public:
     int16_t encoderRead();
     void encoderReset();
 
-    void motorsSetSpeed(int8_t speed, const int8_t index);
+    void motorSetSpeed(const int8_t index, int8_t speed);
     void motorsUpdateSpeed();
     void controlMovement(const int8_t joystickX, const int8_t joystickY);
 
