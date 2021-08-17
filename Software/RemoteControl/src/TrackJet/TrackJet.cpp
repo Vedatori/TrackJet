@@ -269,6 +269,16 @@ void TrackJetClass::controlMovement(const int8_t joystickX, const int8_t joystic
     motorSetSpeed(2, engineRightSpeed);
 }
 
+int16_t TrackJetClass::encoderGetSteps(uint8_t encID) {
+    if(encID != 1 && encID != 2)
+        return 0;
+    return encSteps[encID - 1];
+}
+float TrackJetClass::encoderGetDistance(uint8_t encID) {
+    if(encID != 1 && encID != 2)
+        return 0;
+    return encSteps[encID - 1]*2.75;
+}
 float TrackJetClass::encoderGetSpeed(uint8_t encID) {
     static int16_t prevEncSteps = 0;
     static uint32_t prevTime = 0;
@@ -549,8 +559,20 @@ void TrackJetClass::commandSend(String command) {
 }
 
 void TrackJetClass::internCommandHandle() {
+    static uint8_t counter = 0;
+    if(counter < 20) {
+        counter++;
+        return;
+    }
+    else {
+        counter = 0;
+    }
     if(TrackJet.commandGetIndexed(0) == "reset") {
         ESP.restart();
+    }
+    else if(TrackJet.commandGet() == "encoder calibrate") {
+        TrackJet.encoderCalibrate(5000);    //calibrate for 5s
+        TrackJet.commandClear();
     }
 }
 

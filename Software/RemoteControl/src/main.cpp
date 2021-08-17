@@ -3,7 +3,7 @@
 const uint8_t CONTROL_PERIOD = 100;
 uint32_t prevControlTime = 0;
 
-uint8_t prevEnc0 = 0, prevEnc1 = 0;
+uint16_t prevEnc1 = 0, prevEnc2 = 0;
 
 void setup() {
     TrackJet.begin();
@@ -26,12 +26,12 @@ void loop() {
             }
             TrackJet.displaySingle(TrackJet.lidarDistance()/100, 6, 1);
         }
-        //Serial.printf("Button %d, Enc %d, %d, %d\n", TrackJet.buttonRead(), TrackJet.encoderRead(), TrackJet.encoderReadButton(), TrackJet.encoderReadButtonPulse());
-        //Serial.printf("%d\n", TrackJet.lidarDistance());
+        //printf("Button %d, Enc %d, %d, %d\n", TrackJet.buttonRead(), TrackJet.encoderRead(), TrackJet.encoderReadButton(), TrackJet.encoderReadButtonPulse());
+        //printf("%d\n", TrackJet.lidarDistance());
 
-        Serial.printf("FL %d RL %d FR %d RR %d enc0 %d enc1 %d speed0 %d speed1 %d\n", adc1_get_raw(TJ::ADC_CH_ENC_FL), adc1_get_raw(TJ::ADC_CH_ENC_RL), adc1_get_raw(TJ::ADC_CH_ENC_FR), adc1_get_raw(TJ::ADC_CH_ENC_RR), TrackJet.encSteps[0], TrackJet.encSteps[1], TrackJet.encSteps[0] - prevEnc0, TrackJet.encSteps[1] - prevEnc1);
-        prevEnc0 = TrackJet.encSteps[0];
-        prevEnc1 = TrackJet.encSteps[1];
+        printf("FL %d RL %d FR %d RR %d enc0 %d enc1 %d speed0 %d speed1 %d\n", adc1_get_raw(TJ::ADC_CH_ENC_FL), adc1_get_raw(TJ::ADC_CH_ENC_RL), adc1_get_raw(TJ::ADC_CH_ENC_FR), adc1_get_raw(TJ::ADC_CH_ENC_RR), TrackJet.encoderGetSteps(1), TrackJet.encoderGetSteps(2), TrackJet.encoderGetSteps(1) - prevEnc1, TrackJet.encoderGetSteps(2) - prevEnc2);
+        prevEnc1 = TrackJet.encoderGetSteps(1);
+        prevEnc2 = TrackJet.encoderGetSteps(2);
 
         //Serial.printf("pot %d battV %f battP %d lineL %d lineR %d\n", TrackJet.potentiometerRead(), TrackJet.battVolt(), TrackJet.battPercent(), TrackJet.lineLeft(), TrackJet.lineRight());
 
@@ -47,10 +47,6 @@ void loop() {
             TrackJet.soundTone();
             delay(500);
             TrackJet.soundEnd();
-            TrackJet.commandClear();
-        }
-        else if(TrackJet.commandGetIndexed(0) == "encoder calibrate ") {
-            TrackJet.encoderCalibrate(5000);    //calibrate for 5s
             TrackJet.commandClear();
         }
         TrackJet.ledWrite(1, TrackJet.buttonRead());

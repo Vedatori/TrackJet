@@ -110,6 +110,8 @@ public:
     void motorsUpdateSpeed();
     void controlMovement(const int8_t joystickX, const int8_t joystickY);
 
+    int16_t encoderGetSteps(uint8_t encID);
+    float encoderGetDistance(uint8_t encID);
     float encoderGetSpeed(uint8_t encID);
 
     void servoSetPosition(uint8_t servoID, float position);     // servoID 0, 1, 2; position 0-180 [°]

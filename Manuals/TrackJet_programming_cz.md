@@ -18,7 +18,6 @@ ___
 * [Potenciometr](#potenciometr)
 * [Sériová linka](#seriovka)
 * [Motory](#motory)
-* [Enkodér](#enkoder)
 * [Serva](#serva)
 * [LIDAR](#lidar)
 * [Výpis textu na LED panel](#panelLed)
@@ -27,6 +26,7 @@ ___
 * [Senzor čáry](#cara)
 * [WiFi](#wifi)
 * [Vzdálený příkazový řádek](#remoteCmd)
+* [Enkodér](#enkoder)
 ___
 ## <a name = IDE>Vývojové prostředí</a>
 
@@ -592,13 +592,19 @@ TrackJet.motorSetSpeed(2, 50);
 ```
 
 ___
-## <a name = enkoder>Enkodér</a>
-
-___
 ## <a name = serva>Serva</a>
+TrackJet má 3 sloty pro servomotory s indexy:
+* Index 1: servo radlice
+* Index 2: servo LIDARu
+* Index 3: volný konektor
+
+Pro nastavení polohy serva použijeme funkci `TrackJet.servoSetPosition(index, pozice)`, kde *index* popisuje, které servo chceme nastavit, a *pozice* popisuje žádanou polohu serva, čili úhel v rozsahu 0-180.
+
+Standardně jsou serva nastavena na plnou rychlost pohybu, tj. 600°/s. Pokud chceme, aby se pohybovalo pomaleji, můžeme tuto rychlost snižit funkci `TrackJet.servoSetSpeed(index, rychlost)`. Zde *rychlost* značí nastavenou rychlost pohybu serva v rozsahu 0-600°/s.
 
 ___
 ## <a name = lidar>LIDAR</a>
+Pro zjištění měřené vzdálenosti od překážky senzorem LIDAR použijeme funkci `TrackJet.lidarDistance()`. Ta nám vrátí celé číslo udávající počet milimetrů od překážky. 
 
 ___
 ## <a name = panelLed>Výpis textu na LED panel</a>
@@ -708,3 +714,10 @@ void loop() {
 }
 ```
 
+___
+## <a name = enkoder>Enkodér</a>
+TrackJet je vybaven senzory ujeté vzdálenosti, které nazýváme mírně slangově *enkodéry*. Fungují na principu optické brány, kde je paprsek světla přerušován vnitřními výstupky pásu. Tímto způsobem je možné získat celočíselnou proměnnou, která je zvýšena o 4 při každém posunu pásu o jeden celý segment. Aby enkodéry správně fungovaly, je třeba je zkalibrovat. K tomu je třeba přes vzdálený příkazový řádek zadat `encoder calibrate`. Po zadání bude probíhat kalibrace po dobu 5 sekund. Během této doby je nutné, aby se oba pásy pootočily o několik segmentů. Poté je kalibrace hotova a uložena. 
+
+Celočíselnou proměnnou udávající ujetouo vzdálenost získáme zavoláním funkce `TrackJet.encoderGetSteps(index)`, kde *index* je 1 pro levý pás a 2 pro pravý pás, podobně jako u motorů. 
+
+Pro získání ujeté vzdálenosti daného pásu použijeme funkci `TrackJet.encoderGetDistance(index)`, která nám vrátí ujetou vzdálenost daného pásu vyjádřenou v milimetrech jako desetinné číslo.
