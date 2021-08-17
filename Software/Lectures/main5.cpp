@@ -16,7 +16,7 @@ void setup() {
 }
 
 void loop() {
-    printf("%d %d %d\n", millis(), TrackJet.buttonRead(), TrackJet.potentiometerRead());
+    printf("%d %d\n", millis(), TrackJet.buttonRead());
 
     delay(100);
 }

@@ -33,7 +33,7 @@ Po stisku tlačítka SW2 zůstane LED zapnutá. Po opětovném zmáčknutí tač
 Přečteme stav potenciometru, ukážeme si číselnou proměnnou a nastavíme jas LED.
 
 ## Úkol 6 - Rychlost blikání
-Napište program, který bude blikat libovolnou LED a rychlost tohoto blikání bude nastavitelná pomocí natočení potenciometru. Nejvyšší perioda blikání bude 1s, nejvyšší bude 50ms. 
+Napište program, který bude blikat libovolnou LED a rychlost tohoto blikání bude nastavitelná pomocí natočení potenciometru.
 
 # Lekce 4
 Roztočíme motory a ukážeme si podmínku "if".
@@ -44,11 +44,59 @@ Napiště program, který bude pomocí potenciometru ovládat jeden z motorů ta
 ## Úkol 8 - Jízda vpřed/vzad
 Napište program, který bude jezdit s TrackJet dopředu a dozadu. Doba jízdy dopředu je 1 s, dozadu taky 1 s. Rychlost je libovolná nenulová.
 
+## Úkol 9 - Nastavení jasu LED po stisku tlačítka
+Napište program, který nastavý jas libovolné LED podle polohy potenciometru. Nastavení jasu proběhne **jen** po stisku tlačítka SW2. Když není zmáčknuto, je jas stabilní.
+
 # Lekce 5
 TrackJet začne komunikovat s počítačem pomocí sériové linky.
+
+## Úkol 10 - Vypsání hodnoty potenciommetru
+Napiště program, který bude na sériovou linku vypisovat hodnotu natočení potenciometru.
+
+## Úkol 11 - Vysání času od startu TrackJet bez funkce millis()
+Napište program, který bude vypisovat celočíselnou proměnnou každou vteřinu. Tuto proměnnou však každou milisekundu zvyšte o 1. Je chování tohoto programu stejné jako v případě použití `funkce millis()`?
 
 # Lekce 6
 Přečteme stav rotačního enkodéru a rozpohybujeme servomotory.
 
+## Úkol 11 - Vypsání stavu enkodéru
+Napište program, který na sériovku vypíše akutální hodnotu rotačního enkodéru. Po stisku tlačítku tuto hodnotu resetujte do nuly.
+
+## Úkol 12 - Nastavení polohy serva podle potenciometru
+Napište program, který přečte polohu potenciometru a podle ní nastaví polohu libovolného serva.
+
+## Úkol 13 - Mávání servem
+Napište program, který nastaví rychlost serva 2 (LIDAR) na **polovinu** jeho maximální rychlosti. Touto rychlostí jezděte se servem periodicky mezi krajmíni polohami.
+
 # Lekce 7
-Rozblikáme LED bez použití příkazu delay(). Vytvoříme vlastní funkci.
+Rozblikáme LED bez použití příkazu delay().
+
+# Lekce 8
+Ukážeme si cyklus.
+
+## Úkol - 
+Napište program, který bude postupně vyblikávat všechny LEDky v jednom řádku LED panelu. Vždy svítí jen jedna LED.
+
+## Úkol - 
+Napište program, který bude postupně vyblikávat všechny LEDky v jednom řádku LED panelu. Vlna se bude symstricky zpět. Vždy svítí jen jedna LED. Blikání bude připomínat vzor na [slavném inteligentním autě K.I.T.T.](https://www.youtube.com/watch?v=oNyXYPhnUIs&ab_channel=NBCClassics).
+
+# Lekce 9
+Budeme měřit vzdálenost mezi překážkou a TrackJet pomocí senzoru LIDAR.
+
+## Úkol - Parkovací senzory
+Napište program, který bude na sériovou linku posílat sekvenci znaků tak dlouhou, kolik desítek centimetrů je mezi LIDAR senzorem a překážkou. Např. při měření vzdálenosti 40 cm bude program vypisovat na jedden řádek eskvenci `####`. 
+
+## Úkol - Držení si odstupu
+Napište program, který zajistí, že si TrackJet bude udržovat odstup od překážky (ruky programátora) na vzdálenost 30 cm. Když je vzdálenost větší, pojede dopředu a když menší, bude couvat. Pozor, aby nezačal kmitat, nemusí být udržovaná vzdálenost úplně přesná.
+
+# Lekce 10
+Rozezníme bzučák na TrackJet a ukážeme si jak nastavit jeho frekvenci na konkrétní tóny.
+
+## Úkol - Hraní melodie
+Napište program, který zahraje vaši oblíbenou melodii (oblíbená píseň, film, opera) nebo jakoukoliv jinou melodii o alespoň 5 notách.
+
+## Úkol - Klakson
+Napište program, který *zatroubí* bzučákem v případě, že je čtení vzdálenosti z LIDARu menší než 5 cm.
+
+# Lekce 11
+Ukážeme se spuštění WiFi knihovny a použití vzdáleného příkazového řádku.
