@@ -42,7 +42,9 @@ const uint8_t SERVO_CHANNEL[SERVO_COUNT] = {0, 1, 2};
 const uint8_t BUZZER_CHANNEL = 3;
 
 const float MOTOR_SPEED_FILTER_UPDATE_COEF = 0.15;
-const float BATT_PERCENT_UPDATE_COEF = 0.05;
+const float BATT_VOLTAGE_UPDATE_COEF = 0.05;
+const float BATT_VOLTAGE_CUTOFF = 3.4;    // [V]
+const float BATT_VOLTAGE_RESET = 3.6;     // [V]
 
 const uint16_t encThresholdInit = 1600;
 
@@ -91,7 +93,9 @@ class TrackJetClass {
     bool connectionEnabled = false;
     bool connectionActive = false;
     String displayTextBuffer;
+    float battVoltageFiltered = 3.7;
     float battPercentFiltered = 50;
+    bool battCutoff = false;    // false-high V., true-low V.
 
 public:
     uint16_t encThreshold[4];   // 0-FL, 1-RL, 2-FR, 3-RR
@@ -134,6 +138,7 @@ public:
     float battVolt();
     float battPercentCalc(float voltage);
     uint8_t battPercent();
+    void handleLowBatt();
 
     uint16_t lineRead(uint8_t index);
 

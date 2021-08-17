@@ -35,6 +35,8 @@ void TJ::updatePWM(void * param) {
 
         TrackJet.internCommandHandle();
 
+        TrackJet.handleLowBatt();
+
         vTaskDelay(TJ::controlPeriod);
     }
 }
@@ -146,7 +148,7 @@ void TrackJetClass::begin() {
     else
         Serial.printf("Lidar VL53L0X not connected.\n");
 
-    TJ::serialPWM.setPWM(STEP_EN, 100);   // Turn on motor step up
+    
     display(dispWelcome);
     xTaskCreatePinnedToCore(TJ::updatePWM, "updatePWM", 10000 , (void*) 0, 1, NULL, 1);
     xTaskCreatePinnedToCore(TJ::updateEnc, "updateEnc", 10000 , (void*) 0, 1, NULL, 1);
@@ -213,16 +215,18 @@ void TrackJetClass::motorSetSpeed(const int8_t index, int8_t speed) {
     
 }
 void TrackJetClass::motorsUpdateSpeed() {
-    if(connectionEnabled == true && connectionActive == false) {
+    if((connectionEnabled == true && connectionActive == false) || battCutoff) {
         for(uint8_t i = 0; i < 2; ++i) {
             motorsSpeed[i] = 0;
         }
     }
 
+    // Power of step up converter when batt cutoff
+    TJ::serialPWM.setPWM(STEP_EN, !battCutoff*100);   // Turn on motor step up
+
     // Switch PFM/PWM step up converter mode
     if(motorsSpeed[0] != 0 || motorsSpeed[1] != 0) {
         TJ::serialPWM.setPWM(STEP_MODE, 0);     // PWM mode - High power
-        
     }
     else {
         TJ::serialPWM.setPWM(STEP_MODE, 100);   // PFM mode - Low power, high efficiency
@@ -350,8 +354,9 @@ void TrackJetClass::updateAnalogMux() {
     static uint8_t analogReadIndex = 0;
     analogReadData[analogReadIndex] = adc1_get_raw(TJ::ADC_CH_COM);
     if(analogReadIndex == BAT_VOLT) {
-        float newPercent = battPercentCalc(battVolt());
-        battPercentFiltered = (1 - TJ::BATT_PERCENT_UPDATE_COEF)*battPercentFiltered + TJ::BATT_PERCENT_UPDATE_COEF*newPercent;
+        float newVoltage = battVolt();
+        battVoltageFiltered = (1 - TJ::BATT_VOLTAGE_UPDATE_COEF)*battVoltageFiltered + TJ::BATT_VOLTAGE_UPDATE_COEF*newVoltage;
+
     }
     if(++analogReadIndex >= 8) {
         analogReadIndex = 0;
@@ -367,7 +372,7 @@ float TrackJetClass::battVolt() {
     return float(analogReadData[BAT_VOLT])/4095*4/3*3.3;
 }
 float TrackJetClass::battPercentCalc(float voltage) {
-    float percent = -740 + 200*voltage;; // Linear between 3,7~0% and 4.2~100%
+    float percent = -546 + 153.8*voltage;; // Linear between 3.55~0% and 4.2~100%
     if(percent < 0)
         percent = 0;
     else if(percent > 100)
@@ -375,7 +380,24 @@ float TrackJetClass::battPercentCalc(float voltage) {
     return percent;
 }
 uint8_t TrackJetClass::battPercent() {
-    return uint8_t(battPercentFiltered + 0.5);  // Add 0.5 to round correctly
+    return uint8_t(battPercentCalc(battVoltageFiltered) + 0.5);  // Add 0.5 to round correctly
+}
+void TrackJetClass::handleLowBatt() {
+    static bool prevBattCutoff = false;
+    if(battVoltageFiltered < TJ::BATT_VOLTAGE_CUTOFF)
+        battCutoff = true;
+    else if(battVoltageFiltered > TJ::BATT_VOLTAGE_RESET)
+        battCutoff = false;
+
+    if(battCutoff && !prevBattCutoff) {
+        soundNote();
+        displayText("LOW BATT");
+    }
+    else if(!battCutoff && prevBattCutoff) {
+        soundEnd();
+    }
+
+    prevBattCutoff = battCutoff;
 }
 
 uint16_t TrackJetClass::lineRead(uint8_t index) {
