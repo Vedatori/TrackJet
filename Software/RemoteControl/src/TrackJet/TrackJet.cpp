@@ -557,7 +557,11 @@ void TrackJetClass::commandClear() {
 }
 
 void TrackJetClass::commandSend(String command) {
-    commandSendCaptain(command);
+    commandSendCaptain("command", command);
+}
+
+void TrackJetClass::msgSend(String type, String payload){
+    commandSendCaptain(type, payload);
 }
 
 void TrackJetClass::internCommandHandle() {

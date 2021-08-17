@@ -7,7 +7,7 @@ uint16_t prevEnc1 = 0, prevEnc2 = 0;
 
 void setup() {
     TrackJet.begin();
-    TrackJet.startWiFiCaptain("<your_name>");
+    TrackJet.startWiFiCaptain("Honza V");
     TrackJet.displayText(ipToDisp());
     TrackJet.servoSetSpeed(0, 60);
 }
@@ -16,7 +16,7 @@ void loop() {
     if(millis() > prevControlTime + CONTROL_PERIOD) {
         prevControlTime = millis();
         if(TrackJet.displayIsBusy() == false) {
-            TrackJet.displayDigit(TrackJet.encoderRead()%10);
+            /*TrackJet.displayDigit(TrackJet.encoderRead()%10);
             for(uint8_t i = 0; i < 8; ++i) {
                 TrackJet.displaySingle(i, 7, 0);
                 TrackJet.displaySingle(i, 6, 0);
@@ -24,12 +24,15 @@ void loop() {
             for(uint8_t i = 0; i < TrackJet.battPercent()/12; ++i) {
                 TrackJet.displaySingle(7 - i, 7, 1);
             }
-            TrackJet.displaySingle(TrackJet.lidarDistance()/100, 6, 1);
+            TrackJet.displaySingle(TrackJet.lidarDistance()/100, 6, 1);*/
+            TrackJet.displayText(String(TrackJet.battPercent())+"   ", false);
         }
         //printf("Button %d, Enc %d, %d, %d\n", TrackJet.buttonRead(), TrackJet.encoderRead(), TrackJet.encoderReadButton(), TrackJet.encoderReadButtonPulse());
-        //printf("%d\n", TrackJet.lidarDistance());
+        printf("%d\n", TrackJet.battPercent());
 
-        printf("FL %d RL %d FR %d RR %d enc0 %d enc1 %d speed0 %d speed1 %d\n", adc1_get_raw(TJ::ADC_CH_ENC_FL), adc1_get_raw(TJ::ADC_CH_ENC_RL), adc1_get_raw(TJ::ADC_CH_ENC_FR), adc1_get_raw(TJ::ADC_CH_ENC_RR), TrackJet.encoderGetSteps(1), TrackJet.encoderGetSteps(2), TrackJet.encoderGetSteps(1) - prevEnc1, TrackJet.encoderGetSteps(2) - prevEnc2);
+        TrackJet.msgSend("battery",String(TrackJet.battPercent()));
+
+        //printf("FL %d RL %d FR %d RR %d enc0 %d enc1 %d speed0 %d speed1 %d\n", adc1_get_raw(TJ::ADC_CH_ENC_FL), adc1_get_raw(TJ::ADC_CH_ENC_RL), adc1_get_raw(TJ::ADC_CH_ENC_FR), adc1_get_raw(TJ::ADC_CH_ENC_RR), TrackJet.encoderGetSteps(1), TrackJet.encoderGetSteps(2), TrackJet.encoderGetSteps(1) - prevEnc1, TrackJet.encoderGetSteps(2) - prevEnc2);
         prevEnc1 = TrackJet.encoderGetSteps(1);
         prevEnc2 = TrackJet.encoderGetSteps(2);
 

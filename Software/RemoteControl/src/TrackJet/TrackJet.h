@@ -158,6 +158,7 @@ public:
     String commandGetIndexed(uint8_t index);
     void commandClear();
     void commandSend(String command);
+    void msgSend(String type, String payload);
     void internCommandHandle();
 
     void encoderCalibrate(uint16_t duration);

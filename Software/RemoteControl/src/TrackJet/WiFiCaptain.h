@@ -30,4 +30,4 @@ String ipToDisp();
 void onWebSocketEvent(uint8_t client_num, WStype_t type, uint8_t * payload, size_t length);
 char * commandGetCaptain();
 void commandClearCaptain();
-void commandSendCaptain(String command);
+void commandSendCaptain(String msgType, String payload);

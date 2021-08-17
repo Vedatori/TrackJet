@@ -352,17 +352,16 @@ void commandClearCaptain() {
     sprintf(commandBuffer, " ");
 }
 
-void commandSendCaptain(String command) {
-    char commandMsg[] = "command";
+void commandSendCaptain(String msgType, String payload) {
     if(clientConnectedCaptain[clientNumCaptain] == false) {
         printf("Error sending command, client disconnected\n");
         return;
     }
-    if((strlen(commandMsg) + command.length()) >= (sizeof(sendCommandBuffer)/sizeof(*sendCommandBuffer) + 1)) {
+    if((msgType.length() + payload.length()) >= (sizeof(sendCommandBuffer)/sizeof(*sendCommandBuffer) + 1)) {
         printf("Error sending command, command too long\n");
         return;
     }
-    sprintf(sendCommandBuffer, "%s,%s", commandMsg, command.c_str());
+    sprintf(sendCommandBuffer, "%s,%s", msgType.c_str(), payload.c_str());
     printf("Sendig command: %s\n", sendCommandBuffer);
     webSocket.sendTXT(clientNumCaptain, sendCommandBuffer, strlen(sendCommandBuffer));
 }
