@@ -378,11 +378,13 @@ uint8_t TrackJetClass::battPercent() {
     return uint8_t(battPercentFiltered + 0.5);  // Add 0.5 to round correctly
 }
 
-uint16_t TrackJetClass::lineLeft() {
-    return analogReadData[LINE_SENSOR_LEFT];
-}
-uint16_t TrackJetClass::lineRight() {
-    return analogReadData[LINE_SENSOR_RIGHT];
+uint16_t TrackJetClass::lineRead(uint8_t index) {
+    if(index == 1)
+        return map(analogReadData[LINE_SENSOR_LEFT], 0, 4095, 0, 100); 
+    else if(index == 2)
+        return map(analogReadData[LINE_SENSOR_RIGHT], 0, 4095, 0, 100);
+    else 
+        return 0;
 }
 
 uint16_t TrackJetClass::lidarDistance() {

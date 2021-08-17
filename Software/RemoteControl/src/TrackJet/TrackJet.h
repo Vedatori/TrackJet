@@ -135,8 +135,7 @@ public:
     float battPercentCalc(float voltage);
     uint8_t battPercent();
 
-    uint16_t lineLeft();
-    uint16_t lineRight();
+    uint16_t lineRead(uint8_t index);
 
     uint16_t lidarDistance();
     void lidarUpdate();

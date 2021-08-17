@@ -18,15 +18,15 @@ ___
 * [Potenciometr](#potenciometr)
 * [Sériová linka](#seriovka)
 * [Motory](#motory)
+* [Enkodér](#enkoder)
 * [Serva](#serva)
 * [LIDAR](#lidar)
 * [Výpis textu na LED panel](#panelLed)
 * [Bzučák](#buzzer)
-* [Měření ujeté vzdálenosti](#odometr)
 * [Senzor čáry](#cara)
 * [WiFi](#wifi)
 * [Vzdálený příkazový řádek](#remoteCmd)
-* [Enkodér](#enkoder)
+* [Měření ujeté vzdálenosti](#odometr)
 ___
 ## <a name = IDE>Vývojové prostředí</a>
 
@@ -592,6 +592,12 @@ TrackJet.motorSetSpeed(2, 50);
 ```
 
 ___
+## <a name = enkoder>Enkodér</a>
+Enkodérem budeme mírně nepřesně nazývat otočný ovládací prvek podobný potenciometru. Na rozdíl od něj se však otáčí v krocích a umí se točit nepřetržitě dokola. Pro zjištění o kolik kroků byl od startu TrackJet otočen, zavoláme funkci `TrackJet.encoderRead()`. Pokud budeme chtít začít s počítáním kroků od znova, zavoláme funkci `TrackJet.encoderReset()`, která vrátí vracenou hodnotu zpět do nuly. 
+
+Enkodér v sobě integruje další tlačítko. Jeho stav zjistíme zavoláním funkce `TrackJet.encoderReadButton()`, která vrátí *true*, když je zmáčknut a *false* když ne.
+
+___
 ## <a name = serva>Serva</a>
 TrackJet má 3 sloty pro servomotory s indexy:
 * Index 1: servo radlice
@@ -638,13 +644,14 @@ Pro ovládání bzučáku slouží funkce `TrackJet.soundTone(frekvence)`, kde p
 Pro tvoření melodie je vhodné použít funkci `TrackJet.soundNote(tón, oktáva)`. Zde je třeba zadat parametr *tón* ve formátu `NOTE_C`, kde měníme poslední písmeno na jiný tón. Druhý parametr *oktáva* udává, ze které oktávy nastavený tón bude.
 
 ___
-## <a name = odometr>Měření ujeté vzdálenosti</a>
-
-___
 ## <a name = cara>Senzor čáry</a>
+TrackJet má na své spodní straně 2 infračervené reflexní senzory, které umí měřit světlost povrchu pod ním. To se může hodit když chceme, aby jel TrackJet po čáře. Čára musí být v takovém případě kontrastní k povrchu.
+
+Pro zjištění hodnoty světlosti povrchu zavoláme funkci `TrackJet.lineRead(index)`, kde *index* v hodnotě 1 značí levý senzor a v hodnotě 2 pravý senzor, podobně jako u motorů. Tato funkce vrátí hodnotu v rozsahu 0-100, kde 0 odpovídá tmavšímu povrchu a 100 odpovídá světlejšímu povrchu.
 
 ___
 ## <a name = wifi>WiFi</a>
+Pro spuštění WiFi a ovládací webové aplikace slouží funkce `TrackJet.startWiFiCaptain("<your_name>")`. Po jejím zavolání bude postaráno o vytvoření WiFi přístupového bodu (AP) v TrackJet a také o připojní k externí WiFi, jakmile má TrackJet správné přihlašovací údaje a je v dosahu. Také je spuštěn server hostující webovou aplikaci pro dálkové ovládání TrackJet.
 
 ___
 ## <a name = remoteCmd>Vzdálený příkazový řádek</a>
@@ -715,7 +722,7 @@ void loop() {
 ```
 
 ___
-## <a name = enkoder>Enkodér</a>
+## <a name = odometr>Měření ujeté vzdálenosti</a>
 TrackJet je vybaven senzory ujeté vzdálenosti, které nazýváme mírně slangově *enkodéry*. Fungují na principu optické brány, kde je paprsek světla přerušován vnitřními výstupky pásu. Tímto způsobem je možné získat celočíselnou proměnnou, která je zvýšena o 4 při každém posunu pásu o jeden celý segment. Aby enkodéry správně fungovaly, je třeba je zkalibrovat. K tomu je třeba přes vzdálený příkazový řádek zadat `encoder calibrate`. Po zadání bude probíhat kalibrace po dobu 5 sekund. Během této doby je nutné, aby se oba pásy pootočily o několik segmentů. Poté je kalibrace hotova a uložena. 
 
 Celočíselnou proměnnou udávající ujetouo vzdálenost získáme zavoláním funkce `TrackJet.encoderGetSteps(index)`, kde *index* je 1 pro levý pás a 2 pro pravý pás, podobně jako u motorů. 
