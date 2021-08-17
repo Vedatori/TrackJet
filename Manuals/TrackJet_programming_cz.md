@@ -23,10 +23,10 @@ ___
 * [LIDAR](#lidar)
 * [Výpis textu na LED panel](#panelLed)
 * [Bzučák](#buzzer)
-* [Měření ujeté vzdálenosti](#odometr)
 * [Senzor čáry](#cara)
 * [WiFi](#wifi)
 * [Vzdálený příkazový řádek](#remoteCmd)
+* [Měření ujeté vzdálenosti](#odometr)
 ___
 ## <a name = IDE>Vývojové prostředí</a>
 
@@ -440,7 +440,7 @@ Pro ovládání samostatných LED pod panelem TrackJet použijeme funkce:
 Pro ovládání LED na panelu TrackJet použijeme následující funkce:
 * `TrackJet.displaySingle(row, col, state);` - rozsvícení a zhasnutí jedné LED na panelu. Parametr `row` udává číslo řádku v rozsahu 0-nahoře po 7-dole. Parametr `col` udává číslo sloupce v rozsahu 0-vlevo po 7-vpravo. Parametr `state` je 0-nesvítí, 1-svítí.
 * `TrackJet.displaySingleAnalog(row, col, brightness);` - nastavení jasu jedné LED na panelu. Parametr `row` udává číslo řádku v rozsahu 0-nahoře po 7-dole. Parametr `col` udává číslo sloupce v rozsahu 0-vlevo po 7-vpravo. Parametr `brightness` je v rozsahu 0-nesvítí až do 12-plně svítí.
-* `TrackJet.displayAll()` - nastavení jasu všech LED na panelu. arametr `brightness` je v rozsahu 0-nesvítí až do 12-plně svítí.
+* `TrackJet.displayAll(brightness)` - nastavení jasu všech LED na panelu. arametr `brightness` je v rozsahu 0-nesvítí až do 12-plně svítí.
 
 Například pro rozsvícení LED na panelu vlevo dole použijeme příkaz:
 ```
@@ -520,33 +520,30 @@ ___
 ## <a name = seriovka>Sériová linka</a>
 
 ### Motivace
-Při programování robotů se často stane, že potřebujete s programem v robotovi komunikovat. Například když se snažíš odhalit chybu, vypisovat hodnotu senzorů nebo informovat uživatele o ději v programu. Pro tento účel nám poslouží sériová linka.
+Při programování robotů se často stane, že potřebujete s programem v robotovi komunikovat. Například když se snažíte odhalit chybu, vypisovat hodnotu senzorů nebo informovat uživatele o ději v programu. Pro tento účel nám poslouží sériová linka.
 
 ### Program pro výpis textu na sériové lince
-Pro výpis textu na sériové lince budeme používat příkaz `printf`. Abychom na sériové lince jedenkrát vypsali text *Hello World!*, použijeme následující program:
+Pro výpis textu na sériové lince budeme používat příkaz `printf`. Abyste na sériové lince jedenkrát vypsali text *Hello World!*, použijte následující program:
 ```
 #include "TrackJet/TrackJet.h"
 
 void setup() {
-    trrBegin();
-    printf("Hello World!\n");
+    TrackJet.begin();
 }
 
 void loop() {
-
+    printf("Hello World!\n");
+    delay(1000);
 }
 ```
-Okolo textu, který chceme vypsat je třeba vložit dvojité uvozovky `"text"`. Řetězec `/n` označuje znak pro odřádkování, čili obdoba tlačítku *ENTER* v textových editorech. 
+Okolo textu, který chceme vypsat, je třeba vložit dvojité uvozovky `"text"`. Řetězec `\n` označuje znak pro odřádkování, čili obdoba tlačítka *ENTER* v textových editorech. 
 
 ### Spuštění sériové linky
-1. Po nahrání programu do TrackJet necháme TrackJet připojený USB kabelem k PC.
+1. Po nahrání programu do TrackJet necháme TrackJet zapnutý a připojený USB kabelem k PC.
 1. Pomocí tlačítka v levé dolní liště PlatformIO ve tvaru zásuvky spustíme sériovou linku.
 
     ![alt](SupportFiles/prog_serial.png)
-1. Se spuštěnou sériovou linkou je třeba resetovat TrackJet, aby mohl jednou po startu vypsat žádaný text. Provedeme to stisknutím tlačítka RESET ze spodní strany modulu *ESP-CAM*:
-
-    ![alt](SupportFiles/prog_reset.jpg)
-1. Na otevřené sériové lince v dolní částí okna VS Code najedte zadatý textový řetězec *Hellp World!*:
+1. V monitoru sériové linky v dolní částí okna VS Code najdete příchozí zprávy z TrackJet. Uvidíte, že každou vteřinu přijde nová zpráva ve tvaru *Hello World!*, vždy na novém řádku:
     ![alt](SupportFiles/prog_hello.png)
 
 ### Výpis hodnot proměnných
@@ -556,7 +553,7 @@ Okolo textu, který chceme vypsat je třeba vložit dvojité uvozovky `"text"`. 
 * %c - (char) označuje znak
 * %s - (string) značí řetězec 
 
-Pro úpravu formátu vypisovaných proměnných máme mnoho dalších možností, které nalezneš například na [Wiki](https://cs.wikipedia.org/wiki/Printf#Form%C3%A1tovac%C3%AD_%C5%99et%C4%9Bzec). Pro výpis celočíselné proměnné `cele_cislo` do sériové linky použijeme následující příkaz:
+Pro úpravu formátu vypisovaných proměnných máme mnoho dalších možností, které jsou například na [Wiki](https://cs.wikipedia.org/wiki/Printf#Form%C3%A1tovac%C3%AD_%C5%99et%C4%9Bzec). Pro výpis celočíselné proměnné `cele_cislo` do sériové linky použijeme následující příkaz:
 ```
 printf("%d\n", cele_cislo);
 ```
@@ -566,57 +563,72 @@ Příklad: Pro opakovaný výpis času od startu TrackJet použijeme následují
 #include "TrackJet/TrackJet.h"
 
 void setup() {
-    trrBegin();
+    TrackJet.begin();
 }
 
 void loop() {
     printf("%d\n", millis());
-    delay(500);
+    delay(1000);
 }
 ```
-Funkce `millis()` nám vrací počet uplynulých milisekund od startu programu jako celé číslo.
+Funkce `millis()` nám vrací počet uplynulých milisekund od startu TrackJet jako celé číslo.
 
 ___
 ## <a name = motory>Motory</a>
-Nyní konečně pořádně oživíme TrackJet a začneme s ním pohybovat.
+Nyní konečně pořádně oživíme TrackJet a začneme s ním jezdit.
 
-Pro řízení motorů můžete použít následující příkazy:
-* `trrMotorsSetSpeed()` - nastaví rychlost obou motorů podle 2 zadaných číselných parametrů v rozshahu -100 až 100.
-* `trrMotorsSetSpeedLeft()` - nastaví rychlost levého motoru podle zadaného číselného parametru v rozshahu -100 až 100.
-* `trrMotorsSetSpeedRight()` - nastaví rychlost pravého motoru podle zadaného číselného parametru v rozshahu -100 až 100.
+Pro řízení motorů můžete použít příkaz `TrackJet.motorSetSpeed(index, speed)`. *index* určuje, který motor ovládáme. Indexy motorů odpovídají popiskům na desce elektroniky. TrackJet disponuje následujícími motory:
+* Index 1: motor levého pásu. Točí se na obě strany. Rozsah *speed* -100 až 100 (dopředu). Max. napětí 10V.
+* Index 2: motor pravého pásu. Točí se na obě strany. Rozsah *speed* -100 až 100 (dopředu). Max. napětí 10V.
+* Index 3: volný konektor. Točí se jednosměrně. Rozsah *speed* 0 až 100. Max. napětí 10V.
+* Index 4: volný konektor. Točí se jednosměrně. Rozsah *speed* 0 až 100. Max. napětí 5V.
+* Index 5: volný konektor. Točí se jednosměrně. Rozsah *speed* 0 až 100. Max. napětí 10V.
+* Index 6: volný konektor. Točí se jednosměrně. Rozsah *speed* 0 až 100. Max. napětí 5V.
 
-Příklad: Následujícím příkazem rozjedeme TrackJet na poloviční rychlost dopředu:
+Příklad: Následujícími příkazy rozjedeme TrackJet na poloviční rychlost dopředu:
 ```
-trrMotorsSetSpeed(50, 50);
-```
-Úplně stejně bude fungovat i následující dvojice příkazů:
-```
-trrMotorsSetSpeedLeft(50);
-trrMotorsSetSpeedRight(50);
+TrackJet.motorSetSpeed(1, 50);
+TrackJet.motorSetSpeed(2, 50);
 ```
 
 ___
 ## <a name = enkoder>Enkodér</a>
+Enkodérem budeme mírně nepřesně nazývat otočný ovládací prvek podobný potenciometru. Na rozdíl od něj se však otáčí v krocích a umí se točit nepřetržitě dokola. Pro zjištění o kolik kroků byl od startu TrackJet otočen, zavoláme funkci `TrackJet.encoderRead()`. Pokud budeme chtít začít s počítáním kroků od znova, zavoláme funkci `TrackJet.encoderReset()`, která vrátí vracenou hodnotu zpět do nuly. 
+
+Enkodér v sobě integruje další tlačítko. Jeho stav zjistíme zavoláním funkce `TrackJet.encoderReadButton()`, která vrátí *true*, když je zmáčknut a *false* když ne.
 
 ___
 ## <a name = serva>Serva</a>
+TrackJet má 3 sloty pro servomotory s indexy:
+* Index 1: servo radlice
+* Index 2: servo LIDARu
+* Index 3: volný konektor
+
+Pro nastavení polohy serva použijeme funkci `TrackJet.servoSetPosition(index, pozice)`, kde *index* popisuje, které servo chceme nastavit, a *pozice* popisuje žádanou polohu serva, čili úhel v rozsahu 0-180.
+
+Standardně jsou serva nastavena na plnou rychlost pohybu, tj. 600°/s. Pokud chceme, aby se pohybovalo pomaleji, můžeme tuto rychlost snižit funkci `TrackJet.servoSetSpeed(index, rychlost)`. Zde *rychlost* značí nastavenou rychlost pohybu serva v rozsahu 0-600°/s.
 
 ___
 ## <a name = lidar>LIDAR</a>
+Pro zjištění měřené vzdálenosti od překážky senzorem LIDAR použijeme funkci `TrackJet.lidarDistance()`. Ta nám vrátí celé číslo udávající počet milimetrů od překážky. 
 
 ___
 ## <a name = panelLed>Výpis textu na LED panel</a>
-Pro výpis textu na LED panel TrackJet slouží následující funkce:
-* `trrDisplayText(String text, bool sweep = true)` - postupně vypíše zadaný *text* v datovém typu *String*. Druhý pravdivostní parametr *sweep* je nepovinný a určuje, zda bude text odjíždět vlevo (*true*) nebo budou znaky pouze přeblikávat bez animace (*false*). Bez uvedení parametru *sweep* bude text odjíždět vlevo.
-* `trrIsDisplayingText()` - vrací pravdivostní hodnotu (*true* nebo *false*) označující jestli je aktuálně vypisován zadaný text.
+Pro ukázání jedné celé číslice na panelu TrackJet použijeme funkci `TrackJet.displayDigit(cislo)`, kde *cislo* je celočíselná proměnná v rozsahu 0-9. Pro zobrazení číslice *4* tedy použijeme `TrackJet.displayDigit(4)`.
+
+Pro ukázaní jednoho znaku na panelu TrackJet použijeme funkci `TrackJet.displayChar(znak)`, kde *znak* je proměnná typu *char*. Pro zobrazení znaku *a* tedy použijeme `TrackJet.displayChar('a')`. Tímto způsobem můžeme zobrazovat i číslovky jako v předchozím případě nebo i velká písmena. Přidáním nepovinných parametrů *posunVpravo* a *posunDolu* ve variantě příkazu `TrackJet.displayChar(znak, posunVpravo, posunDolu)` můžeme znak posunovat po obrazovce. Přidané parametry udávají v celých číslech, o kolik LED bude znak posunut.
+
+Pro výpis delšího textu na panel TrackJet slouží funkce `TrackJet.displayText(text)`. Ta postupně vypíše zadaný *text* z proměnné typu *String*. Pro vypsání textu *ahoj* tedy použijeme `TrackJet.displayText("ahoj")`. V základní variantě odjíždí text postupně doleva z panelu. Pro postupné vypsání jednotlivých znaků textu bez posunu přidejte nepovinný binární parametr v hodnotě *false*, tedy `TrackJet.displayText("ahoj", false)`.
+
+Funkce pro postupný výpis více zpráv se bude hodit funkce `TrackJet.displayIsBusy()`. Ta vrací pravdivostní hodnotu (*true* nebo *false*) označující jestli je aktuálně vypisován v minulosti zadaný text.
 
 Příklad: Následující program při startu vypíše text "TrackJet is starting" v pohyblivém módu textu.
 ```
 #include "TrackJet/TrackJet.h"
 
 void setup() {
-    trrBegin();
-    trrDisplayText("TrackJet is starting");
+    TrackJet.begin();
+    TrackJet.displayText("TrackJet is starting");
 }
 
 void loop() {
@@ -627,84 +639,92 @@ void loop() {
 ___
 ## <a name = buzzer>Bzučák</a>
 
-Pro ovládání bzučáku slouží funkce `trrBuzzerBeep()`. Jako parametr uvedeme délku pípnutí v milisekundách. Následující příkaz pípne bzučákem na půl vteřiny:
+Pro ovládání bzučáku slouží funkce `TrackJet.soundTone(frekvence)`, kde parametr *frekvence* značí frekvenci zvuku v jednotce Hertz (Hz nebo 1/s). Tento tón bude hrát do té doby, dokud TrackJet nevypnete nebo nezavoláte funkci `TrackJet.soundEnd()`.
 
-`trrBuzzerBeep(500);`
-
-___
-## <a name = odometr>Měření ujeté vzdálenosti</a>
+Pro tvoření melodie je vhodné použít funkci `TrackJet.soundNote(tón, oktáva)`. Zde je třeba zadat parametr *tón* ve formátu `NOTE_C`, kde měníme poslední písmeno na jiný tón. Druhý parametr *oktáva* udává, ze které oktávy nastavený tón bude.
 
 ___
 ## <a name = cara>Senzor čáry</a>
+TrackJet má na své spodní straně 2 infračervené reflexní senzory, které umí měřit světlost povrchu pod ním. To se může hodit když chceme, aby jel TrackJet po čáře. Čára musí být v takovém případě kontrastní k povrchu.
+
+Pro zjištění hodnoty světlosti povrchu zavoláme funkci `TrackJet.lineRead(index)`, kde *index* v hodnotě 1 značí levý senzor a v hodnotě 2 pravý senzor, podobně jako u motorů. Tato funkce vrátí hodnotu v rozsahu 0-100, kde 0 odpovídá tmavšímu povrchu a 100 odpovídá světlejšímu povrchu.
 
 ___
 ## <a name = wifi>WiFi</a>
+Pro spuštění WiFi a ovládací webové aplikace slouží funkce `TrackJet.startWiFiCaptain("<your_name>")`. Po jejím zavolání bude postaráno o vytvoření WiFi přístupového bodu (AP) v TrackJet a také o připojní k externí WiFi, jakmile má TrackJet správné přihlašovací údaje a je v dosahu. Také je spuštěn server hostující webovou aplikaci pro dálkové ovládání TrackJet.
 
 ___
 ## <a name = remoteCmd>Vzdálený příkazový řádek</a>
-Pro dálkové ovládání TrackJet můžeš použít i textové příkazy. Ty budeš zadávat do pole *Command entry* na webové stránce dálkového ovládání. Po stisku tlačítka *Enter* (funguje i na klávesnici) je zadaný příkaz odeslán do TrackJet. K použítí přijatého příkazu budeme používat následující funkce:
-* `trrCommandGet()` - vrací textový řetězec (proměnnou typu *String*) obsahující aktuálně přijatý příkaz.
-* `trrCommandGetIndexed(uint8_t index)` - vrací textový řetězec obsahující jedno slovo z přijatého příkazu. Slova jsou oddělena mezerami a číslována od 0.
-* `trrCommandClear()` - vymaže obsah aktuálně přijatého příkazu.
+Pro dálkové ovládání TrackJet můžete použít i textové příkazy. Ty budete zadávat do pole *Command entry* na webové stránce dálkového ovládání. Po stisku tlačítka *Enter* (funguje i na klávesnici) je zadaný příkaz odeslán do TrackJet. K použítí přijatého příkazu budeme používat následující funkce:
+* `TrackJet.commandGet()` - vrací textový řetězec (proměnnou typu *String*) obsahující aktuálně přijatý příkaz.
+* `TrackJet.commandGetIndexed(index)` - vrací textový řetězec obsahující jedno slovo z přijatého příkazu. Slova jsou oddělena mezerami a číslována od 0.
+* `TrackJet.commandClear()` - vymaže obsah celého aktuálně přijatého příkazu.
 
-Příklad: Následující program blikne LED reflektorem po obdržení příkazu "flash":
+Příklad: Následující program pípne bzučákem na frekvenci 1kHz po 0,5 sekundy po obdržení příkazu "beep":
 ```
 #include "TrackJet/TrackJet.h"
 
 void setup() {
-    trrBegin();
-    trrWiFiControlStart("TrackJet", "12345678");    // password length minimally 8 characters
+    TrackJet.begin();
+    TrackJet.startWiFiCaptain("<your_name>");
 }
 
 void loop() {
-    if(trrCommandGet() == "flash") {
-        trrSetFlashLightAnalog(50);
-        delay(500);
-        trrSetFlashLightAnalog(0);
-        trrCommandClear();  // nutné jinak bude v paměti pořád příkaz "flash" a LED bude pořád svítit
-    }
-    delay(200);
+    if(TrackJet.commandGet() == "beep") {
+            TrackJet.soundTone(1000);
+            delay(500);
+            TrackJet.soundEnd();
+            TrackJet.commandClear();  // nutné jinak bude v paměti pořád příkaz "flash" a LED bude pořád svítit
+        }
+    delay(100);
 }
 ```
 
-Příklad: Následující program rozsvítí LED na příkaz "flash on" a zhasne na příkaz "flash off":
+Příklad: Následující program spustí bzučák na příkaz "buzzer on" a vypne ho na příkaz "buzzer off":
 ```
 #include "TrackJet/TrackJet.h"
 
 void setup() {
-    trrBegin();
-    trrWiFiControlStart("TrackJet", "12345678");    // password length minimally 8 characters
+    TrackJet.begin();
+    TrackJet.startWiFiCaptain("<your_name>");
 }
 
 void loop() {
-    if(trrCommandGetIndexed(0) == "flash") {
+    if(TrackJet.commandGetIndexed(0) == "buzzer") {
         if(trrCommandGetIndexed(1) == "on") {
-            trrSetFlashLightAnalog(50);
+            TrackJet.soundTone(1000);
         }
         else if(trrCommandGetIndexed(1) == "off") {
-            trrSetFlashLightAnalog(0);
+            TrackJet.soundEnd();
         }
-        trrCommandClear();
+        TrackJet.commandClear();
     }
-    delay(200);
+    delay(100);
 }
 ```
 
 TrackJet umožňuje textovou komunikaci i opačným směrem, tedy z TrackJet do webové stránky dálkového ovládání.
-* `trrCommandSend(String command)` - odešle textový příkaz z TrackJet a zobrazí ho šedě v poli *Command entry*.
+* `TrackJet.commandSend(command)` - odešle textový příkaz *command* z TrackJet a zobrazí ho šedě v poli *Command entry*.
 
 Příklad: Následující program bude v textovém poli *Command entry* vypisovat stav tlačítka TrackJet:
 ```
 #include "TrackJet/TrackJet.h"
 
 void setup() {
-    trrBegin();
-    trrWiFiControlStart("TrackJet", "12345678");    // password length minimally 8 characters
+    TrackJet.begin();
+    TrackJet.startWiFiCaptain("<your_name>");
 }
 
 void loop() {
-    trrCommandSend(String(TrackJet.buttonRead;()));
-    delay(200);
+    TrackJet.commandSend(String(TrackJet.buttonRead()));
+    delay(500);
 }
 ```
 
+___
+## <a name = odometr>Měření ujeté vzdálenosti</a>
+TrackJet je vybaven senzory ujeté vzdálenosti, které nazýváme mírně slangově *enkodéry*. Fungují na principu optické brány, kde je paprsek světla přerušován vnitřními výstupky pásu. Tímto způsobem je možné získat celočíselnou proměnnou, která je zvýšena o 4 při každém posunu pásu o jeden celý segment. Aby enkodéry správně fungovaly, je třeba je zkalibrovat. K tomu je třeba přes vzdálený příkazový řádek zadat `encoder calibrate`. Po zadání bude probíhat kalibrace po dobu 5 sekund. Během této doby je nutné, aby se oba pásy pootočily o několik segmentů. Poté je kalibrace hotova a uložena. 
+
+Celočíselnou proměnnou udávající ujetouo vzdálenost získáme zavoláním funkce `TrackJet.encoderGetSteps(index)`, kde *index* je 1 pro levý pás a 2 pro pravý pás, podobně jako u motorů. 
+
+Pro získání ujeté vzdálenosti daného pásu použijeme funkci `TrackJet.encoderGetDistance(index)`, která nám vrátí ujetou vzdálenost daného pásu vyjádřenou v milimetrech jako desetinné číslo.

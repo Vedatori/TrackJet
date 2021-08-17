@@ -88,9 +88,11 @@ void TJ::handleSW(){
 }
 
 TrackJetClass::TrackJetClass(void) {
-    for(uint8_t i = 0; i < 3; ++i) {
+    for(uint8_t i = 0; i < 2; ++i) {
         motorsSpeed[i] = 0;
-        motorsSpeedFiltered[i] = 0;
+        //motorsSpeedFiltered[i] = 0;
+    }
+    for(uint8_t i = 0; i < 3; ++i) {
         gyroYPR[i] = 0;
         gyroOffsets[i] = 0;
         accelOffsets[i] = 0;
@@ -185,34 +187,40 @@ int16_t TrackJetClass::encoderRead() {
 void TrackJetClass::encoderReset() {
     TJ::quadEnc.clear();
 }
-void TrackJetClass::motorsSetSpeed(const int8_t speed, const int8_t index) {
-    if(index == 0 || index == 1) {
+void TrackJetClass::motorSetSpeed(const int8_t index, int8_t speed) {
+    if(index == 1 || index == 2) {
         if(speed < -100)
-            motorsSpeed[index] = -100;
+            speed = -100;
         else if(speed > 100)
-            motorsSpeed[index] = 100;
-        else
-            motorsSpeed[index] = speed;
+            speed = 100;
+        motorsSpeed[index - 1] = speed;
     }
-    else if(index == 2) {
+    else {
         if(speed < 0)
-            motorsSpeed[index] = 0;
+            speed = 0;
         else if(speed > 100)
-            motorsSpeed[index] = 100;
-        else
-            motorsSpeed[index] = speed;
+            speed = 100;
+
+        if(index == 3)
+            TJ::serialPWM.setPWM(MOT3, speed);
+        if(index == 4)
+            TJ::serialPWM.setPWM(MOT4, speed);
+        if(index == 5)
+            TJ::serialPWM.setPWM(MOT5, speed);
+        if(index == 6)
+            TJ::serialPWM.setPWM(MOT6, speed);
     }
     
 }
 void TrackJetClass::motorsUpdateSpeed() {
     if(connectionEnabled == true && connectionActive == false) {
-        for(uint8_t i = 0; i < 3; ++i) {
+        for(uint8_t i = 0; i < 2; ++i) {
             motorsSpeed[i] = 0;
         }
     }
 
     // Switch PFM/PWM step up converter mode
-    if(motorsSpeed[0] != 0 || motorsSpeed[1] != 0 || motorsSpeed[2]) {
+    if(motorsSpeed[0] != 0 || motorsSpeed[1] != 0) {
         TJ::serialPWM.setPWM(STEP_MODE, 0);     // PWM mode - High power
         
     }
@@ -221,28 +229,28 @@ void TrackJetClass::motorsUpdateSpeed() {
     }
 
     // Filter motor speeds and turn off when connection not active
-    for(uint8_t i = 0; i < 3; ++i) {
+    /*for(uint8_t i = 0; i < 2; ++i) {
         motorsSpeedFiltered[i] = motorsSpeed[i] * TJ::MOTOR_SPEED_FILTER_UPDATE_COEF + motorsSpeedFiltered[i] * (1 - TJ::MOTOR_SPEED_FILTER_UPDATE_COEF);
-    }
+    }*/
     
     // Left motor
-    if(motorsSpeedFiltered[0] > 0) {
-        TJ::serialPWM.setPWM(MOTB1, (int)motorsSpeedFiltered[0]);
-        TJ::serialPWM.setPWM(MOTB2, 0);
+    if(motorsSpeed[0] > 0) {
+        TJ::serialPWM.setPWM(MOT2A, (int)motorsSpeed[0]);
+        TJ::serialPWM.setPWM(MOT2B, 0);
     }
     else {
-        TJ::serialPWM.setPWM(MOTB1, 0);
-        TJ::serialPWM.setPWM(MOTB2, -(int)motorsSpeedFiltered[0]);
+        TJ::serialPWM.setPWM(MOT2A, 0);
+        TJ::serialPWM.setPWM(MOT2B, -(int)motorsSpeed[0]);
     }
 
     // Right motor
-    if(motorsSpeedFiltered[1] > 0) {
-        TJ::serialPWM.setPWM(MOTA1, 0);
-        TJ::serialPWM.setPWM(MOTA2, (int)motorsSpeedFiltered[1]);
+    if(motorsSpeed[1] > 0) {
+        TJ::serialPWM.setPWM(MOT1A, 0);
+        TJ::serialPWM.setPWM(MOT1B, (int)motorsSpeed[1]);
     }
     else {
-        TJ::serialPWM.setPWM(MOTA1, -(int)motorsSpeedFiltered[1]);
-        TJ::serialPWM.setPWM(MOTA2, 0);
+        TJ::serialPWM.setPWM(MOT1A, -(int)motorsSpeed[1]);
+        TJ::serialPWM.setPWM(MOT1B, 0);
     }
 }
 
@@ -257,10 +265,20 @@ void TrackJetClass::controlMovement(const int8_t joystickX, const int8_t joystic
     engineLeftSpeed = constrain(engineLeftSpeed, -100, 100);
     engineRightSpeed = constrain(engineRightSpeed, -100, 100);
 
-    motorsSetSpeed(engineLeftSpeed, 0);
-    motorsSetSpeed(engineRightSpeed, 1);
+    motorSetSpeed(1, engineLeftSpeed);
+    motorSetSpeed(2, engineRightSpeed);
 }
 
+int16_t TrackJetClass::encoderGetSteps(uint8_t encID) {
+    if(encID != 1 && encID != 2)
+        return 0;
+    return encSteps[encID - 1];
+}
+float TrackJetClass::encoderGetDistance(uint8_t encID) {
+    if(encID != 1 && encID != 2)
+        return 0;
+    return encSteps[encID - 1]*2.75;
+}
 float TrackJetClass::encoderGetSpeed(uint8_t encID) {
     static int16_t prevEncSteps = 0;
     static uint32_t prevTime = 0;
@@ -360,11 +378,13 @@ uint8_t TrackJetClass::battPercent() {
     return uint8_t(battPercentFiltered + 0.5);  // Add 0.5 to round correctly
 }
 
-uint16_t TrackJetClass::lineLeft() {
-    return analogReadData[LINE_SENSOR_LEFT];
-}
-uint16_t TrackJetClass::lineRight() {
-    return analogReadData[LINE_SENSOR_RIGHT];
+uint16_t TrackJetClass::lineRead(uint8_t index) {
+    if(index == 1)
+        return map(analogReadData[LINE_SENSOR_LEFT], 0, 4095, 0, 100); 
+    else if(index == 2)
+        return map(analogReadData[LINE_SENSOR_RIGHT], 0, 4095, 0, 100);
+    else 
+        return 0;
 }
 
 uint16_t TrackJetClass::lidarDistance() {
@@ -541,8 +561,20 @@ void TrackJetClass::commandSend(String command) {
 }
 
 void TrackJetClass::internCommandHandle() {
+    static uint8_t counter = 0;
+    if(counter < 20) {
+        counter++;
+        return;
+    }
+    else {
+        counter = 0;
+    }
     if(TrackJet.commandGetIndexed(0) == "reset") {
         ESP.restart();
+    }
+    else if(TrackJet.commandGet() == "encoder calibrate") {
+        TrackJet.encoderCalibrate(5000);    //calibrate for 5s
+        TrackJet.commandClear();
     }
 }
 

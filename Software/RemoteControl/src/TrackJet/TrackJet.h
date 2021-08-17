@@ -67,7 +67,7 @@ void handleSW();
 }
 
 enum shiftRegPins {
-    MOTA1, MOTA2, MOTB1, MOTB2, STEP_EN, STEP_MODE, MOT1, MOT2, MOT3, MOT4, 
+    MOT1A, MOT1B, MOT2A, MOT2B, STEP_EN, STEP_MODE, MOT3, MOT4, MOT5, MOT6, 
     XSHUT, LED2, LED1, MUXA, MUXB, MUXC
 };
 
@@ -77,8 +77,8 @@ enum adcMuxPins {
 
 class TrackJetClass {
     bool beginCalled = false;
-    int8_t motorsSpeed[3];
-    float motorsSpeedFiltered[3];
+    int8_t motorsSpeed[2];
+    //float motorsSpeedFiltered[2];
     uint8_t gyroStatus = 0; // 0-disabled, 1-running, 2-calibrating
     float gyroYPR[3];
     float gyroOffsets[3];
@@ -106,10 +106,12 @@ public:
     int16_t encoderRead();
     void encoderReset();
 
-    void motorsSetSpeed(const int8_t speed, const int8_t index);
+    void motorSetSpeed(const int8_t index, int8_t speed);
     void motorsUpdateSpeed();
     void controlMovement(const int8_t joystickX, const int8_t joystickY);
 
+    int16_t encoderGetSteps(uint8_t encID);
+    float encoderGetDistance(uint8_t encID);
     float encoderGetSpeed(uint8_t encID);
 
     void servoSetPosition(uint8_t servoID, float position);     // servoID 0, 1, 2; position 0-180 [°]
@@ -133,8 +135,7 @@ public:
     float battPercentCalc(float voltage);
     uint8_t battPercent();
 
-    uint16_t lineLeft();
-    uint16_t lineRight();
+    uint16_t lineRead(uint8_t index);
 
     uint16_t lidarDistance();
     void lidarUpdate();
