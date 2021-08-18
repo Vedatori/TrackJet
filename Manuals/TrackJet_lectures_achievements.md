@@ -54,7 +54,7 @@ TrackJet začne komunikovat s počítačem pomocí sériové linky.
 Napiště program, který bude na sériovou linku vypisovat hodnotu natočení potenciometru.
 
 ## Úkol 11 - Vysání času od startu TrackJet bez funkce millis()
-Napište program, který bude vypisovat celočíselnou proměnnou každou vteřinu. Tuto proměnnou však každou milisekundu zvyšte o 1. Je chování tohoto programu stejné jako v případě použití `funkce millis()`?
+Napište program, který bude vypisovat celočíselnou proměnnou každou vteřinu. Tuto proměnnou však každou milisekundu zvyšte o 1. Je chování tohoto programu stejné jako v případě použití funkce `millis()`?
 
 # Lekce 6
 Přečteme stav rotačního enkodéru a rozpohybujeme servomotory.
