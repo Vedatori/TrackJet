@@ -19,7 +19,6 @@
 			<text id="batteryStatus">Battery: ---% </text><text id="batteryVoltage">---V</text>
 		</div>
 
-
 		<br>
 		<br>
 		<br>
@@ -94,9 +93,7 @@
 						break;
 					case "battery":
 						document.getElementById('batteryStatus').innerText = "Battery: " + parsedMessage[1] + "% ";
-						break;
-					case "batteryVoltage":
-						document.getElementById('batteryVoltage').innerText = parsedMessage[1] + "V";
+						document.getElementById('batteryVoltage').innerText = parsedMessage[2] + "V";
 						break;
 					default:
 						break;
