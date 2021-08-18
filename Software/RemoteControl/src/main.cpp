@@ -22,7 +22,7 @@ void loop() {
             TrackJet.displayText(String(TrackJet.battPercent())+"   ", false);
         }
         //printf("Button %d, Enc %d, %d, %d\n", TrackJet.buttonRead(), TrackJet.encoderRead(), TrackJet.encoderReadButton(), TrackJet.encoderReadButtonPulse());
-        printf("%d\n", TrackJet.battPercent());
+        //printf("%d\n", TrackJet.battPercent());
 
         TrackJet.msgSend("battery",String(TrackJet.battPercent()));
         TrackJet.msgSend("batteryVoltage",String(((float)((int)(TrackJet.battVolt()*100)))/100));
@@ -31,7 +31,7 @@ void loop() {
         prevEnc1 = TrackJet.encoderGetSteps(1);
         prevEnc2 = TrackJet.encoderGetSteps(2);
 
-        Serial.printf("pot %d battV %f battP %d lineL %d lineR %d\n", TrackJet.potentiometerRead(), TrackJet.battVolt(), TrackJet.battPercent(), TrackJet.lineRead(1), TrackJet.lineRead(2));
+        //Serial.printf("pot %d battV %f battP %d lineL %d lineR %d\n", TrackJet.potentiometerRead(), TrackJet.battVolt(), TrackJet.battPercent(), TrackJet.lineRead(1), TrackJet.lineRead(2));
 
         if(TrackJet.commandGetIndexed(0) == "blade") {
             TrackJet.servoSetPosition(0, TrackJet.commandGetIndexed(1).toInt());

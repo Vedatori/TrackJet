@@ -14,10 +14,10 @@
 	<body>
 		<div class = "wrapper">
 			<div class="box"><h1 style="font-size:3.5vh;text-align:center"><font color = "#F5F5F5" face='verdana'>
-				<a href="/info.html" target="_blank">TrackJet</a><br>Remote Control
+				<a href="/info.html">TrackJet</a><br>Remote Control
 			</font></h1></div>
 			<div class="box3" id="position">
-				<a id="batteryStatus">Battery: ---% </a><a id="batteryVoltage">---V</a>
+				<p id="batteryStatus" style="color: #FFE640;">Battery: ---% </p>
 				<input type = "text" id = "commandInput" placeholder = "Command entry" autofocus="autofocus"/>
 				<input type = "button" value = "Enter" onclick = "commandEnter()"/>
 				<a href='/wifi'><input type = "button" value = "WiFi setup"/></a>
@@ -225,9 +225,8 @@
 			var clientConnected = false;
 			function init() {
 				// Connect to WebSocket server
-				var str = window.location.href;
-				clientURL = str.substring(4, str.length - 1);
-				clientURL = "ws" + clientURL + ":1337";
+				var str = window.location.hostname;
+                clientURL = "ws://" + str + ":1337";
 				wsConnect(clientURL);
 				console.log(clientURL);
 			}
@@ -281,9 +280,6 @@
 						break;
 					case "battery":
 						document.getElementById('batteryStatus').innerText = "Battery: " + parsedMessage[1] + "% ";
-						break;
-					case "batteryVoltage":
-						document.getElementById('batteryVoltage').innerText = parsedMessage[1] + "V";
 						break;
 					default:
 						break;
