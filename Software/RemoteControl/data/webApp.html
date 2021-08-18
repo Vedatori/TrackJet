@@ -13,12 +13,11 @@
 	</head>
 	<body>
 		<div class = "wrapper">
-			<div class="box1"><a href="http://wp.vedatori.com/" target="_blank"><img src="http://wp.vedatori.com/wp-content/uploads/2019/03/logo-2-e1551903315141.png" alt="vedatori.com" style="height:10vh;" align="middle"></a></div>
-			<div class="box2"><h1 style="font-size:3.5vh;text-align:center"><font color = "#F5F5F5" face='verdana'>
-				<a href="https://github.com/vedatori/TrackJet" target="_blank">TrackJet</a><br>Remote Control
+			<div class="box"><h1 style="font-size:3.5vh;text-align:center"><font color = "#F5F5F5" face='verdana'>
+				<a href="/info.html" target="_blank">TrackJet</a><br>Remote Control
 			</font></h1></div>
 			<div class="box3" id="position">
-				<a id="batteryStatus">Battery: ---%</a>
+				<a id="batteryStatus">Battery: ---% </a><a id="batteryVoltage">---V</a>
 				<input type = "text" id = "commandInput" placeholder = "Command entry" autofocus="autofocus"/>
 				<input type = "button" value = "Enter" onclick = "commandEnter()"/>
 				<a href='/wifi'><input type = "button" value = "WiFi setup"/></a>
@@ -281,7 +280,10 @@
 						document.getElementById('commandInput').placeholder = parsedMessage[1];
 						break;
 					case "battery":
-						document.getElementById('batteryStatus').innerText = "Battery: " + parsedMessage[1] + "%";
+						document.getElementById('batteryStatus').innerText = "Battery: " + parsedMessage[1] + "% ";
+						break;
+					case "batteryVoltage":
+						document.getElementById('batteryVoltage').innerText = parsedMessage[1] + "V";
 						break;
 					default:
 						break;

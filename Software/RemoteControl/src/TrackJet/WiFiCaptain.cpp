@@ -40,6 +40,13 @@ void handleRoot() {
 
     lastConnectionType = (webserver.client().localIP() == WiFi.softAPIP());
 }
+void handleInfo() {
+    File f = SPIFFS.open("/info.html", "r");
+    webserver.streamFile(f, "text/html");
+    f.close();
+
+    lastConnectionType = (webserver.client().localIP() == WiFi.softAPIP());
+}
 void handleStyle() {
     File f = SPIFFS.open("/style.css", "r");
     webserver.streamFile(f, "text/css");
@@ -241,6 +248,7 @@ void wifiCaptInit() {
     webserver.on("/wifi", handleWifi);
     webserver.on("/wifisave", handleWifiSave);
     webserver.on("/softApEnable", handleSoftApEnable);
+    webserver.on("/info.html", handleInfo);
     webserver.onNotFound(handleNotFound);
     
     webserver.begin();
