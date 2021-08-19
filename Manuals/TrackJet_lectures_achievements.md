@@ -69,48 +69,52 @@ Napište program, který přečte polohu potenciometru a podle ní nastaví polo
 Napište program, který nastaví rychlost serva 2 (LIDAR) na **polovinu** jeho maximální rychlosti. Touto rychlostí jezděte se servem periodicky mezi krajmíni polohami.
 
 # Lekce 7
-Rozblikáme LED bez použití příkazu delay().
-
-# Lekce 8
-Ukážeme si cyklus.
-
-## Úkol - 
-Napište program, který bude postupně vyblikávat všechny LEDky v jednom řádku LED panelu. Vždy svítí jen jedna LED.
-
-## Úkol - 
-Napište program, který bude postupně vyblikávat všechny LEDky v jednom řádku LED panelu. Vlna se bude symstricky zpět. Vždy svítí jen jedna LED. Blikání bude připomínat vzor na [slavném inteligentním autě K.I.T.T.](https://www.youtube.com/watch?v=oNyXYPhnUIs&ab_channel=NBCClassics).
-
-# Lekce 9
 Budeme měřit vzdálenost mezi překážkou a TrackJet pomocí senzoru LIDAR.
 
-## Úkol - Parkovací senzory
+## Úkol 14 - Parkovací senzory
 Napište program, který bude na sériovou linku posílat sekvenci znaků tak dlouhou, kolik desítek centimetrů je mezi LIDAR senzorem a překážkou. Např. při měření vzdálenosti 40 cm bude program vypisovat na jedden řádek eskvenci `####`. 
 
-## Úkol - Držení si odstupu
+## Úkol 15 - Držení si odstupu
 Napište program, který zajistí, že si TrackJet bude udržovat odstup od překážky (ruky programátora) na vzdálenost 30 cm. Když je vzdálenost větší, pojede dopředu a když menší, bude couvat. Pozor, aby nezačal kmitat, nemusí být udržovaná vzdálenost úplně přesná.
 
-# Lekce 10
+# Lekce 8
 Rozezníme bzučák na TrackJet a ukážeme si jak nastavit jeho frekvenci na konkrétní tóny.
 
-## Úkol - Hraní melodie
+## Úkol 16 - Hraní melodie
 Napište program, který zahraje vaši oblíbenou melodii (oblíbená píseň, film, opera) nebo jakoukoliv jinou melodii o alespoň 5 notách.
 
-## Úkol - Klakson
+## Úkol 17 - Klakson
 Napište program, který *zatroubí* bzučákem v případě, že je čtení vzdálenosti z LIDARu menší než 5 cm.
 
-## Úkol - Theremin
+## Úkol 18- Theremin
 Napište program, který bude číst vzdálenost od překážky z LIDARu a podle této vzdálenosti bude nastavovat frekvenci bzučáku. Zahrejte vedoucímu hezkou melodii.
 
-# Lekce 11
+# Lekce 9
 Ukážeme si spuštění WiFi knihovny a použití vzdáleného příkazového řádku.
 
-## Úkol - 
+## Úkol 19 - Vzdálené měření vzdálenosti
 Napište program, který po zadání příkazu "dist" do vzdáleného příkazového řádku vrátí měřenou vzdálenost od překážky LIDARem.
 
-# Lekce 12
+# Lekce 10
+Rozblikáme LED bez použití příkazu delay(). Ukážeme si cyklus.
+
+## Úkol 20 - Vlna
+Napište program, který bude postupně vyblikávat všechny LEDky v jednom řádku LED panelu. Vždy svítí jen jedna LED.
+
+## Úkol 21 - K.I.T.T.
+Napište program, který bude postupně vyblikávat všechny LEDky v jednom řádku LED panelu. Vlna se bude symstricky zpět. Vždy svítí jen jedna LED. Blikání bude připomínat vzor na [slavném inteligentním autě K.I.T.T.](https://www.youtube.com/watch?v=oNyXYPhnUIs&ab_channel=NBCClassics).
+
+# Lekce 11
 Změříme ujetou vzdálenost pomocí *enkodérů*. Ty měří pohyb pásů. K úspěšnému měření je třeba enkodéry zkalibrovat.
 
-## Úkol - 
-Napište program, který po zmáčknutí tlačítka rozjede TrackJet směrem dopředu libovolnou rychlostí a po ujetí 1 metru ho zastaví.
+## Úkol 22 - Změření metru
+Napište program, který po zmáčknutí tlačítka rozjede TrackJet směrem dopředu libovolnou rychlostí. Po ujetí 1 metru se TrackJet zastaví.
 
-## Úkol - 
+## Úkol 23 - Autonomní jízda
+Napište program, který bude s TrackJet jezdit po prostoru. Při detekování překážky LIDARem se TrackJet zastaví. Otočí a pokračuje v jízdě.
+
+## Úkol 24 - Autonomní jízda s rozhlížením
+Napište program, který vylepší autonomní jízdu z minulého úkolu o *rozlížení*. Při detekování překážky TrackJet zastaví, rozhlédne se do stran pomocí serva natáčejího LIDAR senzor. Program vybere nejvhodnější směr pro další jízdu. Tam se TrackJet otočí a rozjede.
+
+## Úkol 25 - Otočení o zadaný úhel
+Napište program, který bude číst kroky otočení rotačního enkodéru a podle nich bude na LED panelu zobrazovat linku svítících LED. Tato linka bude vždy začínat ve středu panelu a může být natočena v 8 možných úhlech (0, 45, 90, 135, 180, 225, 270, 315)°. Po stisku tlačítka enkodéru se TrackJet začne otáčet. Otočí se o zadaný úhel co nejpřesněji.
