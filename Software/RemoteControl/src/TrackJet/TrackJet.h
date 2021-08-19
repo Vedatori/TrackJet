@@ -124,7 +124,8 @@ public:
     void soundNote(note_t note = NOTE_C, uint8_t octave = 5);
     void soundTone(float freq = 1000);
     void soundEnd();
-    
+    void playMelody(int melody[], int size, int tempo = 180);
+
     uint8_t gyroGetStatus();
     float gyroAngleYPR(uint8_t index) ;
     void gyroCalibrate();
