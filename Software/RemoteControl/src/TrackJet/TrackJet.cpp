@@ -437,6 +437,10 @@ void TrackJetClass::handleLowBatt() {
     else if(!battCutoff && prevBattCutoff) {
         soundEnd();
     }
+    if(battCutoff && !displayIsBusy()) {
+        soundNote();
+        displayText("LOW BATT");
+    }
 
     prevBattCutoff = battCutoff;
 }
