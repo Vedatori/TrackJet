@@ -293,10 +293,12 @@ float TrackJetClass::encoderGetSpeed(uint8_t encID) {
 }
 
 void TrackJetClass::servoSetPosition(uint8_t servoID, float position) {
-    TJ::servo[servoID].setPosition(position);
+    if(servoID >= 1 && servoID <= SERVO_COUNT)
+        TJ::servo[servoID - 1].setPosition(position);
 }
 void TrackJetClass::servoSetSpeed(uint8_t servoID, float speed) {
-    TJ::servo[servoID].setSpeed(speed);
+    if(servoID >= 1 && servoID <= SERVO_COUNT)
+        TJ::servo[servoID - 1].setSpeed(speed);
 }
 
 void TrackJetClass::soundNote(note_t note, uint8_t octave) {

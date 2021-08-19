@@ -9,7 +9,7 @@ void setup() {
     TrackJet.begin();
     TrackJet.startWiFiCaptain("<your_name>");
     TrackJet.displayText(ipToDisp());
-    TrackJet.servoSetSpeed(0, 60);
+    TrackJet.servoSetSpeed(1, 60);
 }
 
 void loop() {
@@ -36,11 +36,11 @@ void loop() {
         Serial.printf("pot %d battV %f battP %d lineL %d lineR %d\n", TrackJet.potentiometerRead(), TrackJet.battVolt(), TrackJet.battPercent(), TrackJet.lineRead(1), TrackJet.lineRead(2));
 
         if(TrackJet.commandGetIndexed(0) == "blade") {
-            TrackJet.servoSetPosition(0, TrackJet.commandGetIndexed(1).toInt());
+            TrackJet.servoSetPosition(1, TrackJet.commandGetIndexed(1).toInt());
             TrackJet.commandClear();
         }
         else if(TrackJet.commandGetIndexed(0) == "lidar") {
-            TrackJet.servoSetPosition(1, TrackJet.commandGetIndexed(1).toInt());
+            TrackJet.servoSetPosition(2, TrackJet.commandGetIndexed(1).toInt());
             TrackJet.commandClear();
         }
         else if(TrackJet.commandGetIndexed(0) == "beep") {

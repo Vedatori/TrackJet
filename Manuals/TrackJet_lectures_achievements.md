@@ -98,5 +98,19 @@ Napište program, který zahraje vaši oblíbenou melodii (oblíbená píseň, f
 ## Úkol - Klakson
 Napište program, který *zatroubí* bzučákem v případě, že je čtení vzdálenosti z LIDARu menší než 5 cm.
 
+## Úkol - Theremin
+Napište program, který bude číst vzdálenost od překážky z LIDARu a podle této vzdálenosti bude nastavovat frekvenci bzučáku. Zahrejte vedoucímu hezkou melodii.
+
 # Lekce 11
-Ukážeme se spuštění WiFi knihovny a použití vzdáleného příkazového řádku.
+Ukážeme si spuštění WiFi knihovny a použití vzdáleného příkazového řádku.
+
+## Úkol - 
+Napište program, který po zadání příkazu "dist" do vzdáleného příkazového řádku vrátí měřenou vzdálenost od překážky LIDARem.
+
+# Lekce 12
+Změříme ujetou vzdálenost pomocí *enkodérů*. Ty měří pohyb pásů. K úspěšnému měření je třeba enkodéry zkalibrovat.
+
+## Úkol - 
+Napište program, který po zmáčknutí tlačítka rozjede TrackJet směrem dopředu libovolnou rychlostí a po ujetí 1 metru ho zastaví.
+
+## Úkol - 

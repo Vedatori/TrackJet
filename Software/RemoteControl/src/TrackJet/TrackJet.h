@@ -118,7 +118,7 @@ public:
     float encoderGetDistance(uint8_t encID);
     float encoderGetSpeed(uint8_t encID);
 
-    void servoSetPosition(uint8_t servoID, float position);     // servoID 0, 1, 2; position 0-180 [°]
+    void servoSetPosition(uint8_t servoID, float position);     // servoID 1, 2, 3; position 0-180 [°]
     void servoSetSpeed(uint8_t servoID, float speed);    // speed 0-600 [°/s]
 
     void soundNote(note_t note = NOTE_C, uint8_t octave = 5);
