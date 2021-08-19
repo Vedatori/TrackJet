@@ -468,7 +468,7 @@ void setup() {
 
 void loop() {
     if(TrackJet.buttonRead()) {
-        TrackJet.ledwWrite(1, true);
+        TrackJet.ledWrite(1, true);
     }
     else {
         TrackJet.ledWrite(1, false);
