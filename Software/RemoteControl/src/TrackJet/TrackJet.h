@@ -96,6 +96,7 @@ class TrackJetClass {
     float battVoltageFiltered = 3.7;
     float battPercentFiltered = 50;
     bool battCutoff = false;    // false-high V., true-low V.
+    bool soundMusicIsPlaying = false;
 
 public:
     uint16_t encThreshold[4];   // 0-FL, 1-RL, 2-FR, 3-RR
@@ -124,6 +125,8 @@ public:
     void soundNote(note_t note = NOTE_C, uint8_t octave = 5);
     void soundTone(float freq = 1000);
     void soundEnd();
+    void soundMusic(int melody[], int tempo, int lenght);
+    void soundMusicEnd();
     
     uint8_t gyroGetStatus();
     float gyroAngleYPR(uint8_t index) ;
