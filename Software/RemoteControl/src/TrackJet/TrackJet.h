@@ -120,6 +120,8 @@ public:
 
     void servoSetPosition(uint8_t servoID, float position);     // servoID 1, 2, 3; position 0-180 [°]
     void servoSetSpeed(uint8_t servoID, float speed);    // speed 0-600 [°/s]
+    float servoGetPosition(uint8_t servoID);
+    bool servoMoving(uint8_t servoID);
 
     void soundNote(note_t note = NOTE_C, uint8_t octave = 5);
     void soundTone(float freq = 1000);

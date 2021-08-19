@@ -608,6 +608,8 @@ Pro nastavení polohy serva použijeme funkci `TrackJet.servoSetPosition(index, 
 
 Standardně jsou serva nastavena na plnou rychlost pohybu, tj. 600°/s. Pokud chceme, aby se pohybovalo pomaleji, můžeme tuto rychlost snižit funkci `TrackJet.servoSetSpeed(index, rychlost)`. Zde *rychlost* značí nastavenou rychlost pohybu serva v rozsahu 0-600°/s.
 
+Pro zjištění aktuální polohy serva je možné použít funkci `TrackJet.servoGetPosition(index)`. Ta vrací číslo udávající aktuální úhel natočení serva *index*. Dále je možné použít funkci `TrackJet.servoMoving(index)`, která vrací *true* když se servo aktuálně pohybuje a *false* když se servo nepohybuje.
+
 ___
 ## <a name = lidar>LIDAR</a>
 Pro zjištění měřené vzdálenosti od překážky senzorem LIDAR použijeme funkci `TrackJet.lidarDistance()`. Ta nám vrátí celé číslo udávající počet milimetrů od překážky. 
