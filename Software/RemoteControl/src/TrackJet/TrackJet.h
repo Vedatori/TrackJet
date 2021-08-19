@@ -96,7 +96,6 @@ class TrackJetClass {
     float battVoltageFiltered = 3.7;
     float battPercentFiltered = 50;
     bool battCutoff = false;    // false-high V., true-low V.
-    bool soundMusicIsPlaying = false;
 
 public:
     uint16_t encThreshold[4];   // 0-FL, 1-RL, 2-FR, 3-RR
@@ -119,15 +118,14 @@ public:
     float encoderGetDistance(uint8_t encID);
     float encoderGetSpeed(uint8_t encID);
 
-    void servoSetPosition(uint8_t servoID, float position);     // servoID 0, 1, 2; position 0-180 [°]
+    void servoSetPosition(uint8_t servoID, float position);     // servoID 1, 2, 3; position 0-180 [°]
     void servoSetSpeed(uint8_t servoID, float speed);    // speed 0-600 [°/s]
 
     void soundNote(note_t note = NOTE_C, uint8_t octave = 5);
     void soundTone(float freq = 1000);
     void soundEnd();
-    void soundMusic(int melody[], int tempo, int lenght);
-    void soundMusicEnd();
-    
+    void playMelody(int melody[], int size, int tempo = 180);
+
     uint8_t gyroGetStatus();
     float gyroAngleYPR(uint8_t index) ;
     void gyroCalibrate();
@@ -166,7 +164,6 @@ public:
     String commandGetIndexed(uint8_t index);
     void commandClear();
     void commandSend(String command);
-    void msgSend(String type, String payload);
     void internCommandHandle();
 
     void encoderCalibrate(uint16_t duration);

@@ -293,10 +293,12 @@ float TrackJetClass::encoderGetSpeed(uint8_t encID) {
 }
 
 void TrackJetClass::servoSetPosition(uint8_t servoID, float position) {
-    TJ::servo[servoID].setPosition(position);
+    if(servoID >= 1 && servoID <= SERVO_COUNT)
+        TJ::servo[servoID - 1].setPosition(position);
 }
 void TrackJetClass::servoSetSpeed(uint8_t servoID, float speed) {
-    TJ::servo[servoID].setSpeed(speed);
+    if(servoID >= 1 && servoID <= SERVO_COUNT)
+        TJ::servo[servoID - 1].setSpeed(speed);
 }
 
 void TrackJetClass::soundNote(note_t note, uint8_t octave) {
@@ -311,40 +313,46 @@ void TrackJetClass::soundEnd() {
     ledcDetachPin(TJ::BUZZER);
 }
 
-void TrackJetClass::soundMusic(int melody[], int tempo, int lenght){
-    soundMusicIsPlaying = true;
-    int notes = lenght / 2;
-    int wholenote = (60000 * 4) / tempo;
-    int divider = 0, noteDuration = 0;
-    for (int thisNote = 0; (thisNote < notes * 2) && soundMusicIsPlaying; thisNote = thisNote + 2) {
+void TrackJetClass::playMelody(int melody[], int size, int tempo)
+{
+	
+	// sizeof gives the number of bytes, each int value is composed of two bytes (16 bits)
+	// there are two values per note (pitch and duration), so for each note there are four bytes
+	int notes = size / sizeof(int) / 2;
 
-        // calculates the duration of each note
-        divider = melody[thisNote + 1];
-        if (divider > 0) {
-            // regular note, just proceed
-            noteDuration = (wholenote) / divider;
-        } else if (divider < 0) {
-            // dotted notes are represented with negative durations!!
-            noteDuration = (wholenote) / abs(divider);
-            noteDuration *= 1.5; // increases the duration in half for dotted notes
-    }
+	// this calculates the duration of a whole note in ms
+	int wholenote = (60000 * 4) / tempo;
 
-    soundTone(melody[thisNote]);
+	int divider = 0, noteDuration = 0;
+	
+	for (int thisNote = 0; thisNote < notes * 2; thisNote = thisNote + 2) 
+	{
 
-    // Wait for the specief duration before playing the next note.
-    delay(noteDuration*0.9);
-    
-    // stop the waveform generation before the next note.
-    soundEnd();
+		// calculates the duration of each note
+		divider = melody[thisNote + 1];
+		if (divider > 0) {
+		// regular note, just proceed
+		noteDuration = (wholenote) / divider;
+		} else if (divider < 0) {
+		// dotted notes are represented with negative durations!!
+		noteDuration = (wholenote) / abs(divider);
+		noteDuration *= 1.5; // increases the duration in half for dotted notes
+		}
 
-    delay(noteDuration*0.1);
-  }
+		// we only play the note for 90% of the duration, leaving 10% as a pause
+		TrackJet.soundTone(melody[thisNote]);
+
+		// Wait for the specief duration before playing the next note.
+		delay(noteDuration * 0.9);
+
+		// stop the waveform generation before the next note.
+		TrackJet.soundEnd();
+
+		// Wait for the specief duration before playing the next note.
+		delay(noteDuration * 0.1);
+  	}  
 }
 
-void TrackJetClass::soundMusicEnd(){
-    soundMusicIsPlaying = false;
-    soundEnd();
-}
 
 uint8_t TrackJetClass::gyroGetStatus() {
     return gyroStatus;
@@ -618,11 +626,7 @@ void TrackJetClass::commandClear() {
 }
 
 void TrackJetClass::commandSend(String command) {
-    commandSendCaptain("command", command);
-}
-
-void TrackJetClass::msgSend(String type, String payload){
-    commandSendCaptain(type, payload);
+    commandSendCaptain(command);
 }
 
 void TrackJetClass::internCommandHandle() {
