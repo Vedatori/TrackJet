@@ -434,8 +434,8 @@ ___
 V této kapitole si pořádně ukážeme ovládání LEDek na TrackJet.
 
 Pro ovládání samostatných LED pod panelem TrackJet použijeme funkce:
-* `TrackJet.ledWrite(index, state)` - rozsvícení a zhasnutí jedné z led pod panelem TrackJet. Parametr `index` je 1-pravá LED a 2-levá LED. Parametr `state` je 0-nesvítí, 1-svítí.
-* `TrackJet.ledWriteAnalog(index, brightness)` - nastavení jasu jedné LED pod panelem TrackJet. Parametr `brightness` je v rozsahu 0-nesvítí až do 100-plně svítí.
+* `TrackJet.ledWrite(state)` - rozsvícení a zhasnutí jedné LED. Parametr `state` je 0-nesvítí, 1-svítí.
+* `TrackJet.ledWriteAnalog(brightness)` - nastavení jasu jedné LED. Parametr `brightness` je v rozsahu 0-nesvítí až do 100-plně svítí.
 
 Pro ovládání LED na panelu TrackJet použijeme následující funkce:
 * `TrackJet.displaySingle(row, col, state);` - rozsvícení a zhasnutí jedné LED na panelu. Parametr `row` udává číslo řádku v rozsahu 0-nahoře po 7-dole. Parametr `col` udává číslo sloupce v rozsahu 0-vlevo po 7-vpravo. Parametr `state` je 0-nesvítí, 1-svítí.
