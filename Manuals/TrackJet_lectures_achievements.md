@@ -118,3 +118,26 @@ Napište program, který vylepší autonomní jízdu z minulého úkolu o *rozl�
 
 ## Úkol 25 - Otočení o zadaný úhel
 Napište program, který bude číst kroky otočení rotačního enkodéru a podle nich bude na LED panelu zobrazovat linku svítících LED. Tato linka bude vždy začínat ve středu panelu a může být natočena v 8 možných úhlech (0, 45, 90, 135, 180, 225, 270, 315)°. Po stisku tlačítka enkodéru se TrackJet začne otáčet. Otočí se o zadaný úhel co nejpřesněji.
+
+## Bonusové úkoly
+
+1. Napiš program, který postupně rozsvítí všechny LED v matici v obou
+        diagonálách. Nesmí být zapnuto více LED současně.
+
+2. Program, který postupně rozsvítí každou LED v matici za použití dvou for
+        cyklů. Nesmí být zapnuto více LED současně.
+
+3. Program, kde je rozsvícená taková LED v sloupci, jaká je vzdálenost před 
+        LiDAR senzorem(Jak je v originálním programu)
+
+4. Program, který na zmáčknutí tlačítka vypíše procento naplnění baterie
+        na sériovou linku, na druhé zmáčknutí vypíše napětí.
+
+5. Program, který na každé otočení enkodéru posune servem o 10% jeho rozsahu. 
+        Když už nebude možnost hýbat se dál do tohoto směru, servo se natočí
+        na druhou stranu a nechá uživatele pokračovat, vypíše ale na sériovou
+        linku informaci o resetování polohy serva.
+        
+6. Program, kde na matici svítí první LED, a po každém otočení enkodéru
+        se rozsvítí ta vedle ní atd., než matice přeteča a rozsvítí se LED
+        na dalším řádku.
