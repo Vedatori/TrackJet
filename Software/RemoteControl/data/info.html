@@ -7,20 +7,42 @@
 		<link rel="stylesheet" type="text/css" href="style.css">
 		<style>
 			body {
-				overflow : hidden;
+				overflow:auto;
 			}
 			</style>
 	</head>
     <body>
 		<h1>TrackJet Info</h1>
 		<p><a href='/'><input type = 'button' value = 'Remote Control page'/></a></p>
+		<div class="box3" id="position">
+			<input type = "text" id = "commandInput" placeholder = "Command entry" autofocus="autofocus"/>
+			<input type = "button" value = "Enter" onclick = "commandEnter()"/>
+			<a href='/wifi'><input type = "button" value = "WiFi setup"/></a>
+		</div>
 		<br>
 		<div class="box" style="color: #FFE640;">
 			<text id="batteryStatus">Battery: ---% </text><text id="batteryVoltage">---V</text>
 		</div>
+		<br>
+		<text id="servo1">Servo 1: ---  </text><text id="servo1_moving">Stopped</text>
+		<text id="servo2">Servo 2: ---  </text><text id="servo2_moving">Stopped</text>
+		<text id="servo3">Servo 3: ---  </text><text id="servo3_moving">Stopped</text>
+		<br>
+		<p id="button">Button: ----</p>
+		<p id="encoder">Encoder: ---- Button: ----</p>
+		<p id="potentiometer">Potentiometer: ---</p>
+		<p id="lidar">Lidar: ----mm</p>
+		<p id="line">Line: --- | ---</p>
+		<br>
+		<p id="speed">Speed: --- | ---</p>
+		<p id="dist">Dist: --- | ---</p>
+		<p id="steps">Steps: --- | ---</p>
+		<br>
+		<p id="rawF">Raw F: -- | --</p>
+		<p id="rawR">Raw R: -- | --</p>
+		<p id="thrF">Thr F: -- | --</p>
+		<p id="thrR">Thr R: -- | --</p>
 
-		<br>
-		<br>
 		<br>
 		<div class="box">
         	<a href="https://github.com/vedatori/TrackJet" target="_blank">Official TrackJet Repository - GitHub</a>
@@ -95,6 +117,36 @@
 						document.getElementById('batteryStatus').innerText = "Battery: " + parsedMessage[1] + "% ";
 						document.getElementById('batteryVoltage').innerText = parsedMessage[2] + "V";
 						break;
+					case "lidar":
+						document.getElementById('lidar').innerText = "Lidar: " + parsedMessage[1] + "mm";
+						break;
+					case "servos":
+						document.getElementById('servo1').innerText = "Servo 1: " + parsedMessage[1] + "° ";
+						document.getElementById('servo2').innerText = "Servo 2: " + parsedMessage[2] + "° ";
+						document.getElementById('servo3').innerText = "Servo 3: " + parsedMessage[3] + "° ";
+						document.getElementById('servo1_moving').innerText = "" + parsedMessage[4] + " | ";
+						document.getElementById('servo2_moving').innerText = "" + parsedMessage[5] + " | ";
+						document.getElementById('servo3_moving').innerText = "" + parsedMessage[6] + " | ";
+						break;
+					case "buttons":
+						document.getElementById('button').innerText = "Button: " + parsedMessage[1] + "";
+						document.getElementById('encoder').innerText = "Encoder: " + parsedMessage[2] + " Button: " + parsedMessage[3];
+						document.getElementById('potentiometer').innerText = "Potentiometer: " + parsedMessage[4] + "";
+						break;
+					case "line":
+						document.getElementById('line').innerText = "Line: " + parsedMessage[1] + " | " + parsedMessage[2];
+						break;
+					case "encoders":
+						document.getElementById('speed').innerText = "Speed: " + parsedMessage[1] + " | " + parsedMessage[2];
+						document.getElementById('dist').innerText = "Dist: " + parsedMessage[3] + " | " + parsedMessage[4];
+						document.getElementById('steps').innerText = "Steps: " + parsedMessage[5] + " | " + parsedMessage[6];
+						break;
+					case "encoders_raw":
+						document.getElementById('rawF').innerText = "Raw F: " + parsedMessage[1] + " | " + parsedMessage[2];
+						document.getElementById('rawR').innerText = "Raw R: " + parsedMessage[3] + " | " + parsedMessage[4];
+						document.getElementById('thrF').innerText = "thr F: " + parsedMessage[5] + " | " + parsedMessage[6];
+						document.getElementById('thrR').innerText = "thr R: " + parsedMessage[7] + " | " + parsedMessage[8];
+						break;
 					default:
 						break;
 				}
@@ -113,7 +165,7 @@
 				}
 			}
 			
-			/*
+			
 			function commandEnter(){
 				var command = document.getElementById("commandInput");
 				var commandText = command.value;
@@ -128,7 +180,7 @@
 					commandEnter();
 				}
 			});
-			*/
+			
 
 			// Call the init function as soon as the page loads
 			window.addEventListener("load", init, false);

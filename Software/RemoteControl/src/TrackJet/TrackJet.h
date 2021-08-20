@@ -11,6 +11,8 @@
 #include "WiFiCaptain.h"
 #include "QuadEncoder.h"
 #include "SemiIntelligentServo.h"
+#include "Music.h"
+
 
 namespace TJ {
 
@@ -50,6 +52,8 @@ const uint16_t encThresholdInit = 1600;
 
 const uint8_t FREQ_PWM_THRESHOLD = 40;
 const uint16_t controlPeriod = 10;  // [ms]
+const uint16_t statusSendPeriod = 500; // [ms]
+const uint16_t melodyHandlePeriod = 40; //[ms]
 const char STORAGE_NAMESPACE[] = "TrackJet";
 const uint16_t communicationTimeout = 1000;
 const uint16_t lettersSwapTimeout = 500;
@@ -97,6 +101,14 @@ class TrackJetClass {
     float battPercentFiltered = 50;
     bool battCutoff = false;    // false-high V., true-low V.
 
+    bool melodyPlaying = false;
+    bool melodyPause = false;
+    int melodyTempo = 180;
+    int * melody;
+    int melodythisNote = 0;
+    int melodySize = 0;
+    unsigned long melodyLastMillis = 0;
+
 public:
     uint16_t encThreshold[4];   // 0-FL, 1-RL, 2-FR, 3-RR
     int16_t encSteps[2];    // 0-Left, 1-right
@@ -123,10 +135,11 @@ public:
     float servoGetPosition(uint8_t servoID);
     bool servoMoving(uint8_t servoID);
 
-    void soundNote(note_t note = NOTE_C, uint8_t octave = 5);
     void soundTone(float freq = 1000);
     void soundEnd();
-    void playMelody(int melody[], int size, int tempo = 180);
+    void playMelody(int * aMelody, int size, int tempo = 180);
+    void stopMelody();
+    void handleMelody();
 
     uint8_t gyroGetStatus();
     float gyroAngleYPR(uint8_t index) ;
@@ -168,6 +181,7 @@ public:
     void commandSend(String command);
     void msgSend(String type, String msg);
     void internCommandHandle();
+    void sendStatus();
 
     void encoderCalibrate(uint16_t duration);
 };

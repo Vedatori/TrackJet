@@ -17,6 +17,9 @@ SemiIntelligentServo TJ::servo[] = {SemiIntelligentServo(TJ::SERVO[0], SERVO_CHA
 MPU6050 TJ::mpu(Wire);
 VL53L0X TJ::lidar;
 
+unsigned long updatePWM_sendStatus_prevMillis = 0;
+unsigned long updatePWM_handleMelody_prevMillis = 0;
+
 void TJ::updatePWM(void * param) {
     for(;;) {
         TrackJet.updateAnalogMux();
@@ -37,6 +40,15 @@ void TJ::updatePWM(void * param) {
 
         TrackJet.handleLowBatt();
 
+        if(millis() >= TJ::statusSendPeriod+updatePWM_sendStatus_prevMillis){
+            updatePWM_sendStatus_prevMillis = millis();
+            TrackJet.sendStatus();
+        }
+
+        //TrackJet.handleMelody();
+        
+        
+
         vTaskDelay(TJ::controlPeriod);
     }
 }
@@ -54,6 +66,7 @@ void TJ::updateEnc(void * parameter) {
             }
             prevEncState[encID] = encState;
         }
+        TrackJet.handleMelody();
         delayMicroseconds(500);
     }
 }
@@ -284,11 +297,11 @@ float TrackJetClass::encoderGetDistance(uint8_t encID) {
     return encSteps[encID - 1]*2.75;
 }
 float TrackJetClass::encoderGetSpeed(uint8_t encID) {
-    static int16_t prevEncSteps = 0;
-    static uint32_t prevTime = 0;
-    float encSpeed = (encSteps[encID] - prevEncSteps) / ((millis() - prevTime) * 0.001) * 2.75; // [mm/s]
-    prevTime = millis();
-    prevEncSteps = encSteps[encID];
+    static int16_t prevEncSteps[2] = {0,0};
+    static uint32_t prevTime[2] = {0,0};
+    float encSpeed = (encSteps[encID-1] - prevEncSteps[encID-1]) / ((millis() - prevTime[encID-1]) * 0.001) * 2.75; // [mm/s]
+    prevTime[encID-1] = millis();
+    prevEncSteps[encID-1] = encSteps[encID-1];
     return encSpeed;
 }
 
@@ -313,10 +326,6 @@ bool TrackJetClass::servoMoving(uint8_t servoID) {
         return false;
 }
 
-void TrackJetClass::soundNote(note_t note, uint8_t octave) {
-    ledcAttachPin(TJ::BUZZER, TJ::BUZZER_CHANNEL);
-    ledcWriteNote(TJ::BUZZER_CHANNEL, note, octave);
-}
 void TrackJetClass::soundTone(float freq) {
     ledcAttachPin(TJ::BUZZER, TJ::BUZZER_CHANNEL);
     ledcWriteTone(TJ::BUZZER_CHANNEL, freq);
@@ -325,44 +334,56 @@ void TrackJetClass::soundEnd() {
     ledcDetachPin(TJ::BUZZER);
 }
 
-void TrackJetClass::playMelody(int melody[], int size, int tempo)
+void TrackJetClass::playMelody(int * aMelody, int size, int tempo)
 {
-	
-	// sizeof gives the number of bytes, each int value is composed of two bytes (16 bits)
-	// there are two values per note (pitch and duration), so for each note there are four bytes
-	int notes = size / sizeof(int) / 2;
+	TrackJetClass::melodyPlaying = true;
+    TrackJetClass::melodyPause = true;
+    TrackJetClass::melodyTempo = tempo;
+    TrackJetClass::melody = aMelody;
+    TrackJetClass::melodythisNote = 0;
+    TrackJetClass::melodySize = size;
+}
 
-	// this calculates the duration of a whole note in ms
-	int wholenote = (60000 * 4) / tempo;
+void TrackJetClass::stopMelody(){
 
-	int divider = 0, noteDuration = 0;
-	
-	for (int thisNote = 0; thisNote < notes * 2; thisNote = thisNote + 2) 
-	{
+}
 
-		// calculates the duration of each note
-		divider = melody[thisNote + 1];
-		if (divider > 0) {
-		// regular note, just proceed
-		noteDuration = (wholenote) / divider;
-		} else if (divider < 0) {
-		// dotted notes are represented with negative durations!!
-		noteDuration = (wholenote) / abs(divider);
-		noteDuration *= 1.5; // increases the duration in half for dotted notes
-		}
+void TrackJetClass::handleMelody(){
+    if(!TrackJetClass::melodyPlaying){
+        return;
+    }
+    int notes = TrackJetClass::melodySize / sizeof(int) / 2;
+    int wholenote = ((60000 * 4) / TrackJetClass::melodyTempo);
+    int divider = 0, noteDuration = 0;
 
-		// we only play the note for 90% of the duration, leaving 10% as a pause
-		TrackJet.soundTone(melody[thisNote]);
+    divider = TrackJetClass::melody[TrackJetClass::melodythisNote + 1];
+	if (divider > 0) {
+	// regular note, just proceed
+	    noteDuration = (wholenote) / divider;
+	} else if (divider < 0) {
+	// dotted notes are represented with negative durations!!
+	    noteDuration = (wholenote) / abs(divider);
+	    noteDuration *= 1.5; // increases the duration in half for dotted notes
+	}
 
-		// Wait for the specief duration before playing the next note.
-		delay(noteDuration * 0.9);
+    if((millis() >= TrackJetClass::melodyLastMillis+(noteDuration*0.9))&&!TrackJetClass::melodyPause){
+        TrackJetClass::melodyPause=true;
+        TrackJetClass::melodythisNote+=2;
+        TrackJetClass::soundEnd();
+        if(TrackJetClass::melodythisNote>notes*2){
+            TrackJetClass::melodyPlaying = false;
+            return;
+        }
+        TrackJetClass::melodyLastMillis = millis();
+    }else if((millis() >= TrackJetClass::melodyLastMillis+(noteDuration*0.1))&&TrackJetClass::melodyPause){
+        TrackJetClass::soundTone(TrackJetClass::melody[TrackJetClass::melodythisNote]);
+        TrackJetClass::melodyPause=false;
+        TrackJetClass::melodyLastMillis = millis();
+    }
 
-		// stop the waveform generation before the next note.
-		TrackJet.soundEnd();
 
-		// Wait for the specief duration before playing the next note.
-		delay(noteDuration * 0.1);
-  	}  
+
+
 }
 
 
@@ -445,14 +466,14 @@ void TrackJetClass::handleLowBatt() {
         battCutoff = false;
 
     if(battCutoff && !prevBattCutoff) {
-        soundNote();
+        soundTone(1000);
         displayText("LOW BATT");
     }
     else if(!battCutoff && prevBattCutoff) {
         soundEnd();
     }
     if(battCutoff && !displayIsBusy()) {
-        soundNote();
+        soundTone(1000);
         displayText("LOW BATT");
     }
 
@@ -645,6 +666,37 @@ void TrackJetClass::msgSend(String type, String msg){
     commandSendCaptain(type, msg);
 }
 
+void TrackJetClass::sendStatus(){
+    if(!connectionEnabled){
+        return;
+    }
+    /*
+    battery: Percent, Voltage
+    lidar: Lidar Dist
+    servos: S1pos, S2pos, S3pos, S1moving, S2moving, S3moving
+    buttons: Button, EncPos, EncButton, Potentiometer
+    line: L1read(int), L2read(int)
+    encoders: E1spd, E2spd, E1dist, E2dist, E1steps, E2steps
+    encoders_raw: FLraw, RLraw, FRraw, RRraw, FLthr, RLthr, FRthr, RRthr
+    */
+    TrackJet.msgSend("battery",String(TrackJet.battPercent())+","+String(((float)((int)(TrackJet.battVolt()*100)))/100));
+    TrackJet.msgSend("lidar",String(TrackJet.lidarDistance()));
+    TrackJet.msgSend("servos",String(TrackJet.servoGetPosition(1))+","+String(TrackJet.servoGetPosition(2))+","+String(TrackJet.servoGetPosition(3))+","+String(TrackJet.servoMoving(1))+","+String(TrackJet.servoMoving(2))+","+String(TrackJet.servoMoving(3)));
+    TrackJet.msgSend("buttons",String(TrackJet.buttonRead())+","+String(TrackJet.encoderRead())+","+String(TrackJet.encoderReadButton())+","+String(TrackJet.potentiometerRead()));
+    TrackJet.msgSend("line",String(TrackJet.lineRead(1))+","+String(TrackJet.lineRead(2)));
+    TrackJet.msgSend("encoders",String(TrackJet.encoderGetSpeed(1))+","+String(TrackJet.encoderGetSpeed(2))+","+String(TrackJet.encoderGetDistance(1))+","+String(TrackJet.encoderGetDistance(2))+","+String(TrackJet.encoderGetSteps(1))+","+String(TrackJet.encoderGetSteps(2)));
+    
+    int encFL = (adc1_get_raw(TJ::ADC_CH_ENC_FL));
+    int encRL = (adc1_get_raw(TJ::ADC_CH_ENC_RL));
+    int encFR = (adc1_get_raw(TJ::ADC_CH_ENC_FR));
+    int encRR = (adc1_get_raw(TJ::ADC_CH_ENC_RR));
+    uint16_t thrFL = TrackJet.encThreshold[0];
+    uint16_t thrRL = TrackJet.encThreshold[0];
+    uint16_t thrFR = TrackJet.encThreshold[0];
+    uint16_t thrRR = TrackJet.encThreshold[0];
+    TrackJet.msgSend("encoders_raw",String(encFL)+","+String(encRL)+","+String(encFR)+","+String(encRR)+","+String(thrFL)+","+String(thrRL)+","+String(thrFR)+","+String(thrRR));
+}
+
 void TrackJetClass::internCommandHandle() {
     static uint8_t counter = 0;
     if(counter < 20) {
@@ -654,7 +706,7 @@ void TrackJetClass::internCommandHandle() {
     else {
         counter = 0;
     }
-    if(TrackJet.commandGetIndexed(0) == "reset") {
+    if(TrackJet.commandGetIndexed(0) == "reset" || TrackJet.commandGetIndexed(0) == "restart") {
         ESP.restart();
     }
     else if(TrackJet.commandGet() == "encoder calibrate") {
@@ -685,7 +737,7 @@ void TrackJetClass::encoderCalibrate(uint16_t duration) {
     }
     for(uint8_t i = 0; i < 4; ++i) {
         TrackJet.encThreshold[i] = uint16_t((encMax[i] + encMin[i])/2);
-        //Serial.printf("Enc%d %d\n", i, TrackJet.encThreshold[i]);
+        Serial.printf("Enc%d %d\n", i, TrackJet.encThreshold[i]);
     }
     preferences.begin("TrackJet", false);
     preferences.putBytes("encThres", TrackJet.encThreshold, 8);

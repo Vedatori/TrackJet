@@ -370,6 +370,6 @@ void commandSendCaptain(String msgType, String payload) {
         return;
     }
     sprintf(sendCommandBuffer, "%s,%s", msgType.c_str(), payload.c_str());
-    printf("Sendig command: %s\n", sendCommandBuffer);
+    //printf("Sendig command: %s\n", sendCommandBuffer);
     webSocket.sendTXT(clientNumCaptain, sendCommandBuffer, strlen(sendCommandBuffer));
 }
