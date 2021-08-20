@@ -20,6 +20,8 @@ public:
     SemiIntelligentServo(uint8_t aPwmPin, uint8_t aPwmChannel);
     void setPWM(float aPosition);
     void setPosition(float aPosition);
+    float getPosition();
+    bool moving();
     void setSpeed(float aSpeed);
     void updatePWM();
 };

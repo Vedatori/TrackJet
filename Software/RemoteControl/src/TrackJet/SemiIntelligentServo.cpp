@@ -29,6 +29,12 @@ void SemiIntelligentServo::setPosition(float aPosition) {
     targetPosition = aPosition;
     targetAchieved = false;
 }
+float SemiIntelligentServo::getPosition() {
+    return currentPosition;
+}
+bool SemiIntelligentServo::moving() {
+    return !targetAchieved;
+}
 void SemiIntelligentServo::setSpeed(float aSpeed) {
     if(aSpeed < 0)
         aSpeed = 0;
