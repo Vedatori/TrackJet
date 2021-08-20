@@ -1,4 +1,5 @@
 #include "TrackJet/TrackJet.h"
+#include "TrackJet/music.h"
 
 const uint8_t CONTROL_PERIOD = 100;
 uint32_t prevControlTime = 0;
@@ -7,24 +8,20 @@ uint16_t prevEnc1 = 0, prevEnc2 = 0;
 
 void setup() {
     TrackJet.begin();
-    TrackJet.startWiFiCaptain("<your_name>");
+    TrackJet.startWiFiCaptain("Honza V");
     TrackJet.displayText(ipToDisp());
     TrackJet.servoSetSpeed(1, 60);
 }
+
+String songDisplay = "";
+bool prevEncButton = false;
+
 
 void loop() {
     if(millis() > prevControlTime + CONTROL_PERIOD) {
         prevControlTime = millis();
         if(TrackJet.displayIsBusy() == false) {
-            TrackJet.displayDigit(TrackJet.encoderRead()%10);
-            for(uint8_t i = 0; i < 8; ++i) {
-                TrackJet.displaySingle(i, 7, 0);
-                TrackJet.displaySingle(i, 6, 0);
-            }
-            for(uint8_t i = 0; i < TrackJet.battPercent()/12; ++i) {
-                TrackJet.displaySingle(7 - i, 7, 1);
-            }
-            TrackJet.displaySingle(TrackJet.lidarDistance()/100, 6, 1);
+            TrackJet.displayText(songDisplay, false);
         }
         //printf("Button %d, Enc %d, %d, %d\n", TrackJet.buttonRead(), TrackJet.encoderRead(), TrackJet.encoderReadButton(), TrackJet.encoderReadButtonPulse());
         //printf("%d\n", TrackJet.lidarDistance());
@@ -33,7 +30,72 @@ void loop() {
         prevEnc1 = TrackJet.encoderGetSteps(1);
         prevEnc2 = TrackJet.encoderGetSteps(2);
 
-        Serial.printf("pot %d battV %f battP %d lineL %d lineR %d\n", TrackJet.potentiometerRead(), TrackJet.battVolt(), TrackJet.battPercent(), TrackJet.lineRead(1), TrackJet.lineRead(2));
+        //Serial.printf("pot %d battV %f battP %d lineL %d lineR %d\n", TrackJet.potentiometerRead(), TrackJet.battVolt(), TrackJet.battPercent(), TrackJet.lineRead(1), TrackJet.lineRead(2));
+        
+        TrackJet.msgSend("battery",String(TrackJet.battPercent())+","+String(((float)((int)(TrackJet.battVolt()*100)))/100));
+
+        int song = TrackJet.encoderRead() % 7;
+
+        switch (song)
+        {
+        case 0:
+            songDisplay = "0";
+            break;
+        case 1:
+            songDisplay = "1";
+            break;
+        case 2:
+            songDisplay = "2";
+            break;
+        case 3:
+            songDisplay = "3";
+            break;
+        case 4:
+            songDisplay = "4";
+            break;
+        case 5:
+            songDisplay = "5";
+            break;
+        case 6:
+            songDisplay = "6";
+            break;
+        
+        default:
+            break;
+        }
+
+        if(TrackJet.encoderReadButton() && !prevEncButton){
+            switch (song)
+            {
+            case 0:
+                TrackJet.playMelody(starwars, sizeof(starwars)/sizeof(starwars[0]), starwars_tempo);
+                break;
+            case 1:
+                TrackJet.playMelody(nevergonnagiveyouup, sizeof(nevergonnagiveyouup)/sizeof(nevergonnagiveyouup[0]), nevergonnagiveyouup_tempo);
+                break;
+            case 2:
+                TrackJet.playMelody(miichannel, sizeof(miichannel)/sizeof(miichannel[0]), miichannel_tempo);
+                break;
+            case 3:
+                TrackJet.playMelody(nokia, sizeof(nokia)/sizeof(nokia[0]), nokia_tempo);
+                break;
+            case 4:
+                TrackJet.playMelody(supermariobros, sizeof(supermariobros)/sizeof(supermariobros[0]), supermariobros_tempo);
+                break;
+            case 5:
+                TrackJet.playMelody(takeonme, sizeof(takeonme)/sizeof(takeonme[0]), takeonme_tempo);
+                break;
+            case 6:
+                TrackJet.playMelody(tetris, sizeof(tetris)/sizeof(tetris[0]), tetris_tempo);
+                break;
+            
+            
+            default:
+                break;
+            }
+        }
+
+        prevEncButton = TrackJet.encoderReadButton();
 
         if(TrackJet.commandGetIndexed(0) == "blade") {
             TrackJet.servoSetPosition(1, TrackJet.commandGetIndexed(1).toInt());
@@ -50,5 +112,7 @@ void loop() {
             TrackJet.commandClear();
         }
         TrackJet.ledWrite(1, TrackJet.buttonRead());
+
+
     }
 }
