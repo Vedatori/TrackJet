@@ -291,6 +291,11 @@ float TrackJetClass::encoderGetSpeed(uint8_t encID) {
     prevEncSteps = encSteps[encID];
     return encSpeed;
 }
+void TrackJetClass::encoderDistReset(uint8_t encID) {
+    if(encID != 1 && encID != 2)
+        return;
+    encSteps[encID - 1] = 0;
+}
 
 void TrackJetClass::servoSetPosition(uint8_t servoID, float position) {
     if(servoID >= 1 && servoID <= SERVO_COUNT)
