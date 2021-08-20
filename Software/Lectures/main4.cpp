@@ -5,20 +5,20 @@ void setup() {
     TrackJet.begin();
 	
 	// Roztočení motoru 0 (levý pás) na 50% výkonu
-	TrackJet.motorsSetSpeed(50, 0);
+	TrackJet.motorsSetSpeed(1, 50);
 	delay(1000);
 }
 
 void loop() {
     if(TrackJet.buttonRead()) {
 		// Když je tláčítko zmáčknuto, roztočí se oba motory
-		TrackJet.motorsSetSpeed(50, 0);
-		TrackJet.motorsSetSpeed(50, 1);
+		TrackJet.motorsSetSpeed(1, 50);
+		TrackJet.motorsSetSpeed(2, 50);
 	}
 	else {
 		// Když není tláčítko zmáčknuto, oba motory se zastaví
-		TrackJet.motorsSetSpeed(0, 0);
-		TrackJet.motorsSetSpeed(0, 1);
+		TrackJet.motorsSetSpeed(1, 0);
+		TrackJet.motorsSetSpeed(2, 0);
 	}
 
     delay(100);
