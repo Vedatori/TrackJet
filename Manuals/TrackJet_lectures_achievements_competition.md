@@ -148,14 +148,24 @@ Napište program, který bude číst kroky otočení rotačního enkodéru a pod
 ## Tour de Chotěborky [dálkové ovládání]
 Úkolem je s robotem pomocí dálkového ovládání projet zadanou trasu v Chotěborkách v co nejkratším čase. Trasa je zadána vedoucími, ti dohlíží na její projetí a měří čas. Časová penalizace za každý dotyk člověka a robota je 15 sekund. Nejsou penalizovány případy, ve kterých selže technika. V takovém případě se zastavuje časomíra. Vyhraje robot, který projede zadanou trasu nejrychleji.
 
+Bodování od porvního místa: 20, 18, 16, 14, 13, 12, 11, 10, 9, 8, 8, ...
+
 ## Úklid tábora [dálkové ovládání]
 Úkolem je s robotem pomocí dálkového ovládání uklidit vymezený prostor od nepořádku (3D tištěné *puky*). Za uklizený se počítá puk, který je celým tělem mimo vymezený prostor. Vyhraje robot, který uklidí vymezený prostor nejrychleji.
+
+Bodování od porvního místa: 20, 18, 16, 14, 13, 12, 11, 10, 9, 8, 8, ...
 
 ## Velký závod [dálkové ovládání]
 Úkolem je s robotem pomocí dálkového ovládání projet zadanou trasu rychleji než soupeři. Při závodě soutěží několik robotů zaráz.
 
+Bodování od porvního místa: 14, 12, 10, 8.
+
 ## Úniková hra [autonomní]
 Úkolem je, aby robot našel východ z čtvercového hřiště a projel jím ven co nejrychleji. Hřiště je ohraničeno stěnou, která je detekovatelná senzorem vzdálenosti LIDAR. Robot startuje uprostřed hřiště a je náhodně natočen. Měření času je ukončeno až je celým tělem mimo hřiště. Vyhraje robot, který najde cestu z hřiště nejrychleji.
 
+Bodování od porvního místa: 25, 23, 21, 19, 17, 15, 15, ...
+
 ## Jízda podél stěny [autonomní]
 Úkolem je, aby robot co nejrychleji autonomně projel zadanou trasu. K navigaci slouží stěny po straně trasy, od kterých lze měřit vzdálenost LIDAR senzorem. 
+
+Bodování od porvního místa: 25, 23, 21, 19, 17, 15, 15, ...
