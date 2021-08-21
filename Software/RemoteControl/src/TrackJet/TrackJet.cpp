@@ -351,6 +351,7 @@ void TrackJetClass::playMelody(int * aMelody, int size, int tempo)
 
 void TrackJetClass::stopMelody(){
     TrackJetClass::melodyPlaying = false;
+    TrackJet.soundEnd();
 }
 
 void TrackJetClass::handleMelody(){
