@@ -128,6 +128,7 @@ public:
     int16_t encoderGetSteps(uint8_t encID);
     float encoderGetDistance(uint8_t encID);
     float encoderGetSpeed(uint8_t encID);
+    void encoderDistReset(uint8_t encID);
 
     void servoSetPosition(uint8_t servoID, float position);     // servoID 1, 2, 3; position 0-180 [°]
     void servoSetSpeed(uint8_t servoID, float speed);    // speed 0-600 [°/s]
