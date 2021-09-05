@@ -249,9 +249,9 @@ ___
     ![alt](SupportFiles/IMG_0693.jpeg)
 1. Vložit matku do ložiska z 3D tisku. Přitlačit kleštěmi, pokud je potřeba.
     ![alt](SupportFiles/IMG_0705.jpeg)
-1. Prošroubovat ložisko šroubem a přitáhnout kbočnici z překližky.
-    ![alt](SupportFiles/IMG_0709.jpeg)
-1. Prošroubovat ložisko šroubem a přitáhnout kbočnici z překližky.
+1. Připravit ložisko. Nožem uvolnit jednotlivé "kuličky" od stěn ložiska i mezi sebou.
+
+1. Prošroubovat ložisko šroubem a přitáhnout k bočnici z překližky.
     ![alt](SupportFiles/IMG_0709.jpeg)
 1. Přiložit bočnici k šasi a protáhnout do šasi šrouby od kol.
     ![alt](SupportFiles/IMG_0713.jpeg)
