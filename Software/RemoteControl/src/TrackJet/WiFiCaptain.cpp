@@ -40,8 +40,8 @@ void handleRoot() {
 
     lastConnectionType = (webserver.client().localIP() == WiFi.softAPIP());
 }
-void handleInfo() {
-    File f = SPIFFS.open("/info.html", "r");
+void handleStatus() {
+    File f = SPIFFS.open("/status.html", "r");
     webserver.streamFile(f, "text/html");
     f.close();
 
@@ -248,12 +248,13 @@ void wifiCaptInit() {
     webserver.on("/wifi", handleWifi);
     webserver.on("/wifisave", handleWifiSave);
     webserver.on("/softApEnable", handleSoftApEnable);
-    webserver.on("/info.html", handleInfo);
+    webserver.on("/status", handleStatus);
     webserver.onNotFound(handleNotFound);
     
     webserver.begin();
     
-    xTaskCreate(handleClients, "handleClients", 1024 * 4 , (void*) 0, 1, NULL);
+    //xTaskCreate(handleClients, "handleClients", 1024 * 4 , (void*) 0, 1, NULL);
+    xTaskCreatePinnedToCore(handleClients, "handleClients", 10000 , (void*) 0, 1, NULL, 1);
     
     loadCredentials();
 
@@ -321,6 +322,7 @@ void onWebSocketEvent(uint8_t client_num, WStype_t type, uint8_t * payload, size
             char *token;
             token = strtok((char *)payload, delimiter);
             char controlMsg[] = "control";
+            char statusMsg[] = "statusRequest";
             char commandMsg[] = "command";
             int8_t joystickX = 0, joystickY = 0;
             if(strcmp(token, controlMsg) == 0) {
@@ -329,6 +331,9 @@ void onWebSocketEvent(uint8_t client_num, WStype_t type, uint8_t * payload, size
                 token = strtok(NULL, delimiter);
                 joystickY = atoi(token);
                 TrackJet.controlMovement(joystickX, joystickY);
+            }
+            else if(strcmp(token, statusMsg) == 0) {
+                TrackJet.sendStatus();
             }
             else if(strcmp(token, commandMsg) == 0) {
                 token = strtok(NULL, delimiter);

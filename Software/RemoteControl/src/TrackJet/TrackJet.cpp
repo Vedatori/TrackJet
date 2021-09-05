@@ -17,7 +17,6 @@ SemiIntelligentServo TJ::servo[] = {SemiIntelligentServo(TJ::SERVO[0], SERVO_CHA
 MPU6050 TJ::mpu(Wire);
 VL53L0X TJ::lidar;
 
-unsigned long updatePWM_sendStatus_prevMillis = 0;
 unsigned long updatePWM_handleMelody_prevMillis = 0;
 
 void TJ::updatePWM(void * param) {
@@ -35,19 +34,8 @@ void TJ::updatePWM(void * param) {
 
         TrackJet.gyroUpdate();
         TrackJet.lidarUpdate();
-
         TrackJet.internCommandHandle();
-
         TrackJet.handleLowBatt();
-
-        if(millis() >= TJ::statusSendPeriod+updatePWM_sendStatus_prevMillis){
-            updatePWM_sendStatus_prevMillis = millis();
-            TrackJet.sendStatus();
-        }
-
-        //TrackJet.handleMelody();
-        
-        
 
         vTaskDelay(TJ::controlPeriod);
     }
@@ -339,7 +327,7 @@ void TrackJetClass::soundEnd() {
     ledcDetachPin(TJ::BUZZER);
 }
 
-void TrackJetClass::playMelody(int * aMelody, int size, int tempo)
+void TrackJetClass::playMelody(const int * aMelody, const int size, const int tempo)
 {
 	TrackJetClass::melodyPlaying = true;
     TrackJetClass::melodyPause = true;
@@ -664,45 +652,6 @@ void TrackJetClass::commandClear() {
     commandClearCaptain();
 }
 
-void TrackJetClass::commandSend(String command) {
-    commandSendCaptain("command",command);
-}
-
-void TrackJetClass::msgSend(String type, String msg){
-    commandSendCaptain(type, msg);
-}
-
-void TrackJetClass::sendStatus(){
-    if(!connectionEnabled){
-        return;
-    }
-    /*
-    battery: Percent, Voltage
-    lidar: Lidar Dist
-    servos: S1pos, S2pos, S3pos, S1moving, S2moving, S3moving
-    buttons: Button, EncPos, EncButton, Potentiometer
-    line: L1read(int), L2read(int)
-    encoders: E1spd, E2spd, E1dist, E2dist, E1steps, E2steps
-    encoders_raw: FLraw, RLraw, FRraw, RRraw, FLthr, RLthr, FRthr, RRthr
-    */
-    TrackJet.msgSend("battery",String(TrackJet.battPercent())+","+String(((float)((int)(TrackJet.battVolt()*100)))/100));
-    TrackJet.msgSend("lidar",String(TrackJet.lidarDistance()));
-    TrackJet.msgSend("servos",String(TrackJet.servoGetPosition(1))+","+String(TrackJet.servoGetPosition(2))+","+String(TrackJet.servoGetPosition(3))+","+String(TrackJet.servoMoving(1))+","+String(TrackJet.servoMoving(2))+","+String(TrackJet.servoMoving(3)));
-    TrackJet.msgSend("buttons",String(TrackJet.buttonRead())+","+String(TrackJet.encoderRead())+","+String(TrackJet.encoderReadButton())+","+String(TrackJet.potentiometerRead()));
-    TrackJet.msgSend("line",String(TrackJet.lineRead(1))+","+String(TrackJet.lineRead(2)));
-    TrackJet.msgSend("encoders",String(TrackJet.encoderGetSpeed(1))+","+String(TrackJet.encoderGetSpeed(2))+","+String(TrackJet.encoderGetDistance(1))+","+String(TrackJet.encoderGetDistance(2))+","+String(TrackJet.encoderGetSteps(1))+","+String(TrackJet.encoderGetSteps(2)));
-    
-    int encFL = (adc1_get_raw(TJ::ADC_CH_ENC_FL));
-    int encRL = (adc1_get_raw(TJ::ADC_CH_ENC_RL));
-    int encFR = (adc1_get_raw(TJ::ADC_CH_ENC_FR));
-    int encRR = (adc1_get_raw(TJ::ADC_CH_ENC_RR));
-    uint16_t thrFL = TrackJet.encThreshold[0];
-    uint16_t thrRL = TrackJet.encThreshold[0];
-    uint16_t thrFR = TrackJet.encThreshold[0];
-    uint16_t thrRR = TrackJet.encThreshold[0];
-    TrackJet.msgSend("encoders_raw",String(encFL)+","+String(encRL)+","+String(encFR)+","+String(encRR)+","+String(thrFL)+","+String(thrRL)+","+String(thrFR)+","+String(thrRR));
-}
-
 void TrackJetClass::internCommandHandle() {
     static uint8_t counter = 0;
     if(counter < 20) {
@@ -719,6 +668,42 @@ void TrackJetClass::internCommandHandle() {
         TrackJet.encoderCalibrate(5000);    //calibrate for 5s
         TrackJet.commandClear();
     }
+}
+
+void TrackJetClass::commandSend(String type, String text) {
+    commandSendCaptain(type, text);
+}
+
+void TrackJetClass::commandDisp(String text) {
+    commandSend("commandDisp", text);
+}
+
+void TrackJetClass::sendStatus(){
+    /*
+    battery: Percent, Voltage
+    lidar: Lidar Dist
+    servos: S1pos, S2pos, S3pos, S1moving, S2moving, S3moving
+    buttons: Button, EncPos, EncButton, Potentiometer
+    line: L1read(int), L2read(int)
+    encoders: E1spd, E2spd, E1dist, E2dist, E1steps, E2steps
+    encoders_raw: FLraw, RLraw, FRraw, RRraw, FLthr, RLthr, FRthr, RRthr
+    */
+    TrackJet.commandSend("battery", String(TrackJet.battPercent())+","+String(((float)((int)(TrackJet.battVolt()*100)))/100));
+    TrackJet.commandSend("lidar", String(TrackJet.lidarDistance()));
+    TrackJet.commandSend("servos", String(TrackJet.servoGetPosition(1))+","+String(TrackJet.servoGetPosition(2))+","+String(TrackJet.servoGetPosition(3))+","+String(TrackJet.servoMoving(1))+","+String(TrackJet.servoMoving(2))+","+String(TrackJet.servoMoving(3)));
+    TrackJet.commandSend("buttons", String(TrackJet.buttonRead())+","+String(TrackJet.encoderRead())+","+String(TrackJet.encoderReadButton())+","+String(TrackJet.potentiometerRead()));
+    TrackJet.commandSend("line", String(TrackJet.lineRead(1))+","+String(TrackJet.lineRead(2)));
+    TrackJet.commandSend("encoders", String(TrackJet.encoderGetSpeed(1))+","+String(TrackJet.encoderGetSpeed(2))+","+String(TrackJet.encoderGetDistance(1))+","+String(TrackJet.encoderGetDistance(2))+","+String(TrackJet.encoderGetSteps(1))+","+String(TrackJet.encoderGetSteps(2)));
+    
+    int encFL = (adc1_get_raw(TJ::ADC_CH_ENC_FL));
+    int encRL = (adc1_get_raw(TJ::ADC_CH_ENC_RL));
+    int encFR = (adc1_get_raw(TJ::ADC_CH_ENC_FR));
+    int encRR = (adc1_get_raw(TJ::ADC_CH_ENC_RR));
+    uint16_t thrFL = TrackJet.encThreshold[0];
+    uint16_t thrRL = TrackJet.encThreshold[1];
+    uint16_t thrFR = TrackJet.encThreshold[2];
+    uint16_t thrRR = TrackJet.encThreshold[3];
+    TrackJet.commandSend("encoders_raw", String(encFL)+","+String(encRL)+","+String(encFR)+","+String(encRR)+","+String(thrFL)+","+String(thrRL)+","+String(thrFR)+","+String(thrRR));
 }
 
 void TrackJetClass::encoderCalibrate(uint16_t duration) {

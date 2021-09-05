@@ -9,7 +9,7 @@ struct credentials {
 };
 
 void handleRoot();
-void handleInfo();
+void handleStatus();
 void handleStyle();
 void handleRedirectRoot();
 void redirect(String path);

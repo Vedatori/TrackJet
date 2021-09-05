@@ -8,10 +8,12 @@
 		<style>
 			body {
 				overflow:auto;
+				margin:3vw;
 			}
-			</style>
+		</style>
 	</head>
     <body>
+		<div class='textDiv'></div>
 		<h1>TrackJet Info</h1>
 		<p><a href='/'><input type = 'button' value = 'Remote Control page'/></a></p>
 		<div class="box3" id="position">
@@ -44,16 +46,12 @@
 		<p id="thrR">Thr R: -- | --</p>
 
 		<br>
-		<div class="box">
-        	<a href="https://github.com/vedatori/TrackJet" target="_blank">Official TrackJet Repository - GitHub</a>
-        	<p>by <a href="http://wp.vedatori.com/">Vědátoři</a></p>
-		</div>
+		<p><a href="https://github.com/vedatori/TrackJet" target="_blank">TrackJet Project Repository</a> by <a href="http://wp.vedatori.com/">Vědátoři</a></p>
 
-		<div class="box">
-        	<a href="https://github.com/vacjan321/TrackJet" target="_blank">TrackJet Fork - GitHub</a>
-        	<p>fork by Vacjan</p>
-		</div>
 		<script>
+			setInterval(function(){
+				doSend("statusRequest");
+			}, 1000);
 			//_____________________________________________________________________________
 			// This is called when the page finishes loading
 			var clientURL;
@@ -110,7 +108,7 @@
 				console.log("Received: " + receivedMessage);
 				
 				switch(parsedMessage[0]) {
-					case "command":
+					case "commandDisp":
 						document.getElementById('commandInput').placeholder = parsedMessage[1];
 						break;
 					case "battery":

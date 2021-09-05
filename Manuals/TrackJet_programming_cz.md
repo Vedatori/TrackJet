@@ -88,9 +88,10 @@ Heslo musí mít minimálně 8 znaků, jinak nebude použito.
     <img src="SupportFiles/prog_web_softAP.png" width="400"/>
 1. Pro ovládání TrackJet s připraveným programem můžete používat následující příkazy. Příkazy nejsou citlivé na velikost použitých písmen.
     * `blade <angle>` - Nastaví výšku radlice na daný úhel serva. 0-dole, 180-nahoře
-    * `lidar <angle>` - Nastaví pozici serva LIDARu. 0-vpravo, 180-vlevo
-    * `beep` - Zapne buzzer na 0,5 vteřiny
-
+    * `head <angle>` - Nastaví pozici serva LIDARu. 0-vpravo, 180-vlevo
+    * `beep` - Zapne buzzer na 0,5 vteřiny na frekvenci 1000Hz
+    * `take on me` - Zahraje píseň *Take on me* 
+    * `silence` - Zastaví přehrávání písně
 ___
 ## <a name = novyProjekt>Nový projekt</a>
 

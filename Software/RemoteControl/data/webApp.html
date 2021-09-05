@@ -13,14 +13,15 @@
 	</head>
 	<body>
 		<div class = "wrapper">
-			<div class="box"><h1 style="font-size:3.5vh;text-align:center"><font color = "#F5F5F5" face='verdana'>
-				<a href="/info.html">TrackJet</a><br>Remote Control
+			<div class="box1"><a href="http://wp.vedatori.com/" target="_blank"><img src="http://wp.vedatori.com/wp-content/uploads/2019/03/logo-2-e1551903315141.png" alt="vedatori.com" style="height:10vh;" align="middle"></a></div>
+			<div class="box2"><h1 style="font-size:3.5vh;text-align:center"><font face='verdana'>
+				<a href="https://github.com/vedatori/TrackJet" target="_blank">TrackJet</a><br>Remote Control
 			</font></h1></div>
 			<div class="box3" id="position">
-				<p id="batteryStatus" style="color: #FFE640;">Battery: ---% </p>
 				<input type = "text" id = "commandInput" placeholder = "Command entry" autofocus="autofocus"/>
 				<input type = "button" value = "Enter" onclick = "commandEnter()"/>
 				<a href='/wifi'><input type = "button" value = "WiFi setup"/></a>
+				<a href='/status'><input type = "button" value = "Status"/></a>
 			</div>
 			<div class="box31" id="cam">
 				<img id="stream" class="stream" src="">
@@ -52,10 +53,10 @@
 					}
 				}
 			}
-			var keySpeedStep = 16;
-			var keySpeedReturn = 16;
-			var keyTurnStep = 16;
-			var keyTurnReturn = 16;
+			var keySpeedStep = 4;
+			var keySpeedReturn = 1;
+			var keyTurnStep = 8;
+			var keyTurnReturn = 2;
 			
 			function createJoystick(parent) {
 				const stick = document.createElement('div');
@@ -225,8 +226,9 @@
 			var clientConnected = false;
 			function init() {
 				// Connect to WebSocket server
-				var str = window.location.hostname;
-                clientURL = "ws://" + str + ":1337";
+				var str = window.location.href;
+				clientURL = str.substring(4, str.length - 1);
+				clientURL = "ws" + clientURL + ":1337";
 				wsConnect(clientURL);
 				console.log(clientURL);
 			}
@@ -275,11 +277,8 @@
 				console.log("Received: " + receivedMessage);
 				
 				switch(parsedMessage[0]) {
-					case "command":
+					case "commandDisp":
 						document.getElementById('commandInput').placeholder = parsedMessage[1];
-						break;
-					case "battery":
-						document.getElementById('batteryStatus').innerText = "Battery: " + parsedMessage[1] + "% ";
 						break;
 					default:
 						break;

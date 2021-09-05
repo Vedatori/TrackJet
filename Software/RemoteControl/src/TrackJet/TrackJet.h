@@ -11,6 +11,7 @@
 #include "WiFiCaptain.h"
 #include "QuadEncoder.h"
 #include "SemiIntelligentServo.h"
+#include "Music.h"
 
 
 namespace TJ {
@@ -51,8 +52,6 @@ const uint16_t encThresholdInit = 1600;
 
 const uint8_t FREQ_PWM_THRESHOLD = 40;
 const uint16_t controlPeriod = 10;  // [ms]
-const uint16_t statusSendPeriod = 500; // [ms]
-const uint16_t melodyHandlePeriod = 40; //[ms]
 const char STORAGE_NAMESPACE[] = "TrackJet";
 const uint16_t communicationTimeout = 1000;
 const uint16_t lettersSwapTimeout = 500;
@@ -103,7 +102,7 @@ class TrackJetClass {
     bool melodyPlaying = false;
     bool melodyPause = false;
     int melodyTempo = 180;
-    int * melody;
+    const int * melody;
     int melodythisNote = 0;
     int melodySize = 0;
     unsigned long melodyLastMillis = 0;
@@ -137,7 +136,7 @@ public:
 
     void soundTone(float freq = 1000);
     void soundEnd();
-    void playMelody(int * aMelody, int size, int tempo = 180);
+    void playMelody(const int * aMelody, const int size, const int tempo = 180);
     void stopMelody();
     void handleMelody();
 
@@ -178,9 +177,9 @@ public:
     String commandGet();
     String commandGetIndexed(uint8_t index);
     void commandClear();
-    void commandSend(String command);
-    void msgSend(String type, String msg);
     void internCommandHandle();
+    void commandSend(String type, String text);
+    void commandDisp(String text);
     void sendStatus();
 
     void encoderCalibrate(uint16_t duration);
