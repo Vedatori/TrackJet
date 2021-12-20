@@ -93,7 +93,7 @@ ___
 
 ## <a name = bocnice1>Příprava bočnic</a>
 **Potřebné díly:**
-* 1x šasi z 3D tisku
+* 1x šasi z 3D tiskárny
 * 2x matka M3
 
 **Nástroje:**
@@ -111,7 +111,7 @@ ___
 
 ## <a name = drzaky>Příprava držáků motorů</a>
 **Potřebné díly:**
-* 2x držák motoru z 3D tisku
+* 2x držák motoru z 3D tiskárny
 * 2x žlutý motor
 * šasi
 
@@ -124,10 +124,11 @@ ___
     ![alt](SupportFiles/IMG_0596.jpeg)
 1. Dočistit zalamovacím nožem.
     ![alt](SupportFiles/IMG_0598.jpeg)
-1. Opakovat postup pro šasi. 
+1. Provést podobné očištění od přebytčného plastu i u šasi. 
     ![alt](SupportFiles/IMG_0450.jpg)
     ![alt](SupportFiles/IMG_0452.jpg)
-1. Protlačit šroub skrze díry v šasi. 
+
+1. Protlačit libovolný M3 šroub skrze díry v šasi pro jejich očištění. 
     ![alt](SupportFiles/IMG_0443.jpg)
 1. vytlačený přebytek plastu.
     ![alt](SupportFiles/IMG_0452.jpg)
@@ -228,12 +229,12 @@ ___
 **Potřebné díly:**
 * šasi
 * 6x malé kolo
-* 6x osa kola z 3D tisku
-* 2x podložka šroubu z 3D tisku
+* 6x osa kola z 3D tiskárny
+* 2x podložka šroubu z 3D tiskárny
 * 6x šroub M3x40
 * 2x šroub M3x12
 * 8x matka
-* 2x ložisko kola z 3D tisku
+* 2x ložisko kola z 3D tiskárny
 
 **Nástroje:**
 * šroubovák
@@ -243,11 +244,11 @@ ___
 **Postup:**
 1. Vložit osu kola do kola. Rozevření osy kola je na straně kola, kde jsou matky.
     ![alt](SupportFiles/IMG_0688.jpeg)
-1. *Nastavitelné vypínací kolo má navíc podložku šroubu z 3D tisku.* Provléct šroub skrz podložku, bočnici z plexiskla osou kola. Hlavy šroubů jsou umístěny směrem k plexisklu.
+1. *Nastavitelné vypínací kolo má navíc podložku šroubu z 3D tiskárny.* Provléct šroub skrz podložku, bočnici z plexiskla osou kola. Hlavy šroubů jsou umístěny směrem k plexisklu.
     ![alt](SupportFiles/IMG_0690.jpeg)
 1. Obdobný postup, kromě podložky pod sřoub, zopakovat pro další 2 kola.
     ![alt](SupportFiles/IMG_0693.jpeg)
-1. Vložit matku do ložiska z 3D tisku. Přitlačit kleštěmi, pokud je potřeba.
+1. Vložit matku do ložiska z 3D tiskárny. Přitlačit kleštěmi, pokud je potřeba.
     ![alt](SupportFiles/IMG_0705.jpeg)
 1. Připravit ložisko. Nožem uvolnit jednotlivé "kuličky" od stěn ložiska i mezi sebou.
 
@@ -257,17 +258,17 @@ ___
     ![alt](SupportFiles/IMG_0713.jpeg)
 1. Vložit matky do připravených děr. Srovnat 3D tištěnou a dřevěnou bočnici a dotáhnout šrouby.
     ![alt](SupportFiles/IMG_0714.jpeg)
-1. Vystřeďovací šroub nechat volně pohyblivý. Vyzkoušet, jestli je možné šroubem pohabovat.
+1. Vystřeďovací šroub nechat volně pohyblivý. Vyzkoušet, jestli je možné šroubem pohybovat.
     ![alt](SupportFiles/IMG_0717.jpeg)
 1. Obdobný postup zopakovat pro druhou bočnici. Výsledný vzhled.
     ![alt](SupportFiles/IMG_0719.jpeg)
 
 ## <a name = serva>Držák servo motoru</a>
 **Potřebné díly:**
-* držák motorů s jmenovkou z 3D tisku
+* držák motorů s jmenovkou z 3D tiskárny
 * 2x balení servo motoru 
 * 2x šroub M3x12 se zapuštěnou hlavou
-* ozubené kolo z 3D tisku
+* ozubené kolo z 3D tiskárny
 
 **Nástroje:**
 * šroubovák
@@ -279,7 +280,7 @@ ___
     ![alt](SupportFiles/IMG_0722.jpeg)
 1. Vytáhnout kabel dle fotografie.
     ![alt](SupportFiles/IMG_0724.jpeg)
-1. Na druhý motor natlačit ozubené kolo z 3D tisku.
+1. Na druhý motor natlačit ozubené kolo z 3D tiskárny.
     ![alt](SupportFiles/IMG_0727.jpeg)
 1. Prošroubovat šroub dodaný v balení (ten větší, v balení by takové měly být dva) s motorem ozubeným kolem. Vložit obě serva do držáku motorů.
     ![alt](SupportFiles/IMG_0732.jpeg)
@@ -290,7 +291,7 @@ ___
 
 ## <a name = pohyb>Sestavení senzoru pohybu</a>
 **Potřebné díly:**
-* 6x díl z 3D tisku
+* 6x díl z 3D tiskárny
 * 4x matka
 * 4x šroub M3x40
 
@@ -305,7 +306,7 @@ ___
 **Postup:**
 1. Odlepit kus pásky a zastřihnout.
     ![alt](SupportFiles/IMG_0748.jpeg)
-1. Zalepit plochý díl z 3D tisku tešně pod dírami.
+1. Zalepit plochý díl z 3D tiskárny tešně pod dírami.
     ![alt](SupportFiles/IMG_0750.jpeg)
 1. Ořezat přebytečnou pásku zalamovacím nožem. Ořezání porvádět na podložce, ne na stole!
     ![alt](SupportFiles/IMG_0753.jpeg)
@@ -322,9 +323,9 @@ ___
 
 ## <a name = radlice>Sestavení radlice</a>
 **Potřebné díly:**
-* 2x rameno radlice z 3D tisku (ozubené a neozubené)
-* 2x šroub M3x16
-* 2x podložky z 3D tisku
+* 2x rameno radlice z 3D tiskárny (ozubené a neozubené)
+* 2x šroub M3x14 s kulatou hlavou
+* 2x podložky z 3D tiskárny
 * 4x vrut 2,5x16
 * radlice z překližky
 

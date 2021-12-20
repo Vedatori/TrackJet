@@ -17,8 +17,6 @@ SemiIntelligentServo TJ::servo[] = {SemiIntelligentServo(TJ::SERVO[0], SERVO_CHA
 MPU6050 TJ::mpu(Wire);
 VL53L0X TJ::lidar;
 
-unsigned long updatePWM_handleMelody_prevMillis = 0;
-
 void TJ::updatePWM(void * param) {
     for(;;) {
         TrackJet.updateAnalogMux();

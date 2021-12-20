@@ -1,10 +1,15 @@
-V tomto dokumentu je uveden návod na osazení desky plošných spojů. Část je osazena již z výroby SMD součástkami. Zbytek osazení je předmětem tohoto návodu.
-Pro tento návod si uvedeme následující pojmy: DPS = PCB = deska - Deska Plošných Spojů.
-Deska pro TrackJet je již z výroby osazena SMD (bezvývodovými) součástkami. THT (vývodové) se pájí následujícím způsobem:
-* Součástku vkládáme ze strany, kde je naznačena silkscreenem (kde je bílou barvou natištěn její obrys).
-* Součástku přitlačíme až k desce nebo co nejblíž.
-* Součástku pájíme ze strany, na kterou trčí vývody.
-* Vývody po zapájení zastřihneme.
+V tomto dokumentu je uveden návod na osazení desky plošných spojů. Některé součástky byly osazeny strojově při výrobě desek. Zbytek osazení je předmětem tohoto návodu.
+Pro tento návod si uvedeme následující pojmy: 
+* DPS (Deska Plošných Spojů) - Placatá věc, na kterou budeme nyní pájet součástky a které jsou skrze ni elektricky pospojované.
+* PCB (Printed Circuit Board) - To stejné, co DPS.
+* SMD (Surface Mount Device) - Tzv. bezvývodové elektronické součástky, které mají krátké nožičky. Tyto součástky jsou připájeny k DPS pouze z jedné strany. Tyto součástky byly osazevy strojově při výrobě DPS.
+* THT (Through-hole Technology) - Tzv. vývodové elekotronické součástky, které mají dlouhé nožičky. Tyto nožičky jsou před zapájením součástky prostrčeny skrz díry v DPS.
+
+THT součástky budeme v následujících krocích pájet následujícím způsobem:
+1. Součástku vkládáme ze strany, kde je naznačena silkscreenem (kde je bílou barvou natištěn její obrys).
+1. Součástku přitlačíme až k desce nebo co nejblíž.
+1. Součástku pájíme ze strany, na kterou trčí vývody.
+1. Vývody po zapájení zastřihneme.
 
 # Obsah
 * [Pájení senzorů pohybu](#LED1)
@@ -20,26 +25,26 @@ Deska pro TrackJet je již z výroby osazena SMD (bezvývodovými) součástkami
 **Potřebujeme:**
 * kleště
 * 4x modul s LED a fotodiodou
-* 2x plastový držák pro modul z 3D tisku
-* 2x plastový vymezovač z 3D tisku
+* 2x plastový držák pro modul z 3D tiskárny
+* 2x plastový vymezovač z 3D tiskárny
 * 2x šroub M3x8 
 
 ![alt](SupportFiles/IMG_0829.jpeg)
 **Postup:**
-1. Vložte postupně moduly do držáku z 3D tisku. *Je třeba dodržet orientaci diod s obrázkem pro jednotlivé strany. Modrá čára na schématu označuje pozici "nosu" na součástce.* Barvu diod je možné rozpoznat pod světlem např. z LED telefonu.
+1. Vložte postupně moduly do držáku z 3D tiskárny. *Je třeba dodržet orientaci diod s obrázkem pro jednotlivé strany. Modrá čára na schématu označuje pozici "nosu" na součástce.* Barvu diod je možné rozpoznat pod světlem např. z LED telefonu.
 ![alt](SupportFiles/IMG_0835.jpeg)
 1. Vývody musí být protažené dvěma podélnýma dírama v 3D tisknutém díle (ne těmi v rozích).
 ![alt](SupportFiles/IMG_20210816_092559.jpg)
 1. Opakujte postup pro druhou stranu 2 podle schématu. Zarovnejte nožičky podle obrázku, aby obejmuly shora a zespodu PCB a směřovali doprostřed pájecí plochy. *Nos na součástce je nahoře.*
 ![alt](SupportFiles/IMG_0843.jpeg)
-1. Použijte zarovnávací nástroj z 3D tisku, umístěte do něj moduly podle obrázku. Na vyznačené červené čáře zakraťte vývody kleštěmi.
+1. Použijte zarovnávací nástroj z 3D tiskárny, umístěte do něj moduly podle obrázku. Na vyznačené červené čáře zakraťte vývody kleštěmi.
 ![alt](SupportFiles/IMG_0845.jpeg)
-1. Zarovnávací nástroj z 3D tisku umístěte pod PCB a přišroubujte šroubkem.
+1. Zarovnávací nástroj z 3D tiskárny umístěte pod PCB a přišroubujte šroubkem.
 ![alt](SupportFiles/IMG_0851.jpeg)
-1. Zarovnejte nožičky podle obrázku, aby obejmuly shora a zespodu PCB a směřovaly doprostřed pájecí plochy. *Modul z 3D tisku musí přiléhat k PCB bez mezery.*
+1. Zarovnejte nožičky podle obrázku, aby obejmuly shora a zespodu PCB a směřovaly doprostřed pájecí plochy. *Modul z 3D tiskárny musí přiléhat k PCB bez mezery.*
 ![alt](SupportFiles/IMG_0856.jpeg)
 1. *Zapájejte z horní strany PCB.*
-1. Vyšroubujte díl pro zarovnání z 3D tisku. 
+1. Vyšroubujte díl pro zarovnání z 3D tiskárny. 
 ![alt](SupportFiles/IMG_0862.jpeg)
 1. Otočte na druhou stranu, vyrovnejte nožičky na střed pájecí plochy. Zapájejte.
 ![alt](SupportFiles/IMG_0876.jpeg)
@@ -62,7 +67,7 @@ Deska pro TrackJet je již z výroby osazena SMD (bezvývodovými) součástkami
 ![alt](SupportFiles/IMG_0886.jpeg)
 1. Provlékněte zelenou LED místem označeným D3 FULL. Opakujte stejný postup pájení jako v předchozím kroku.
 ![alt](SupportFiles/IMG_0893.jpeg)
-1. Zastřihněte nožičky u PCB. *Stříhanou nožičku držte rokou, aby neodletěla sousedovi do oka.*
+1. Zastřihněte nožičky u PCB. *Stříhanou nožičku držte rukou, aby neodletěla sousedovi do oka.*
 ![alt](SupportFiles/IMG_0899.jpeg)
 1. Obdobným postupem zapájejte zelenou LED místem ozančeným D14 a vybrané LED místy označenými D1 a D2.
 ![alt](SupportFiles/IMG_0899.jpeg)
@@ -111,8 +116,8 @@ Deska pro TrackJet je již z výroby osazena SMD (bezvývodovými) součástkami
 * 2x konektor se 2 piny
 * 1x konektor se 6 piny
 * 3x kolíková lišta se třemi konektory
-* 2x modul s dvěma diodami
-* 2x podpěry modulu s LED diodami z 3D tisku
+* 2x modul s diodami
+* 2x podpěry modulu s diodami z 3D tiskárny
 * držák baterie
 
 **Postup:** 
@@ -120,7 +125,7 @@ Deska pro TrackJet je již z výroby osazena SMD (bezvývodovými) součástkami
 ![alt](SupportFiles/IMG_0949.jpeg) 
 1. Zapájejte lišty konektorů do míst LIDAR1, J6 a J7. Polarita je vždy zřejmá z nákresu na PCB.
 ![alt](SupportFiles/IMG_0950.jpeg)
-1. Provlečete modul s dvěma LED diodami podpěrou. *Veškerá zkosení modulu jsou i na podpěře a musí lícovat. Z jedné strany podpěry je výřez pro kolík vystupující ze součástky.*
+1. Provlečete modul s diodami podpěrou. *Veškerá zkosení modulu jsou i na podpěře a musí lícovat. Z jedné strany podpěry je výřez pro kolík vystupující ze součástky.*
 ![alt](SupportFiles/IMG_0953.jpeg)
 1. Připájejte moduly s podpěrou na místa označená U7 a U8. Polarita je zřejmá z nákresu na PCB.
 ![alt](SupportFiles/IMG_0957.jpeg)
@@ -136,14 +141,14 @@ Deska pro TrackJet je již z výroby osazena SMD (bezvývodovými) součástkami
 
 ## <a name = finalizace1>Zakrytování PCB, propojení periferií</a>
 **Potřebujeme:**
-* kryt desky z 3D tisku ve tvaru plástve
+* kryt desky z 3D tiskárny ve tvaru plástve
 * 2x stahovací páska
 * oboustranná lepicí páska
 * kleště
 
 
 **Postup:**
-1. Přichyťte baterku a kryt k PCB pomocí velkých upínacích pásků, jejich konce zastřihněte kleštěmi. Pásky protahujte díryami H5 a H6 v desce. Hlavy upínacích pásků dejte do stejné pozice, jako vidíte na obrázku.
+1. Přichyťte baterku a kryt k PCB pomocí velkých upínacích pásků (volitelné), jejich konce zastřihněte kleštěmi. Pásky protahujte díryami H5 a H6 v desce. Hlavy upínacích pásků dejte do stejné pozice, jako vidíte na obrázku.
 ![alt](SupportFiles/IMG_0969.jpeg)
 ![alt](SupportFiles/IMG_0974.jpeg)
 1. Konce pásků zastřihněte kleštěmi.
