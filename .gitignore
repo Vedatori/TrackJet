@@ -26,4 +26,4 @@
 .vscode/settings.json
 
 .pio
-.DS_Store
+*.DS_Store

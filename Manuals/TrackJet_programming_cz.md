@@ -707,7 +707,7 @@ void loop() {
 ```
 
 TrackJet umožňuje textovou komunikaci i opačným směrem, tedy z TrackJet do webové stránky dálkového ovládání.
-* `TrackJet.commandSend(command)` - odešle textový příkaz *command* z TrackJet a zobrazí ho šedě v poli *Command entry*.
+* `TrackJet.commandDisp(command)` - odešle textový příkaz *command* z TrackJet a zobrazí ho šedě v poli *Command entry*.
 
 Příklad: Následující program bude v textovém poli *Command entry* vypisovat stav tlačítka TrackJet:
 ```
@@ -719,7 +719,7 @@ void setup() {
 }
 
 void loop() {
-    TrackJet.commandSend(String(TrackJet.buttonRead()));
+    TrackJet.commandDisp(String(TrackJet.buttonRead()));
     delay(500);
 }
 ```
